@@ -1,24 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Calculator.Net Clone
+
+A stunning, modern recreation of Calculator.net built with Next.js 15, TypeScript, Tailwind CSS, and shadcn/ui components. Features a beautiful design inspired by Omni Calculator with enhanced gradients, animations, and user experience.
+
+## Features
+
+### Design & UX
+- **Modern Gradient Design**: Beautiful blue-purple-pink gradient theme with floating animated background elements
+- **Glassmorphism Effects**: Frosted glass backdrop blur on header and footer
+- **Smooth Animations**: Fade-in-up animations, floating elements, and micro-interactions
+- **Featured Calculators Section**: Highlighted popular calculators with hover effects
+- **Responsive Layout**: Fully mobile-optimized with adaptive spacing and grid layouts
+
+### Content
+- 200+ calculator links organized by category:
+  - **Financial Calculators** (15 types) - Emerald gradient theme
+  - **Fitness & Health Calculators** (8 types) - Pink/Rose gradient theme
+  - **Math Calculators** (6 types) - Purple/Indigo gradient theme
+  - **Other Calculators** (10 types) - Amber/Orange gradient theme
+- Enhanced search bar with gradient glow effect
+- Category cards with gradient headers and icons
+- Call-to-action section with gradient background
+- Ready for Vercel deployment
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Components**: shadcn/ui
+- **Icons**: Lucide React
 
 ## Getting Started
 
-First, run the development server:
+### Development
 
 ```bash
+# Navigate to project directory
+cd calculator-net-clone
+
+# Install dependencies (if not already done)
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the homepage.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
+
+## Deploy to Vercel
+
+1. Push your code to a Git repository (GitHub, GitLab, or Bitbucket)
+2. Go to [Vercel](https://vercel.com)
+3. Import your repository
+4. Vercel will auto-detect Next.js and configure the build settings
+5. Click "Deploy"
+
+Alternatively, use the Vercel CLI:
+
+```bash
+npm install -g vercel
+vercel
+```
+
+## Project Structure
+
+```
+calculator-net-clone/
+├── app/
+│   ├── page.tsx          # Homepage with calculator categories
+│   ├── layout.tsx        # Root layout
+│   └── globals.css       # Global styles
+├── components/
+│   └── ui/               # shadcn/ui components
+│       ├── card.tsx
+│       ├── button.tsx
+│       └── input.tsx
+├── lib/
+│   └── utils.ts          # Utility functions
+└── public/               # Static assets
+```
+
+## Next Steps
+
+The homepage is complete with all calculator links. Next steps:
+
+1. Create individual calculator pages (e.g., `/bmi`, `/mortgage`, etc.)
+2. Implement calculator logic for each type
+3. Add form validation
+4. Implement the search functionality
+5. Add more features as needed
 
 ## Learn More
 
@@ -27,10 +104,6 @@ To learn more about Next.js, take a look at the following resources:
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This is a educational/demonstration project inspired by Calculator.net.

@@ -1,0 +1,392 @@
+[
+  {
+    "name": "Mortgage Calculator",
+    "path": "/mortgage",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Loan Calculator",
+    "path": "/loan",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Auto Loan Calculator",
+    "path": "/auto-loan",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Student Loan Calculator",
+    "path": "/student-loan",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Personal Loan Calculator",
+    "path": "/personal-loan",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Business Loan Calculator",
+    "path": "/business-loan",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Amortization Calculator",
+    "path": "/amortization",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Refinance Calculator",
+    "path": "/refinance",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Debt Payoff Calculator",
+    "path": "/debt-payoff",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Debt Consolidation Calculator",
+    "path": "/debt-consolidation",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Credit Card Calculator",
+    "path": "/credit-card",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Retirement Calculator",
+    "path": "/retirement",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "401K Calculator",
+    "path": "/401k",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "IRA Calculator",
+    "path": "/ira",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Roth IRA Calculator",
+    "path": "/roth-ira",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Investment Calculator",
+    "path": "/investment",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "ROI Calculator",
+    "path": "/roi",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "RMD Calculator",
+    "path": "/rmd",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Social Security Calculator",
+    "path": "/social-security",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Savings Calculator",
+    "path": "/savings",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "CD Calculator",
+    "path": "/cd",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "College Cost Calculator",
+    "path": "/college-cost",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Present Value Calculator",
+    "path": "/present-value",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Future Value Calculator",
+    "path": "/future-value",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Interest Calculator",
+    "path": "/interest",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Compound Interest Calculator",
+    "path": "/compound-interest",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Simple Interest Calculator",
+    "path": "/simple-interest",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Interest Rate Calculator",
+    "path": "/interest-rate",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "APR Calculator",
+    "path": "/apr",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Finance Calculator",
+    "path": "/finance",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Payment Calculator",
+    "path": "/payment",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Inflation Calculator",
+    "path": "/inflation",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Income Tax Calculator",
+    "path": "/income-tax",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Sales Tax Calculator",
+    "path": "/sales-tax",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Salary Calculator",
+    "path": "/salary",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "House Affordability Calculator",
+    "path": "/house-affordability",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Rent Calculator",
+    "path": "/rent",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Down Payment Calculator",
+    "path": "/down-payment",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Budget Calculator",
+    "path": "/budget",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Commission Calculator",
+    "path": "/commission",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Discount Calculator",
+    "path": "/discount",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "BMI Calculator",
+    "path": "/bmi",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Calorie Calculator",
+    "path": "/calorie",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Body Fat Calculator",
+    "path": "/body-fat",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "BMR Calculator",
+    "path": "/bmr",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Ideal Weight Calculator",
+    "path": "/ideal-weight",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Pace Calculator",
+    "path": "/pace",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Conception Calculator",
+    "path": "/conception",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Due Date Calculator",
+    "path": "/due-date",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Scientific Calculator",
+    "path": "/scientific",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Fraction Calculator",
+    "path": "/fraction",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Percentage Calculator",
+    "path": "/percentage",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Random Number Generator",
+    "path": "/random-number",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Triangle Calculator",
+    "path": "/triangle",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Standard Deviation Calculator",
+    "path": "/standard-deviation",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Age Calculator",
+    "path": "/age",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Date Calculator",
+    "path": "/date",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Time Calculator",
+    "path": "/time",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Hours Calculator",
+    "path": "/hours",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "GPA Calculator",
+    "path": "/gpa",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Grade Calculator",
+    "path": "/grade",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Concrete Calculator",
+    "path": "/concrete",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Subnet Calculator",
+    "path": "/subnet",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Password Generator",
+    "path": "/password",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "name": "Conversion Calculator",
+    "path": "/conversion",
+    "status": 200,
+    "passed": true
+  }
+]
