@@ -243,7 +243,7 @@ export default function InvestmentCalculator() {
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
                     Contribution Frequency
                   </label>
-                  <Select value={contributionFrequency} onValueChange={setContributionFrequency}>
+                  <Select value={contributionFrequency} onChange={(e) => setContributionFrequency(e.target.value)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -290,7 +290,7 @@ export default function InvestmentCalculator() {
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
                     Compound Frequency
                   </label>
-                  <Select value={compoundFrequency} onValueChange={setCompoundFrequency}>
+                  <Select value={compoundFrequency} onChange={(e) => setCompoundFrequency(e.target.value)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -313,7 +313,7 @@ export default function InvestmentCalculator() {
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
                     Contribution Timing
                   </label>
-                  <Select value={contributionTiming} onValueChange={setContributionTiming}>
+                  <Select value={contributionTiming} onChange={(e) => setContributionTiming(e.target.value)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>

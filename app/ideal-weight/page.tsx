@@ -26,15 +26,15 @@ export default function IdealWeightCalculator() {
   const [hasCalculated, setHasCalculated] = useState(false);
 
   const calculateIdealWeight = () => {
-    let heightInches = 0;
+    let heightInchesCalc = 0;
 
     if (unit === "imperial") {
-      heightInches = (parseFloat(heightFeet) || 0) * 12 + (parseFloat(heightInches) || 0);
+      heightInchesCalc = (parseFloat(heightFeet) || 0) * 12 + (parseFloat(heightInches) || 0);
     } else {
-      heightInches = (parseFloat(heightFeet) || 0) / 2.54;
+      heightInchesCalc = (parseFloat(heightFeet) || 0) / 2.54;
     }
 
-    const heightCm = heightInches * 2.54;
+    const heightCm = heightInchesCalc * 2.54;
 
     // Calculate using different formulas
     let robinson = 0;
@@ -44,22 +44,22 @@ export default function IdealWeightCalculator() {
 
     if (gender === "male") {
       // Robinson (1983)
-      robinson = 52 + 1.9 * (heightInches - 60);
+      robinson = 52 + 1.9 * (heightInchesCalc - 60);
       // Miller (1983)
-      miller = 56.2 + 1.41 * (heightInches - 60);
+      miller = 56.2 + 1.41 * (heightInchesCalc - 60);
       // Devine (1974)
-      devine = 50 + 2.3 * (heightInches - 60);
+      devine = 50 + 2.3 * (heightInchesCalc - 60);
       // Hamwi (1964)
-      hamwi = 48 + 2.7 * (heightInches - 60);
+      hamwi = 48 + 2.7 * (heightInchesCalc - 60);
     } else {
       // Robinson (1983)
-      robinson = 49 + 1.7 * (heightInches - 60);
+      robinson = 49 + 1.7 * (heightInchesCalc - 60);
       // Miller (1983)
-      miller = 53.1 + 1.36 * (heightInches - 60);
+      miller = 53.1 + 1.36 * (heightInchesCalc - 60);
       // Devine (1974)
-      devine = 45.5 + 2.3 * (heightInches - 60);
+      devine = 45.5 + 2.3 * (heightInchesCalc - 60);
       // Hamwi (1964)
-      hamwi = 45.5 + 2.2 * (heightInches - 60);
+      hamwi = 45.5 + 2.2 * (heightInchesCalc - 60);
     }
 
     // Calculate healthy weight range based on BMI (18.5-24.9)

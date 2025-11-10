@@ -28,7 +28,7 @@ export default function FractionCalculator() {
   const [fraction1Den, setFraction1Den] = useState<string>("2");
   const [fraction2Num, setFraction2Num] = useState<string>("1");
   const [fraction2Den, setFraction2Den] = useState<string>("3");
-  const [operation, setOperation] = useState<'+' | '-' | '*' | '/'>('+ ');
+  const [operation, setOperation] = useState<'+' | '-' | '*' | '/'>('+');
 
   const [results, setResults] = useState<FractionResults | null>(null);
   const [hasCalculated, setHasCalculated] = useState(false);

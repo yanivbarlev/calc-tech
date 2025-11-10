@@ -31,20 +31,20 @@ export default function BodyFatCalculator() {
   const [hasCalculated, setHasCalculated] = useState(false);
 
   const calculateBodyFat = () => {
-    let heightInches = 0;
+    let heightInchesCalc = 0;
     let weightLbs = 0;
     let neckInches = 0;
     let waistInches = 0;
     let hipInches = 0;
 
     if (unit === "imperial") {
-      heightInches = (parseFloat(heightFeet) || 0) * 12 + (parseFloat(heightInches) || 0);
+      heightInchesCalc = (parseFloat(heightFeet) || 0) * 12 + (parseFloat(heightInches) || 0);
       weightLbs = parseFloat(weight) || 0;
       neckInches = parseFloat(neck) || 0;
       waistInches = parseFloat(waist) || 0;
       hipInches = parseFloat(hip) || 0;
     } else {
-      heightInches = (parseFloat(heightFeet) || 0) / 2.54;
+      heightInchesCalc = (parseFloat(heightFeet) || 0) / 2.54;
       weightLbs = (parseFloat(weight) || 0) * 2.20462;
       neckInches = (parseFloat(neck) || 0) / 2.54;
       waistInches = (parseFloat(waist) || 0) / 2.54;
@@ -57,12 +57,12 @@ export default function BodyFatCalculator() {
     if (gender === "male") {
       bodyFatPercentage =
         495 /
-        (1.0324 - 0.19077 * Math.log10(waistInches - neckInches) + 0.15456 * Math.log10(heightInches)) -
+        (1.0324 - 0.19077 * Math.log10(waistInches - neckInches) + 0.15456 * Math.log10(heightInchesCalc)) -
         450;
     } else {
       bodyFatPercentage =
         495 /
-        (1.29579 - 0.35004 * Math.log10(waistInches + hipInches - neckInches) + 0.22100 * Math.log10(heightInches)) -
+        (1.29579 - 0.35004 * Math.log10(waistInches + hipInches - neckInches) + 0.22100 * Math.log10(heightInchesCalc)) -
         450;
     }
 

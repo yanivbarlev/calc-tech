@@ -255,7 +255,7 @@ export default function CDCalculator() {
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
                     Compounding Frequency
                   </label>
-                  <Select value={compoundingFrequency} onValueChange={setCompoundingFrequency}>
+                  <Select value={compoundingFrequency} onChange={(e) => setCompoundingFrequency(e.target.value)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>

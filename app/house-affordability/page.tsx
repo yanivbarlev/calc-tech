@@ -714,7 +714,7 @@ export default function HouseAffordabilityCalculator() {
                       <h3 className="text-xl font-semibold">Maximum Home Price</h3>
                     </div>
                     <p className="text-5xl font-bold mb-2">
-                      {formatCurrency('maxHomePrice' in results ? results.maxHomePrice : results.maxHomePrice)}
+                      {formatCurrency(results.maxHomePrice)}
                     </p>
                     <p className="text-emerald-100">
                       Based on your {calculatorMode === 'income' ? 'income and debt ratios' : 'monthly budget'}
@@ -733,7 +733,7 @@ export default function HouseAffordabilityCalculator() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-3xl font-bold text-emerald-600">
-                        {formatCurrency('downPayment' in results ? results.downPayment : results.downPaymentAmount)}
+                        {formatCurrency(calculatorMode === 'income' ? (results as AffordabilityResults).downPayment : (results as BudgetResults).downPaymentAmount)}
                       </p>
                       <p className="text-sm text-slate-600 mt-2">
                         {calculatorMode === 'income' ? downPaymentPercent : budgetDownPaymentPercent}% of home price
@@ -771,7 +771,7 @@ export default function HouseAffordabilityCalculator() {
                     <div className="flex justify-between items-center pb-3 border-b">
                       <span className="text-slate-700 font-medium">Principal & Interest</span>
                       <span className="text-lg font-semibold text-slate-800">
-                        {formatCurrencyDetailed('monthlyPrincipalInterest' in results ? results.monthlyPrincipalInterest : results.monthlyPrincipalInterest)}
+                        {formatCurrencyDetailed(results.monthlyPrincipalInterest)}
                       </span>
                     </div>
                     <div className="flex justify-between items-center pb-3 border-b">
@@ -803,7 +803,7 @@ export default function HouseAffordabilityCalculator() {
                     <div className="flex justify-between items-center pt-3 bg-emerald-50 p-4 rounded-lg">
                       <span className="text-lg font-bold text-slate-800">Total Monthly Payment</span>
                       <span className="text-2xl font-bold text-emerald-600">
-                        {formatCurrencyDetailed('monthlyPayment' in results ? results.monthlyPayment : results.totalMonthlyPayment)}
+                        {formatCurrencyDetailed(calculatorMode === 'income' ? (results as AffordabilityResults).monthlyPayment : (results as BudgetResults).totalMonthlyPayment)}
                       </span>
                     </div>
                   </CardContent>
