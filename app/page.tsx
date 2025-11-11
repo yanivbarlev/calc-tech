@@ -263,7 +263,7 @@ export default function Home() {
         <div className="mb-16 text-center animate-fade-in-up">
           <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Sparkles className="h-4 w-4" />
-            Over 200 Free Calculators
+            Over 65 Free Calculators
           </div>
 
           <h1 className="mb-6 text-5xl md:text-7xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent leading-tight pb-2">

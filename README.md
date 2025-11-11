@@ -12,7 +12,7 @@ A stunning, modern recreation of Calculator.net built with Next.js 15, TypeScrip
 - **Responsive Layout**: Fully mobile-optimized with adaptive spacing and grid layouts
 
 ### Content
-- 200+ calculator links organized by category:
+- 65+ calculator links organized by category:
   - **Financial Calculators** (15 types) - Emerald gradient theme
   - **Fitness & Health Calculators** (8 types) - Pink/Rose gradient theme
   - **Math Calculators** (6 types) - Purple/Indigo gradient theme
