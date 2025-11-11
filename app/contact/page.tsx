@@ -103,30 +103,6 @@ export default function ContactPage() {
           <div className="grid gap-8 lg:grid-cols-3">
             {/* Contact Information */}
             <div className="lg:col-span-1 space-y-6">
-              {/* Email Card */}
-              <Card className="border-2 rounded-2xl shadow-lg">
-                <CardHeader className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-2xl">
-                  <CardTitle className="flex items-center gap-2">
-                    <Mail className="h-5 w-5" />
-                    Email Us Directly
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <p className="text-slate-600 mb-3">
-                    Prefer to send an email directly?
-                  </p>
-                  <a
-                    href="mailto:yaniv.bl+calc@gmail.com"
-                    className="text-blue-600 hover:text-blue-700 font-medium break-all"
-                  >
-                    yaniv.bl+calc@gmail.com
-                  </a>
-                  <p className="text-sm text-slate-500 mt-4">
-                    We typically respond within 24-48 hours.
-                  </p>
-                </CardContent>
-              </Card>
-
               {/* FAQ Card */}
               <Card className="border-2 rounded-2xl shadow-lg">
                 <CardHeader className="bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-t-2xl">
