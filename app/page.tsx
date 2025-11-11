@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -182,6 +185,34 @@ const features = [
 ];
 
 export default function Home() {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Flatten all calculators from all categories for searching
+  const allCalculators = calculatorCategories.flatMap(category =>
+    category.calculators.map(calc => ({
+      ...calc,
+      category: category.title,
+      categoryGradient: category.gradient,
+    }))
+  );
+
+  // Filter calculators based on search query
+  const filteredCalculators = searchQuery.trim()
+    ? allCalculators.filter(calc =>
+        calc.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
+
+  // Filter categories to show only those with matching calculators
+  const filteredCategories = searchQuery.trim()
+    ? calculatorCategories.map(category => ({
+        ...category,
+        calculators: category.calculators.filter(calc =>
+          calc.name.toLowerCase().includes(searchQuery.toLowerCase())
+        ),
+      })).filter(category => category.calculators.length > 0)
+    : calculatorCategories;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Decorative background elements */}
@@ -256,9 +287,54 @@ export default function Home() {
                   type="search"
                   placeholder="Search calculators... (e.g., BMI, mortgage, percentage)"
                   className="h-14 pl-14 pr-6 text-lg rounded-2xl border-2 border-slate-200 focus:border-blue-400 shadow-lg"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
             </div>
+
+            {/* Search Results Dropdown */}
+            {searchQuery.trim() && (
+              <div className="relative mt-4">
+                <Card className="absolute top-0 left-0 right-0 max-h-96 overflow-y-auto shadow-2xl border-2 z-50 bg-white">
+                  <CardContent className="p-4">
+                    {filteredCalculators.length > 0 ? (
+                      <div className="space-y-2">
+                        <p className="text-sm font-semibold text-slate-600 mb-3">
+                          Found {filteredCalculators.length} calculator{filteredCalculators.length !== 1 ? 's' : ''}
+                        </p>
+                        {filteredCalculators.map((calc, idx) => (
+                          <Link
+                            key={idx}
+                            href={calc.href}
+                            className="block p-3 rounded-lg hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all border hover:border-blue-300 group"
+                            onClick={() => setSearchQuery("")}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="font-semibold text-slate-800 group-hover:text-blue-600">
+                                  {calc.name}
+                                </p>
+                                <p className="text-xs text-slate-500">{calc.category}</p>
+                              </div>
+                              <ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-transform" />
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <Search className="h-12 w-12 text-slate-300 mx-auto mb-3" />
+                        <p className="text-slate-600 font-medium">No calculators found</p>
+                        <p className="text-sm text-slate-500 mt-1">
+                          Try searching for "BMI", "mortgage", or "percentage"
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </div>
 
           {/* Featured Calculators */}
@@ -293,10 +369,23 @@ export default function Home() {
         {/* Calculator Categories Grid */}
         <div className="mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-800 text-center mb-12">
-            Browse by Category
+            {searchQuery.trim() ? `Search Results for "${searchQuery}"` : "Browse by Category"}
           </h2>
-          <div className="grid gap-8 md:grid-cols-2">
-            {calculatorCategories.map((category, index) => {
+          {searchQuery.trim() && filteredCategories.length === 0 ? (
+            <div className="text-center py-12">
+              <Search className="h-16 w-16 text-slate-300 mx-auto mb-4" />
+              <p className="text-xl text-slate-600 font-medium mb-2">No calculators found</p>
+              <p className="text-slate-500">Try a different search term</p>
+              <Button
+                onClick={() => setSearchQuery("")}
+                className="mt-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              >
+                Clear Search
+              </Button>
+            </div>
+          ) : (
+            <div className="grid gap-8 md:grid-cols-2">
+              {filteredCategories.map((category, index) => {
               const Icon = category.icon;
               return (
                 <Card
@@ -333,6 +422,7 @@ export default function Home() {
               );
             })}
           </div>
+          )}
         </div>
 
         {/* Features Section */}
