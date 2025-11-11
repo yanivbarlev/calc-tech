@@ -491,6 +491,9 @@ export default function Home() {
             <Link href="/about" className="hover:text-blue-600 transition-colors font-medium">
               About Us
             </Link>
+            <Link href="/contact" className="hover:text-blue-600 transition-colors font-medium">
+              Contact
+            </Link>
             <Link href="/sitemap" className="hover:text-blue-600 transition-colors font-medium">
               Sitemap
             </Link>
