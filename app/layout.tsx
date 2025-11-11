@@ -28,17 +28,15 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <head>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
           <Script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2201920716197483"
             crossOrigin="anonymous"
-            strategy="afterInteractive"
+            strategy="beforeInteractive"
           />
-        </head>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
           {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
             <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
           )}
