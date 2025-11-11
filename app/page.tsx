@@ -470,6 +470,7 @@ export default function Home() {
               </p>
               <Button
                 size="lg"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 className="bg-white text-blue-600 hover:bg-blue-50 font-bold px-8 py-6 text-lg rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200"
               >
                 Get Started Free
