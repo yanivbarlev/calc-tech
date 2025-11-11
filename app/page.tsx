@@ -278,7 +278,7 @@ export default function Home() {
           </p>
 
           {/* Search Bar */}
-          <div className="mx-auto max-w-2xl mb-12">
+          <div id="search-section" className="mx-auto max-w-2xl mb-12">
             <div className="relative group">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition-opacity"></div>
               <div className="relative flex items-center">
@@ -470,7 +470,10 @@ export default function Home() {
               </p>
               <Button
                 size="lg"
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                onClick={() => {
+                  const searchSection = document.getElementById('search-section');
+                  searchSection?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }}
                 className="bg-white text-blue-600 hover:bg-blue-50 font-bold px-8 py-6 text-lg rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200"
               >
                 Get Started Free
