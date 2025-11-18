@@ -1,0 +1,382 @@
+/* Software Section Styles - Adapted from appposts.com */
+
+* {
+  box-sizing: border-box;
+}
+
+.software-page {
+  min-height: 100vh;
+  background-color: #f8f8f8;
+}
+
+/* Header Styles */
+.software-header {
+  background-color: white;
+  height: 60px;
+  border-bottom: 1px solid #E5E5E5;
+  margin-bottom: 10px;
+}
+
+.header-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 98%;
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 14px;
+}
+
+.header-logo img {
+  height: 35px;
+  transition: all 0.3s linear;
+}
+
+/* Main Content */
+.main {
+  width: 98%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.main-left {
+  width: 100%;
+}
+
+/* App Card */
+.main-app {
+  width: 100%;
+  display: flex;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background-color: white;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, .12);
+}
+
+.main-app-left img {
+  height: 100px;
+  width: 100px;
+  border-radius: 20px;
+}
+
+.main-app-right {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-left: 15px;
+  justify-content: space-around;
+}
+
+.main-app-right h1 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #111111;
+}
+
+.safe-icon {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  vertical-align: middle;
+  margin-left: 5px;
+  background-color: #00D16D;
+  border-radius: 50%;
+  position: relative;
+}
+
+.safe-icon::after {
+  content: '✓';
+  position: absolute;
+  color: white;
+  font-size: 14px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cs-main-app-common {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.cs-main-app-rating,
+.cs-main-app-download,
+.cs-main-app-age {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  text-align: center;
+}
+
+.cs-main-app-text {
+  font-size: 16px;
+  font-weight: bold;
+  color: #484848;
+}
+
+.cs-main-app-type {
+  font-size: 13px;
+  font-weight: 400;
+  color: #757575;
+}
+
+.cs-main-app-rating .cs-main-app-text::before {
+  content: '⭐';
+  margin-right: 3px;
+}
+
+/* Ads Container */
+.ads {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  margin: 15px 0;
+  flex-direction: column;
+  align-items: center;
+}
+
+.adsHeight {
+  width: 100%;
+  min-height: 250px;
+}
+
+@media(min-width: 356px) {
+  .adsHeight {
+    min-height: 280px;
+  }
+}
+
+@media(min-width: 748px) {
+  .adsHeight {
+    min-height: 280px;
+  }
+}
+
+.adsbygoogle {
+  display: block;
+  width: 100%;
+}
+
+.adsbygoogle[data-ad-status="unfilled"] {
+  display: none !important;
+}
+
+/* About Section */
+.main-about {
+  margin-bottom: 15px;
+}
+
+.main-about-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.main-about-item {
+  display: flex;
+  padding: 15px;
+  width: 100%;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, .12);
+  align-items: center;
+}
+
+.cs-main-about-type {
+  min-width: 140px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #262626;
+  padding-right: 10px;
+}
+
+.cs-main-about-content {
+  font-size: 14px;
+  font-weight: 350;
+  color: #777777;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Introduction Section */
+.main-introduction {
+  font-size: 1rem;
+  padding: 20px;
+  color: #333333;
+  margin-bottom: 15px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, .12);
+}
+
+.cs-main-introduction-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #0F112F;
+  margin-bottom: 15px;
+}
+
+.cs-main-introduction-content p,
+.cs-main-introduction-content li {
+  font-size: 15px;
+  line-height: 26px;
+  font-weight: normal;
+  color: #3a3a3a;
+  margin: 0 0 15px 0;
+  letter-spacing: 0.3px;
+}
+
+.cs-main-introduction-content h3 {
+  font-size: 18px;
+  color: #1c1c1c;
+  margin: 25px 0 15px 0;
+  font-weight: 600;
+}
+
+.cs-main-introduction-content ul {
+  list-style: disc;
+  padding-left: 25px;
+}
+
+.cs-main-introduction-content li {
+  margin-bottom: 8px;
+}
+
+/* Download Section */
+.main-download {
+  border-radius: 10px;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, .12);
+  margin-bottom: 15px;
+}
+
+.main-download-btn {
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  margin-top: 15px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.main-download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.main-download-btn-text {
+  font-size: 18px;
+  color: white;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (min-width: 821px) {
+  .main-app {
+    padding: 35px;
+    border-radius: 20px;
+  }
+
+  .main-app-left img {
+    width: 156px;
+    height: 156px;
+    border-radius: 35px;
+  }
+
+  .main-app-right h1 {
+    font-size: 26px;
+  }
+
+  .cs-main-app-text {
+    font-size: 21px;
+  }
+
+  .cs-main-app-type {
+    font-size: 16px;
+  }
+
+  .cs-main-about-type {
+    font-size: 16px;
+  }
+
+  .main-about-item {
+    width: calc(33.3% - 10px);
+    padding: 25px;
+  }
+
+  .main-introduction {
+    padding: 30px;
+    font-size: 18px;
+  }
+
+  .cs-main-introduction-title {
+    font-size: 25px;
+  }
+}
+
+@media (min-width: 1201px) {
+  .main-left {
+    width: 73%;
+  }
+
+  .main {
+    display: flex;
+    gap: 2%;
+  }
+}
+
+/* Footer */
+.software-footer {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 30px 15px;
+  margin-top: 40px;
+  color: white;
+}
+
+.cs-footer {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.cs-footer-introduction {
+  font-size: 14px;
+  color: #FAFEFF;
+  margin-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.cs-footer-about {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.cs-footer-about a {
+  color: #FAFEFF;
+  text-decoration: none;
+  font-size: 14px;
+  transition: opacity 0.3s;
+}
+
+.cs-footer-about a:hover {
+  opacity: 0.8;
+}
