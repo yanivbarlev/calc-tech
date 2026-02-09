@@ -138,11 +138,13 @@
   margin: 15px 0;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 }
 
 .adsHeight {
   width: 100%;
   min-height: 250px;
+  overflow: hidden;
 }
 
 @media(min-width: 356px) {
@@ -160,6 +162,8 @@
 .adsbygoogle {
   display: block;
   width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .adsbygoogle[data-ad-status="unfilled"] {
