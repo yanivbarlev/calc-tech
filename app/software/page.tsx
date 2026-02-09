@@ -157,22 +157,52 @@ export default function SoftwareHub() {
                 </div>
               </Link>
 
-              {/* Placeholder for more apps */}
-              <div style={{
-                padding: '20px',
-                border: '2px dashed #e5e5e5',
-                borderRadius: '15px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minHeight: '140px',
-                color: '#999'
-              }}>
-                <p style={{ textAlign: 'center' }}>
-                  More apps coming soon!<br />
-                  Stay tuned for updates
-                </p>
-              </div>
+              {/* Roblox App Card */}
+              <Link
+                href="/software/roblox"
+                style={{
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  display: 'block',
+                  padding: '20px',
+                  border: '1px solid #e5e5e5',
+                  borderRadius: '15px',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-5px)';
+                  e.currentTarget.style.boxShadow = '0px 10px 20px rgba(0, 0, 0, .15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
+                  <img
+                    src="https://img.appposts.com/com_roblox_client.webp"
+                    alt="Roblox"
+                    style={{
+                      width: '60px',
+                      height: '60px',
+                      borderRadius: '12px',
+                      marginRight: '15px'
+                    }}
+                  />
+                  <div>
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '5px' }}>
+                      Roblox
+                    </h3>
+                    <p style={{ color: '#757575', fontSize: '0.9rem' }}>Games / Adventure</p>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem' }}>
+                  <span>⭐ 4.3</span>
+                  <span>📥 200M+</span>
+                  <span>🔒 Safe</span>
+                </div>
+              </Link>
             </div>
           </div>
 

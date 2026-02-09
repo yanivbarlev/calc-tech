@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { Calculator, Search, TrendingUp, Heart, Brain, DollarSign, Sparkles, ArrowRight, Zap, Shield, Clock } from "lucide-react";
+import { Calculator, Search, TrendingUp, Heart, Brain, DollarSign, Sparkles, ArrowRight, Zap, Shield, Clock, Monitor } from "lucide-react";
 
 const calculatorCategories = [
   {
@@ -135,6 +135,16 @@ const calculatorCategories = [
       { name: "Subnet Calculator", href: "/subnet" },
       { name: "Password Generator", href: "/password" },
       { name: "Conversion Calculator", href: "/conversion" },
+    ],
+  },
+  {
+    title: "Software & App Reviews",
+    icon: Monitor,
+    gradient: "from-cyan-500 to-blue-600",
+    calculators: [
+      { name: "Software Hub", href: "/software" },
+      { name: "Roblox Review", href: "/software/roblox" },
+      { name: "Uber App Review", href: "/software/com_ubercab" },
     ],
   },
 ];

@@ -207,6 +207,75 @@ export default function UberAppPage() {
             </a>
           </div>
         </div>
+
+        {/* Right Sidebar */}
+        <div className="main-right">
+          {/* Sidebar Ad */}
+          <div className="sidebar-section ads-sidebar">
+            <ins
+              className="adsbygoogle"
+              style={{ display: 'inline-block', width: '300px', maxWidth: '100%', height: '250px' }}
+              data-ad-client={ADSENSE_ID}
+              data-ad-slot="9713320054"
+              data-ad-format="rectangle"
+            ></ins>
+            <Script id="ad-sidebar" strategy="afterInteractive">
+              {`(adsbygoogle = window.adsbygoogle || []).push({});`}
+            </Script>
+          </div>
+
+          {/* Trending Apps */}
+          <div className="sidebar-section">
+            <h3 className="sidebar-section-title">Trending Apps</h3>
+            <Link href="/software/roblox" className="sidebar-app-item">
+              <img src="https://img.appposts.com/com_roblox_client.webp" alt="Roblox" />
+              <div className="sidebar-app-info">
+                <h4>Roblox</h4>
+                <p>Games / Adventure</p>
+              </div>
+            </Link>
+            <Link href="#" className="sidebar-app-item">
+              <img src="https://img.appposts.com/com_whatsapp.webp" alt="WhatsApp" />
+              <div className="sidebar-app-info">
+                <h4>WhatsApp</h4>
+                <p>Communication</p>
+              </div>
+            </Link>
+            <Link href="#" className="sidebar-app-item">
+              <img src="https://img.appposts.com/com_zhiliaoapp_musically.webp" alt="TikTok" />
+              <div className="sidebar-app-info">
+                <h4>TikTok</h4>
+                <p>Social Media</p>
+              </div>
+            </Link>
+          </div>
+
+          {/* Popular Apps */}
+          <div className="sidebar-section">
+            <h3 className="sidebar-section-title">Popular Apps</h3>
+            <Link href="#" className="sidebar-app-item">
+              <img src="https://img.appposts.com/com_mojang_minecraftpe.webp" alt="Minecraft" />
+              <div className="sidebar-app-info">
+                <h4>Minecraft</h4>
+                <p>Games</p>
+              </div>
+            </Link>
+            <Link href="#" className="sidebar-app-item">
+              <img src="https://img.appposts.com/com_spotify_music.webp" alt="Spotify" />
+              <div className="sidebar-app-info">
+                <h4>Spotify</h4>
+                <p>Music & Audio</p>
+              </div>
+            </Link>
+            <Link href="#" className="sidebar-app-item">
+              <img src="https://img.appposts.com/com_instagram_android.webp" alt="Instagram" />
+              <div className="sidebar-app-info">
+                <h4>Instagram</h4>
+                <p>Social Media</p>
+              </div>
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* Footer */}
