@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import Link from "next/link";
+import AdUnit from "../components/AdUnit";
 import "../software.css";
 
 export const metadata: Metadata = {
@@ -62,17 +62,11 @@ export default function UberAppPage() {
 
           {/* Ad Unit 1 */}
           <div className="ads">
-            <ins
+            <AdUnit
+              adClient={ADSENSE_ID}
+              adSlot="3339483394"
               className="adsbygoogle adsHeight"
-              style={{ display: 'inline-block' }}
-              data-ad-client={ADSENSE_ID}
-              data-ad-slot="3339483394"
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            ></ins>
-            <Script id="ad-1" strategy="afterInteractive">
-              {`(adsbygoogle = window.adsbygoogle || []).push({});`}
-            </Script>
+            />
           </div>
 
           {/* About Section */}
@@ -107,17 +101,11 @@ export default function UberAppPage() {
 
           {/* Ad Unit 2 */}
           <div className="ads">
-            <ins
+            <AdUnit
+              adClient={ADSENSE_ID}
+              adSlot="9713320054"
               className="adsbygoogle adsHeight"
-              style={{ display: 'inline-block' }}
-              data-ad-client={ADSENSE_ID}
-              data-ad-slot="9713320054"
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            ></ins>
-            <Script id="ad-2" strategy="afterInteractive">
-              {`(adsbygoogle = window.adsbygoogle || []).push({});`}
-            </Script>
+            />
           </div>
 
           {/* Introduction/Review Section */}
@@ -212,16 +200,12 @@ export default function UberAppPage() {
         <div className="main-right">
           {/* Sidebar Ad */}
           <div className="sidebar-section ads-sidebar">
-            <ins
-              className="adsbygoogle"
-              style={{ display: 'inline-block', width: '300px', maxWidth: '100%', height: '250px' }}
-              data-ad-client={ADSENSE_ID}
-              data-ad-slot="9713320054"
-              data-ad-format="rectangle"
-            ></ins>
-            <Script id="ad-sidebar" strategy="afterInteractive">
-              {`(adsbygoogle = window.adsbygoogle || []).push({});`}
-            </Script>
+            <AdUnit
+              adClient={ADSENSE_ID}
+              adSlot="9713320054"
+              adFormat="rectangle"
+              style={{ width: '300px', maxWidth: '100%', height: '250px' }}
+            />
           </div>
 
           {/* Trending Apps */}
