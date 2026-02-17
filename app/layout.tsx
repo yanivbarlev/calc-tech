@@ -40,9 +40,7 @@ export default function RootLayout({
             crossOrigin="anonymous"
             strategy="beforeInteractive"
           />
-          {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
-            <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
-          )}
+          <GoogleAnalytics GA_MEASUREMENT_ID="G-GRVM5D975D" />
           {children}
         </body>
       </html>
