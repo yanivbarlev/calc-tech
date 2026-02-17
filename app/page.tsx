@@ -18,6 +18,8 @@ const calculatorCategories = [
       { name: "Polymarket Arbitrage Calculator", href: "/polymarket-arbitrage" },
       { name: "Kelly Criterion Calculator", href: "/polymarket-kelly" },
       { name: "Implied Probability Calculator", href: "/polymarket-probability" },
+      { name: "Sure Bet Finder Extension", href: "/extensions/sure-bet-finder" },
+      { name: "Whale Tracker Extension", href: "/extensions/whale-tracker" },
     ],
   },
   {
