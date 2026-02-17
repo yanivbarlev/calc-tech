@@ -20,6 +20,7 @@ const calculatorCategories = [
       { name: "Implied Probability Calculator", href: "/polymarket-probability" },
       { name: "Sure Bet Finder Extension", href: "/extensions/sure-bet-finder" },
       { name: "Whale Tracker Extension", href: "/extensions/whale-tracker" },
+      { name: "PolyGuide Extension", href: "/extensions/polyguide" },
     ],
   },
   {
