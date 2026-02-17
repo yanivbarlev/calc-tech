@@ -10,6 +10,17 @@ import { Calculator, Search, TrendingUp, Heart, Brain, DollarSign, Sparkles, Arr
 
 const calculatorCategories = [
   {
+    title: "Polymarket Tools",
+    icon: TrendingUp,
+    gradient: "from-orange-500 to-amber-600",
+    calculators: [
+      { name: "Polymarket EV Calculator", href: "/polymarket-ev" },
+      { name: "Polymarket Arbitrage Calculator", href: "/polymarket-arbitrage" },
+      { name: "Kelly Criterion Calculator", href: "/polymarket-kelly" },
+      { name: "Implied Probability Calculator", href: "/polymarket-probability" },
+    ],
+  },
+  {
     title: "Loan & Mortgage Calculators",
     icon: DollarSign,
     gradient: "from-emerald-500 to-teal-600",
