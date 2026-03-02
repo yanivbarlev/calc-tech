@@ -6,9 +6,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { Calculator, Search, TrendingUp, Heart, Brain, DollarSign, Sparkles, ArrowRight, Zap, Shield, Clock, Monitor } from "lucide-react";
+import { Calculator, Search, TrendingUp, Heart, Brain, DollarSign, Sparkles, ArrowRight, Zap, Shield, Clock, Monitor, Wrench } from "lucide-react";
 
 const calculatorCategories = [
+  {
+    title: "Helpful Tools",
+    icon: Wrench,
+    gradient: "from-green-500 to-emerald-600",
+    calculators: [
+      { name: "WhatsApp Chat Export", href: "/extensions/whatsapp-chat-export" },
+    ],
+  },
   {
     title: "Polymarket Tools",
     icon: TrendingUp,
