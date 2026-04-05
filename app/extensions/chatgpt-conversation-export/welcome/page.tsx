@@ -65,8 +65,67 @@ function StepNumber({ n }: { n: number }) {
   );
 }
 
+function Lightbox({
+  src,
+  alt,
+  onClose,
+}: {
+  src: string;
+  alt: string;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4 cursor-pointer"
+      onClick={onClose}
+    >
+      <NextImage
+        src={src}
+        alt={alt}
+        width={1370}
+        height={866}
+        className="max-w-full max-h-[90vh] w-auto h-auto rounded-xl shadow-2xl object-contain"
+        onClick={(e) => e.stopPropagation()}
+      />
+    </div>
+  );
+}
+
+function ScreenshotImage({
+  src,
+  alt,
+  width,
+  height,
+  onOpen,
+}: {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  onOpen: (src: string, alt: string) => void;
+}) {
+  return (
+    <div
+      className="rounded-xl overflow-hidden shadow-lg border border-slate-200 cursor-pointer hover:shadow-xl transition-shadow duration-200"
+      onClick={() => onOpen(src, alt)}
+    >
+      <NextImage
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        className="w-full h-auto"
+      />
+    </div>
+  );
+}
+
 export default function ChatGPTExportWelcomePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [lightbox, setLightbox] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
 
   const faqs = [
     {
@@ -141,6 +200,13 @@ export default function ChatGPTExportWelcomePage() {
 
   return (
     <div className="min-h-screen bg-white">
+      {lightbox && (
+        <Lightbox
+          src={lightbox.src}
+          alt={lightbox.alt}
+          onClose={() => setLightbox(null)}
+        />
+      )}
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -221,15 +287,13 @@ export default function ChatGPTExportWelcomePage() {
             <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-8">
               click &apos;Select&apos; button, then choose what to export
             </h2>
-            <div className="rounded-xl overflow-hidden shadow-lg border border-slate-200">
-              <NextImage
-                src="/extensions/chatgpt-conversation-export/ss1.png"
-                alt="Select and Export toolbar next to the ChatGPT input box"
-                width={1370}
-                height={866}
-                className="w-full h-auto"
-              />
-            </div>
+            <ScreenshotImage
+              src="/extensions/chatgpt-conversation-export/ss1.png"
+              alt="Select and Export toolbar next to the ChatGPT input box"
+              width={1370}
+              height={866}
+              onOpen={(src, alt) => setLightbox({ src, alt })}
+            />
             <div className="mt-6 text-sm text-slate-500 space-y-1">
               <p>1. you can check/uncheck individual messages</p>
               <p>2. use Select All / Deselect All for bulk actions</p>
@@ -242,15 +306,13 @@ export default function ChatGPTExportWelcomePage() {
             <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-8">
               click &apos;Export&apos; button, then choose file format
             </h2>
-            <div className="rounded-xl overflow-hidden shadow-lg border border-slate-200">
-              <NextImage
-                src="/extensions/chatgpt-conversation-export/ss3.png"
-                alt="Export format dropdown showing PDF, Markdown, Text, CSV, JSON, Image and Copy to Clipboard"
-                width={1370}
-                height={866}
-                className="w-full h-auto"
-              />
-            </div>
+            <ScreenshotImage
+              src="/extensions/chatgpt-conversation-export/ss3.png"
+              alt="Export format dropdown showing PDF, Markdown, Text, CSV, JSON, Image and Copy to Clipboard"
+              width={1370}
+              height={866}
+              onOpen={(src, alt) => setLightbox({ src, alt })}
+            />
           </div>
         </div>
       </section>
@@ -322,47 +384,15 @@ export default function ChatGPTExportWelcomePage() {
                 </div>
                 {/* Visual side */}
                 <div className="flex-1 flex justify-center">
-                  {i === 0 ? (
-                    <div className="rounded-xl overflow-hidden shadow-md border border-slate-200">
-                      <NextImage
-                        src="/extensions/chatgpt-conversation-export/ss3.png"
-                        alt="Export format dropdown"
-                        width={685}
-                        height={433}
-                        className="w-full h-auto"
-                      />
-                    </div>
-                  ) : i === 1 ? (
-                    <div className="rounded-xl overflow-hidden shadow-md border border-slate-200">
-                      <NextImage
-                        src="/extensions/chatgpt-conversation-export/ss2.png"
-                        alt="Selection mode with checkboxes on each message"
-                        width={685}
-                        height={433}
-                        className="w-full h-auto"
-                      />
-                    </div>
-                  ) : i === 2 ? (
-                    <div className="rounded-xl overflow-hidden shadow-md border border-slate-200">
-                      <NextImage
-                        src="/extensions/chatgpt-conversation-export/ss1.png"
-                        alt="Toolbar next to the ChatGPT input box"
-                        width={685}
-                        height={433}
-                        className="w-full h-auto"
-                      />
-                    </div>
-                  ) : (
-                    <div className="rounded-xl overflow-hidden shadow-md border border-slate-200">
-                      <NextImage
-                        src="/extensions/chatgpt-conversation-export/ss1.png"
-                        alt="Advanced output preservation"
-                        width={685}
-                        height={433}
-                        className="w-full h-auto"
-                      />
-                    </div>
-                  )}
+                  <ScreenshotImage
+                    src={`/extensions/chatgpt-conversation-export/${
+                      i === 0 ? "ss1" : i === 1 ? "ss2" : i === 2 ? "ss2" : "ss3"
+                    }.png`}
+                    alt={feature.title}
+                    width={685}
+                    height={433}
+                    onOpen={(src, alt) => setLightbox({ src, alt })}
+                  />
                 </div>
               </div>
             ))}
