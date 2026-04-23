@@ -31,7 +31,8 @@ import {
   ExternalLink,
 } from "lucide-react";
 
-const CHROME_STORE_URL = "#";
+const CHROME_STORE_URL =
+  "https://chromewebstore.google.com/detail/chatgpt-conversation-expo/meemjekapihgngmphphnppghdpjdihag";
 const GUMROAD_URL =
   "https://goldbaryaniv.gumroad.com/l/ChatGPTConversationExport";
 

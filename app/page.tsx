@@ -15,6 +15,9 @@ const calculatorCategories = [
     gradient: "from-green-500 to-emerald-600",
     calculators: [
       { name: "WhatsApp Chat Export", href: "/extensions/whatsapp-chat-export" },
+      { name: "ChatGPT Conversation Export", href: "/extensions/chatgpt-conversation-export" },
+      { name: "Telegram Video Downloader", href: "/extensions/telegram-video-downloader" },
+      { name: "Facebook Messenger Cleaner", href: "/extensions/facebook-messenger-cleaner" },
     ],
   },
   {
