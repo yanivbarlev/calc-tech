@@ -162,7 +162,7 @@ export default function CleanTubeWelcomePage() {
             <span className="text-3xl font-bold text-slate-900">CleanTube</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 leading-tight">
-            YouTube is installed.{" "}
+            CleanTube is installed.{" "}
             <span className="text-teal-600">You&apos;re in control.</span>
           </h1>
           <p className="text-lg text-slate-500 leading-relaxed mb-8 max-w-xl mx-auto">
