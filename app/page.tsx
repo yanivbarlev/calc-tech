@@ -18,6 +18,7 @@ const calculatorCategories = [
       { name: "ChatGPT Conversation Export", href: "/extensions/chatgpt-conversation-export" },
       { name: "Telegram Video Downloader", href: "/extensions/telegram-video-downloader" },
       { name: "Facebook Messenger Cleaner", href: "/extensions/facebook-messenger-cleaner" },
+      { name: "Video Snapshot for YouTube", href: "/extensions/video-snapshot-youtube" },
     ],
   },
   {
