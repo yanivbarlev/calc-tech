@@ -308,8 +308,8 @@ function SureBetFinderWelcomeInner() {
 
         /* ── Onboarding steps ── */
         .sbf-onboarding {
-          margin-top: 56px;
-          opacity: 0; animation: sbfFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.5s forwards;
+          opacity: 0; animation: sbfFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;
+          margin-bottom: 40px;
         }
         .sbf-onboarding-eyebrow {
           display: inline-flex; align-items: center; gap: 8px;
@@ -475,6 +475,65 @@ function SureBetFinderWelcomeInner() {
             <span>POLYMARKET SURE BET FINDER</span>
           </div>
 
+          {/* ── How to open the panel — always visible ── */}
+          <div className="sbf-onboarding">
+            <span className="sbf-onboarding-eyebrow">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L4 9l8 7 8-7-8-7z"/><path d="M4 16l8 7 8-7"/>
+              </svg>
+              HOW TO OPEN THE PANEL
+            </span>
+            <h2 className="sbf-onboarding-headline">2 clicks and you&apos;re in.</h2>
+            <p className="sbf-onboarding-sub">Chrome doesn&apos;t let extensions auto-open the panel. Here&apos;s exactly where to click — takes 5 seconds.</p>
+
+            <div className="sbf-onboarding-grid">
+              <div className="sbf-step">
+                <div className="sbf-step-num">1</div>
+                <div className="sbf-step-art s1">
+                  <Image
+                    src="/extensions/sure-bet-finder/puzzle-icon.png"
+                    alt="Click the puzzle piece icon in your Chrome toolbar"
+                    width={280} height={80}
+                    style={{width:"100%",maxWidth:280,height:"auto"}}
+                    unoptimized
+                  />
+                </div>
+                <div className="sbf-step-title">Click the puzzle piece icon</div>
+                <div className="sbf-step-desc">Top-right of Chrome&apos;s toolbar (circled in red). Opens your installed extensions list.</div>
+              </div>
+
+              <div className="sbf-step">
+                <div className="sbf-step-num">2</div>
+                <div className="sbf-step-art s2">
+                  <Image
+                    src="/extensions/sure-bet-finder/extension-menu.png"
+                    alt="Click 'Polymarket Sure Bet Finder' in the dropdown"
+                    width={240} height={120}
+                    style={{width:"100%",maxWidth:240,height:"auto",borderRadius:6}}
+                    unoptimized
+                  />
+                </div>
+                <div className="sbf-step-title">Click &quot;Polymarket Sure Bet Finder&quot;</div>
+                <div className="sbf-step-desc">In the dropdown that appears, click the extension name. The pin icon next to it keeps the icon permanently visible.</div>
+              </div>
+
+              <div className="sbf-step">
+                <div className="sbf-step-num">3</div>
+                <div className="sbf-step-art s3">
+                  <Image
+                    src="/extensions/sure-bet-finder/side-panel.png"
+                    alt="The Polymarket Sure Bet Finder side panel slides in"
+                    width={400} height={200}
+                    style={{width:"100%",maxWidth:"100%",maxHeight:200,objectFit:"cover",objectPosition:"top"}}
+                    unoptimized
+                  />
+                </div>
+                <div className="sbf-step-title">The panel slides in</div>
+                <div className="sbf-step-desc">Top 20 highest-yield bets, ranked live. Refreshes every 5 minutes.</div>
+              </div>
+            </div>
+          </div>
+
           {/* ── PERMISSION CTA — most important element on the page ── */}
           <div className="sbf-perm-banner">
             <div className="sbf-perm-inner">
@@ -574,65 +633,6 @@ function SureBetFinderWelcomeInner() {
                   <div className="sbf-pct">{pct}</div>
                 </div>
               ))}
-            </div>
-          </div>
-
-          {/* ── How to open the panel — always visible ── */}
-          <div className="sbf-onboarding">
-            <span className="sbf-onboarding-eyebrow">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2L4 9l8 7 8-7-8-7z"/><path d="M4 16l8 7 8-7"/>
-              </svg>
-              HOW TO OPEN THE PANEL
-            </span>
-            <h2 className="sbf-onboarding-headline">2 clicks and you&apos;re in.</h2>
-            <p className="sbf-onboarding-sub">Chrome doesn&apos;t let extensions auto-open the panel. Here&apos;s exactly where to click — takes 5 seconds.</p>
-
-            <div className="sbf-onboarding-grid">
-              <div className="sbf-step">
-                <div className="sbf-step-num">1</div>
-                <div className="sbf-step-art s1">
-                  <Image
-                    src="/extensions/sure-bet-finder/puzzle-icon.png"
-                    alt="Click the puzzle piece icon in your Chrome toolbar"
-                    width={280} height={80}
-                    style={{width:"100%",maxWidth:280,height:"auto"}}
-                    unoptimized
-                  />
-                </div>
-                <div className="sbf-step-title">Click the puzzle piece icon</div>
-                <div className="sbf-step-desc">Top-right of Chrome&apos;s toolbar (circled in red). Opens your installed extensions list.</div>
-              </div>
-
-              <div className="sbf-step">
-                <div className="sbf-step-num">2</div>
-                <div className="sbf-step-art s2">
-                  <Image
-                    src="/extensions/sure-bet-finder/extension-menu.png"
-                    alt="Click 'Polymarket Sure Bet Finder' in the dropdown"
-                    width={240} height={120}
-                    style={{width:"100%",maxWidth:240,height:"auto",borderRadius:6}}
-                    unoptimized
-                  />
-                </div>
-                <div className="sbf-step-title">Click &quot;Polymarket Sure Bet Finder&quot;</div>
-                <div className="sbf-step-desc">In the dropdown that appears, click the extension name. The pin icon next to it keeps the icon permanently visible.</div>
-              </div>
-
-              <div className="sbf-step">
-                <div className="sbf-step-num">3</div>
-                <div className="sbf-step-art s3">
-                  <Image
-                    src="/extensions/sure-bet-finder/side-panel.png"
-                    alt="The Polymarket Sure Bet Finder side panel slides in"
-                    width={400} height={200}
-                    style={{width:"100%",maxWidth:"100%",maxHeight:200,objectFit:"cover",objectPosition:"top"}}
-                    unoptimized
-                  />
-                </div>
-                <div className="sbf-step-title">The panel slides in</div>
-                <div className="sbf-step-desc">Top 20 highest-yield bets, ranked live. Refreshes every 5 minutes.</div>
-              </div>
             </div>
           </div>
 
