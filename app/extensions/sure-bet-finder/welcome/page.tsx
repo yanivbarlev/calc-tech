@@ -17,8 +17,13 @@ function SureBetFinderWelcomeInner() {
   const reason = searchParams.get("reason");
   const prev = searchParams.get("prev");
   const v = searchParams.get("v") || "";
+  const checkout = searchParams.get("checkout"); // 'gumroad' | 'lemonsqueezy' | null
   const conversionFired = useRef(false);
   const [permDone, setPermDone] = useState(false);
+
+  const checkoutUrl = checkout === "gumroad"
+    ? "https://gumroad.com/l/zfldyt"
+    : "https://topchrome.lemonsqueezy.com/checkout/buy/fadca5fb-6e2a-42f3-8660-e085b6348791";
 
   function openPanel() {
     window.postMessage({ type: 'psbf_open_panel' }, '*');
@@ -618,7 +623,7 @@ function SureBetFinderWelcomeInner() {
               </p>
               <div className="sbf-actions">
                 <a
-                  href="https://topchrome.lemonsqueezy.com/checkout/buy/fadca5fb-6e2a-42f3-8660-e085b6348791"
+                  href={checkoutUrl}
                   target="_blank" rel="noopener noreferrer"
                   className="sbf-btn sbf-btn-primary"
                   onClick={openPanel}
@@ -686,7 +691,7 @@ function SureBetFinderWelcomeInner() {
                 <span className="sbf-price-period">/ lifetime</span>
               </div>
               <a
-                href="https://topchrome.lemonsqueezy.com/checkout/buy/fadca5fb-6e2a-42f3-8660-e085b6348791"
+                href={checkoutUrl}
                 target="_blank" rel="noopener noreferrer"
                 className="sbf-btn sbf-btn-primary"
               >
