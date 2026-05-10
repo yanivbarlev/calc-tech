@@ -580,6 +580,7 @@ function SureBetFinderWelcomeInner() {
                   </button>
                 ) : (
                   <button
+                    id="psbf-perm-btn"
                     className="sbf-perm-btn"
                     onClick={() => {
                       setPermDone(true);
