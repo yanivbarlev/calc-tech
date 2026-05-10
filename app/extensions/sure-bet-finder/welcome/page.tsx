@@ -20,6 +20,10 @@ function SureBetFinderWelcomeInner() {
   const conversionFired = useRef(false);
   const [permDone, setPermDone] = useState(false);
 
+  function openPanel() {
+    window.postMessage({ type: 'psbf_open_panel' }, '*');
+  }
+
   useEffect(() => {
     const eyebrow = document.getElementById("heroEyebrow");
     const banner = document.getElementById("updateBanner");
@@ -580,6 +584,7 @@ function SureBetFinderWelcomeInner() {
                     onClick={() => {
                       setPermDone(true);
                       document.getElementById("permHint")?.classList.add("open");
+                      openPanel();
                     }}
                   >
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -615,11 +620,12 @@ function SureBetFinderWelcomeInner() {
                   href="https://topchrome.lemonsqueezy.com/checkout/buy/fadca5fb-6e2a-42f3-8660-e085b6348791"
                   target="_blank" rel="noopener noreferrer"
                   className="sbf-btn sbf-btn-primary"
+                  onClick={openPanel}
                 >
                   Unlock Premium — $4.99 lifetime
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
                 </a>
-                <button className="sbf-btn sbf-btn-ghost" onClick={() => window.close()}>
+                <button className="sbf-btn sbf-btn-ghost" onClick={() => { openPanel(); window.close(); }}>
                   Maybe later
                 </button>
               </div>
@@ -708,7 +714,7 @@ function SureBetFinderWelcomeInner() {
 
           <div className="sbf-foot">
             <div>Already have a license? Open the extension → click <strong style={{color:"var(--text)"}}>Enter License</strong>.</div>
-            <div><a href="#" onClick={(e) => { e.preventDefault(); window.close(); }}>Close this tab</a></div>
+            <div><a href="#" onClick={(e) => { e.preventDefault(); openPanel(); window.close(); }}>Close this tab</a></div>
           </div>
         </div>
       </div>
