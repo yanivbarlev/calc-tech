@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Script from "next/script";
 import Image from "next/image";
@@ -12,7 +12,7 @@ declare global {
   }
 }
 
-export default function SureBetFinderWelcomePage() {
+function SureBetFinderWelcomeInner() {
   const searchParams = useSearchParams();
   const reason = searchParams.get("reason");
   const prev = searchParams.get("prev");
@@ -611,5 +611,13 @@ export default function SureBetFinderWelcomePage() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function SureBetFinderWelcomePage() {
+  return (
+    <Suspense>
+      <SureBetFinderWelcomeInner />
+    </Suspense>
   );
 }
