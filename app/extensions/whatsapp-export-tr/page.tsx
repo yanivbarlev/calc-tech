@@ -9,12 +9,8 @@ import {
   Calculator,
   CheckCircle,
   FileText,
-  Download,
   Calendar,
   Users,
-  Lock,
-  MessageSquare,
-  FileSpreadsheet,
 } from "lucide-react";
 
 // IMPORTANT: Replace TR_PLACEHOLDER_ID with the real Chrome Web Store extension ID
@@ -48,7 +44,7 @@ function FaqItem({
   onToggle,
 }: {
   question: string;
-  answer: string | React.ReactNode;
+  answer: string;
   isOpen: boolean;
   onToggle: () => void;
 }) {
