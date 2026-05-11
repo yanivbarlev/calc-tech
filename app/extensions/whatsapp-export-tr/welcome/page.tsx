@@ -14,10 +14,7 @@ import {
   Download,
 } from "lucide-react";
 
-// IMPORTANT: Replace __TODO_TR_GUMROAD_PLACEHOLDER__ with the real Gumroad product URL
-// for the Turkish WhatsApp exporter (whatsapp-export-tr) after creating the Gumroad product.
-// Example: https://goldbaryaniv.gumroad.com/l/whatsapp-export-tr
-const GUMROAD_URL = "https://gumroad.com/__TODO_TR_GUMROAD_PLACEHOLDER__";
+const GUMROAD_URL = "https://goldbaryaniv.gumroad.com/l/vzyczr";
 
 function FaqItem({
   question,
