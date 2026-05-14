@@ -20,6 +20,7 @@ const calculatorCategories = [
       { name: "Telegram Video Downloader", href: "/extensions/telegram-video-downloader" },
       { name: "Facebook Messenger Cleaner", href: "/extensions/facebook-messenger-cleaner" },
       { name: "Video Snapshot for YouTube", href: "/extensions/video-snapshot-youtube" },
+      { name: "Read Aloud TTS", href: "/read-aloud-tts/welcome" },
     ],
   },
   {
