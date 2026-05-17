@@ -6,16 +6,24 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { Calculator, Search, TrendingUp, Heart, Brain, DollarSign, Sparkles, ArrowRight, Zap, Shield, Clock, Monitor, Wrench } from "lucide-react";
+import { Calculator, Search, TrendingUp, Heart, Brain, DollarSign, Sparkles, ArrowRight, Zap, Shield, Clock, Monitor, Wrench, MessageSquare } from "lucide-react";
 
 const calculatorCategories = [
   {
-    title: "Helpful Tools",
-    icon: Wrench,
+    title: "WhatsApp Tools",
+    icon: MessageSquare,
     gradient: "from-green-500 to-emerald-600",
     calculators: [
+      { name: "AI Chat Summarizer for WhatsApp", href: "/extensions/whatsapp-ai-summarizer" },
       { name: "WhatsApp Chat Export", href: "/extensions/whatsapp-chat-export" },
       { name: "WhatsApp Sohbet Dışa Aktarma (Türkçe)", href: "/extensions/whatsapp-export-tr" },
+    ],
+  },
+  {
+    title: "Helpful Tools",
+    icon: Wrench,
+    gradient: "from-sky-500 to-cyan-600",
+    calculators: [
       { name: "ChatGPT Conversation Export", href: "/extensions/chatgpt-conversation-export" },
       { name: "Telegram Video Downloader", href: "/extensions/telegram-video-downloader" },
       { name: "Facebook Messenger Cleaner", href: "/extensions/facebook-messenger-cleaner" },
