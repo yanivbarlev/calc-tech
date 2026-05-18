@@ -81,7 +81,7 @@ const FAQS = [
   },
   {
     q: "¿Es una suscripción o un pago único?",
-    a: "Es un pago único de $4,99. Sin suscripción, sin renovaciones automáticas, sin cargos adicionales. Una vez que activas tu licencia, las funciones PRO son tuyas para siempre.",
+    a: "Es un pago único de $7,99. Sin suscripción, sin renovaciones automáticas, sin cargos adicionales. Una vez que activas tu licencia, las funciones PRO son tuyas para siempre.",
   },
   {
     q: "¿Las actualizaciones futuras están incluidas?",
@@ -126,7 +126,7 @@ function ThankYouContent() {
               gtag('config', '${GADS_ID}');
               gtag('event', 'conversion', {
                 'send_to': '${GADS_ID}/${PURCHASE_CONVERSION_LABEL}',
-                'value': 4.99,
+                'value': 7.99,
                 'currency': 'USD',
                 'transaction_id': '${orderId.replace(/'/g, "")}'
               });
