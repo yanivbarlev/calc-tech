@@ -24,6 +24,7 @@ const calculatorCategories = [
     icon: Wrench,
     gradient: "from-sky-500 to-cyan-600",
     calculators: [
+      { name: "ChatBlink Launcher", href: "/chat" },
       { name: "ChatGPT Conversation Export", href: "/extensions/chatgpt-conversation-export" },
       { name: "Telegram Video Downloader", href: "/extensions/telegram-video-downloader" },
       { name: "Facebook Messenger Cleaner", href: "/extensions/facebook-messenger-cleaner" },
