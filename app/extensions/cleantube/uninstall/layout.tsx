@@ -4,6 +4,10 @@ export const metadata: Metadata = {
   title: "You've uninstalled CleanTube",
   description:
     "Help us improve by telling us why you uninstalled CleanTube. Or reinstall it — it's free.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function CleanTubeUninstallLayout({
