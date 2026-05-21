@@ -17,7 +17,6 @@ import {
   Lock,
   Inbox,
   CheckCircle,
-  Globe,
   Zap,
   Calculator,
   HelpCircle,
@@ -200,7 +199,7 @@ export default function WhatsAppAiSummarizerPage() {
     },
     {
       name: "Read Aloud TTS",
-      href: "/read-aloud-tts/welcome",
+      href: "/read-aloud-tts",
       icon: BookOpen,
     },
   ];

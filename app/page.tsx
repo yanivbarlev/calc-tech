@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Calculator, Search, TrendingUp, Heart, Brain, DollarSign, Sparkles, ArrowRight, Zap, Shield, Clock, Monitor, Wrench, MessageSquare } from "lucide-react";
 
 const calculatorCategories = [
@@ -29,7 +29,7 @@ const calculatorCategories = [
       { name: "Telegram Video Downloader", href: "/extensions/telegram-video-downloader" },
       { name: "Facebook Messenger Cleaner", href: "/extensions/facebook-messenger-cleaner" },
       { name: "Video Snapshot for YouTube", href: "/extensions/video-snapshot-youtube" },
-      { name: "Read Aloud TTS", href: "/read-aloud-tts/welcome" },
+      { name: "Read Aloud TTS", href: "/read-aloud-tts" },
     ],
   },
   {
@@ -374,7 +374,7 @@ export default function Home() {
                         <Search className="h-12 w-12 text-slate-300 mx-auto mb-3" />
                         <p className="text-slate-600 font-medium">No calculators found</p>
                         <p className="text-sm text-slate-500 mt-1">
-                          Try searching for "BMI", "mortgage", or "percentage"
+                          Try searching for &quot;BMI&quot;, &quot;mortgage&quot;, or &quot;percentage&quot;
                         </p>
                       </div>
                     )}

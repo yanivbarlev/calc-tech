@@ -267,6 +267,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   });
 
   entries.push({
+    url: `${baseUrl}/read-aloud-tts`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  });
+
+  entries.push({
     url: `${baseUrl}/read-aloud-tts/welcome`,
     lastModified: new Date(),
     changeFrequency: "monthly",

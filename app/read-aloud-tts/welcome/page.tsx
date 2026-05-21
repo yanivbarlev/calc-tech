@@ -22,6 +22,8 @@ import {
 // Google Ads → Tools → Conversions.
 const GADS_ID = "AW-1006081641";
 const INSTALL_CONVERSION_LABEL = "PLACEHOLDER_READ_ALOUD_LABEL";
+const CHROME_STORE_URL =
+  "https://chromewebstore.google.com/detail/read-aloud-text-to-speech/gpcgbgibifgjdpoemahepkjiannfmcco?authuser=3&hl=en";
 
 declare global {
   interface Window {
@@ -204,7 +206,7 @@ function ReadAloudTtsWelcomeInner() {
               Read any webpage out loud — free, offline, 40+ languages.
             </p>
             <a
-              href="https://chromewebstore.google.com/detail/read-aloud-a-text-to-spee/hdhinadidafjejdhmfkjgnolgimiaplp"
+              href={CHROME_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold text-lg rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200"
@@ -342,7 +344,7 @@ function ReadAloudTtsWelcomeInner() {
               to begin.
             </p>
             <a
-              href="https://chromewebstore.google.com/detail/read-aloud-a-text-to-spee/hdhinadidafjejdhmfkjgnolgimiaplp"
+              href={CHROME_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold text-lg rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200"
