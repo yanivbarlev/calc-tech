@@ -4,10 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown, ChevronUp, MousePointer, Globe, UserX } from "lucide-react";
 
-// TODO: Replace this placeholder with the real Chrome Web Store URL once the extension is published.
-// File: app/chat/page.tsx  —  search for "CWS_URL" to find it quickly.
 const CWS_URL =
-  "https://chrome.google.com/webstore/detail/REPLACE_WITH_CWS_ID";
+  "https://chromewebstore.google.com/detail/side-chatter-chatroom-ext/janhmknppohbjelpfadjegbcddndejaf";
 
 function FaqItem({
   question,
