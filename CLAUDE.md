@@ -2,6 +2,10 @@
 
 This is the calc-tech Next.js app. It serves as the hosted backend for Chrome extensions: welcome pages, uninstall pages, and marketing landing pages.
 
+## Additional Domains
+
+`ppltok.com` is mapped to this Vercel project and serves the `/chat` page on every path via a host rewrite in `middleware.ts`.
+
 ## Deployment
 
 **Mechanism:** Vercel watches the GitHub repo and auto-deploys on every push to `main`.
