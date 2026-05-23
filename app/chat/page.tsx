@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ChevronDown, ChevronUp, MousePointer, Globe, UserX } from "lucide-react";
 
 const CWS_URL =
-  "https://chromewebstore.google.com/detail/side-chatter-chatroom-ext/janhmknppohbjelpfadjegbcddndejaf";
+  "https://chromewebstore.google.com/detail/novaview/gkpnedgnhkkloibfigmamhgbikfbmojf";
 
 function FaqItem({
   question,
@@ -271,7 +271,7 @@ export default function ChatLandingPage() {
           </h1>
 
           <p className="text-center text-slate-500 mb-8 max-w-lg mx-auto" style={{ fontSize: "1.05rem", lineHeight: 1.6 }}>
-            One click opens a clean random-chat popup — no new tabs, no ads, no age gates. Same matching as chatblink.com, way less friction.
+            One click opens a clean random-chat popup — no new tabs, no ads, no age gates. Same matching as any chat site, way less friction.
           </p>
 
           <div className="flex flex-col items-center gap-3 mb-10">
