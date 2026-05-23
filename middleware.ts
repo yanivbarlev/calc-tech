@@ -1,6 +1,16 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-export default clerkMiddleware();
+export default clerkMiddleware((auth, req) => {
+  const host = req.headers.get("host")?.toLowerCase() ?? "";
+  if (host === "ppltok.com" || host === "www.ppltok.com") {
+    const url = req.nextUrl.clone();
+    if (url.pathname !== "/chat") {
+      url.pathname = "/chat";
+      return NextResponse.rewrite(url);
+    }
+  }
+});
 
 export const config = {
   matcher: [
