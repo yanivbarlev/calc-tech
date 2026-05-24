@@ -3,6 +3,13 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "nextjs",
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "(www\\.)?ppltok\\.com" }],
+      "destination": "/chat"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
