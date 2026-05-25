@@ -6,6 +6,21 @@ This is the calc-tech Next.js app. It serves as the hosted backend for Chrome ex
 
 `ppltok.com` is mapped to this Vercel project and serves the `/chat` page on every path via a host rewrite in `middleware.ts`.
 
+## Random Chat (`/random-chat`)
+
+Anonymous stranger-chat product built on **Supabase** (Postgres + Realtime).
+
+- **Page:** `app/random-chat/page.tsx` — single client component, four-state machine (`setup → waiting → chatting → partner_left`).
+- **API routes:** `app/api/random-chat/{join,match,send,leave}/route.ts` — all writes go server-side using the `service_role` key.
+- **Realtime:** browser subscribes to `chat_messages` INSERTs and `chat_sessions` UPDATEs via the anon key.
+- **Matchmaking:** atomic Postgres function `match_or_wait()` using `FOR UPDATE SKIP LOCKED` (no race conditions). Client polls `/api/random-chat/match` every 2s while waiting.
+- **Persistence:** every message stored permanently in `chat_messages`.
+- **Moderation:** 18+ gate + client-side `bad-words` filter (`Filter.clean()` masks profanity on send).
+
+**Setup:** see `supabase/SETUP.md`. Requires 4 env vars in Vercel: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+
+**Schema:** `supabase/schema.sql` — idempotent, safe to re-run.
+
 ## Deployment
 
 **Mechanism:** Vercel watches the GitHub repo and auto-deploys on every push to `main`.
