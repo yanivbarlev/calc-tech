@@ -1,284 +1,135 @@
 import type { MetadataRoute } from "next";
+import fs from "node:fs";
+import path from "node:path";
+
+const APP_DIR = path.join(process.cwd(), "app");
+const BASE_URL = "https://calc-tech.com";
+
+// Top-level folders that should never appear in the sitemap.
+const EXCLUDED_TOP_LEVEL = new Set([
+  "api",
+  "components",
+  "extensions", // walked separately
+  "chat", // served on ppltok.com via host rewrite, not a canonical calc-tech page
+  "random-chat",
+  "site-map", // internal HTML sitemap page if desired; remove from set to include
+]);
+
+// Reads a layout.tsx (if present) and returns true when it declares index: false.
+function isNoIndex(dir: string): boolean {
+  const layout = path.join(dir, "layout.tsx");
+  if (!fs.existsSync(layout)) return false;
+  const src = fs.readFileSync(layout, "utf8");
+  // crude but reliable: matches `index: false` inside a robots block
+  return /index\s*:\s*false/.test(src);
+}
+
+function hasPage(dir: string): boolean {
+  return (
+    fs.existsSync(path.join(dir, "page.tsx")) ||
+    fs.existsSync(path.join(dir, "page.ts")) ||
+    fs.existsSync(path.join(dir, "page.jsx")) ||
+    fs.existsSync(path.join(dir, "page.js"))
+  );
+}
+
+// Recursively collects route paths (relative to /app) for every folder that has a page file
+// and is not marked noindex. Skips dynamic segments and private folders.
+function collectRoutes(dir: string, routePrefix: string, out: string[]): void {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    const name = entry.name;
+    if (name.startsWith("_") || name.startsWith(".")) continue;
+    if (name.startsWith("[") || name.startsWith("(")) continue; // dynamic / route groups
+    const full = path.join(dir, name);
+    const route = `${routePrefix}/${name}`;
+    if (hasPage(full) && !isNoIndex(full)) {
+      out.push(route);
+    }
+    collectRoutes(full, route, out);
+  }
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://calc-tech.com";
-
-  // Main calculator routes
-  const calculators = [
-    "401k",
-    "about",
-    "age",
-    "amortization",
-    "apr",
-    "auto-loan",
-    "bmi",
-    "bmr",
-    "body-fat",
-    "budget",
-    "business-loan",
-    "calorie",
-    "cd",
-    "chat",
-    "college-cost",
-    "commission",
-    "compound-interest",
-    "conception",
-    "concrete",
-    "contact",
-    "conversion",
-    "credit-card",
-    "date",
-    "debt-consolidation",
-    "debt-payoff",
-    "discount",
-    "down-payment",
-    "due-date",
-    "dumpster",
-    "electricity",
-    "equity",
-    "estate",
-    "fcff",
-    "fifo",
-    "final-grade",
-    "final-salary",
-    "financial-ratio",
-    "financial-statement",
-    "future-value",
-    "gcd",
-    "gpa",
-    "grade",
-    "graphing",
-    "gross-profit",
-    "growth",
-    "heart-rate",
-    "hexadecimal",
-    "hourly",
-    "income",
-    "income-tax",
-    "interest",
-    "interpolation",
-    "investment",
-    "ira",
-    "jed",
-    "lcm",
-    "lease",
-    "length",
-    "life-expectancy",
-    "lifo",
-    "loan",
-    "log",
-    "loan-payoff",
-    "markup",
-    "mass",
-    "meal-cost",
-    "micro",
-    "miles",
-    "molar-mass",
-    "molarity",
-    "mortgage",
-    "moving-average",
-    "multiplication",
-    "net-profit",
-    "net-worth",
-    "nutrient",
-    "overtime",
-    "ovulation",
-    "oz",
-    "parking",
-    "paycheck",
-    "payment",
-    "payroll",
-    "percentage",
-    "percentage-change",
-    "percentage-decrease",
-    "percentage-increase",
-    "percentage-off",
-    "perimeter",
-    "perpetuity",
-    "pmi",
-    "polygon",
-    "population",
-    "portfolio",
-    "potency",
-    "pregnancy",
-    "present-value",
-    "price-increase",
-    "price-per-unit",
-    "prime",
-    "profit",
-    "profit-margin",
-    "property-tax",
-    "proportion",
-    "protein",
-    "pv-fv",
-    "pythagorean",
-    "quadratic",
-    "quarters",
-    "ranking",
-    "real-estate",
-    "retirement",
-    "return-on-investment",
-    "revenue",
-    "rnd",
-    "rounding",
-    "rrsp",
-    "rsp",
-    "salary",
-    "sales-tax",
-    "sample-size",
-    "savings",
-    "scale",
-    "scaling",
-    "scientific-notation",
-    "sd",
-    "semester",
-    "semi-annual",
-    "semi-monthly",
-    "sepia",
-    "shutter",
-    "sigma",
-    "simple-interest",
-    "slope",
-    "software",
-    "speed",
-    "sphere",
-    "square-root",
-    "standard-deviation",
-    "stddev",
-    "stdev",
-    "stemplot",
-    "stm",
-    "stoichiometry",
-    "stress",
-    "stretching",
-    "string-change",
-    "surface-area",
-    "survey",
-    "tax",
-    "tax-deduction",
-    "tax-equivalent-yield",
-    "temperature",
-    "template-value",
-    "term",
-    "test",
-    "thermal-resistance",
-    "time",
-    "tipping",
-    "total-revenue",
-    "trailing-average",
-    "transfer",
-    "triangle",
-    "trinomial",
-    "trip",
-    "true-annual",
-    "true-value",
-    "truncate",
-    "tuition",
-    "two-point",
-    "unit-conversion",
-    "unit-price",
-    "variable-interest",
-    "variance",
-    "vat",
-    "velocity",
-    "volume",
-    "volume-discount",
-    "wage",
-    "waist",
-    "wealth",
-    "week",
-    "weighted-average",
-    "weight-loss",
-    "whitespace",
-    "wick",
-    "width",
-    "window",
-    "windows",
-    "word-count",
-    "work",
-    "workout",
-    "yield",
-    "z-score",
-  ];
-
-  // Extension routes
-  const extensions = [
-    { path: "extensions/chatgpt-conversation-export", priority: 0.9 },
-    { path: "extensions/chatgpt-conversation-export/welcome", priority: 0.7 },
-    { path: "extensions/cleantube/welcome", priority: 0.7 },
-    { path: "extensions/cleantube/uninstall", priority: 0.5 },
-    { path: "extensions/facebook-messenger-cleaner", priority: 0.9 },
-    { path: "extensions/streamsaver", priority: 0.9 },
-    { path: "extensions/streamsaver/welcome", priority: 0.7 },
-    { path: "extensions/streamsaver/thanks", priority: 0.5 },
-    { path: "extensions/streamsaver/uninstall", priority: 0.5 },
-    { path: "extensions/sure-bet-finder/welcome", priority: 0.7 },
-    { path: "extensions/telegram-video-downloader", priority: 0.9 },
-    { path: "extensions/video-snapshot-youtube", priority: 0.9 },
-    { path: "extensions/volume-booster-equalizer-pro", priority: 0.9 },
-    { path: "extensions/volume-booster-equalizer-pro/welcome", priority: 0.7 },
-    { path: "extensions/volume-booster-equalizer-pro/thank-you", priority: 0.5 },
-    { path: "extensions/volume-booster-equalizer-pro/uninstall", priority: 0.5 },
-    { path: "extensions/whatsapp-ai-summarizer", priority: 0.9 },
-    { path: "extensions/whatsapp-chat-export/welcome", priority: 0.7 },
-    { path: "extensions/whatsapp-chat-export/thank-you", priority: 0.5 },
-    { path: "extensions/whatsapp-export-es/thank-you", priority: 0.5 },
-    { path: "extensions/whatsapp-export-es/uninstall", priority: 0.5 },
-    { path: "extensions/whatsapp-export-tr", priority: 0.9 },
-    { path: "extensions/whatsapp-export-tr/welcome", priority: 0.7 },
-  ];
-
+  const lastModified = new Date();
   const entries: MetadataRoute.Sitemap = [];
 
-  // Add home page
   entries.push({
-    url: baseUrl,
-    lastModified: new Date(),
+    url: BASE_URL,
+    lastModified,
     changeFrequency: "daily",
     priority: 1.0,
   });
 
-  // Add calculator pages
-  calculators.forEach((calc) => {
-    entries.push({
-      url: `${baseUrl}/${calc}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    });
-  });
+  // Top-level calculator pages
+  const topLevel = fs
+    .readdirSync(APP_DIR, { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .map((d) => d.name)
+    .filter(
+      (name) =>
+        !EXCLUDED_TOP_LEVEL.has(name) &&
+        !name.startsWith("_") &&
+        !name.startsWith(".") &&
+        !name.startsWith("[") &&
+        !name.startsWith("(")
+    );
 
-  // Add extension pages
-  extensions.forEach(({ path, priority }) => {
-    entries.push({
-      url: `${baseUrl}/${path}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority,
-    });
-  });
+  for (const name of topLevel) {
+    const dir = path.join(APP_DIR, name);
+    if (hasPage(dir) && !isNoIndex(dir)) {
+      entries.push({
+        url: `${BASE_URL}/${name}`,
+        lastModified,
+        changeFrequency: "weekly",
+        priority: 0.8,
+      });
+    }
+    // include indexable subpages (e.g. /read-aloud-tts/welcome, /privacy/<slug>)
+    const subRoutes: string[] = [];
+    collectRoutes(dir, `/${name}`, subRoutes);
+    for (const route of subRoutes) {
+      entries.push({
+        url: `${BASE_URL}${route}`,
+        lastModified,
+        changeFrequency: "monthly",
+        priority: 0.6,
+      });
+    }
+  }
 
-  // Add other important pages
-  entries.push({
-    url: `${baseUrl}/privacy/volume-booster-equalizer-pro`,
-    lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.6,
-  });
+  // Extension pages — only those that don't carry index: false
+  const extDir = path.join(APP_DIR, "extensions");
+  if (fs.existsSync(extDir)) {
+    const exts = fs
+      .readdirSync(extDir, { withFileTypes: true })
+      .filter((d) => d.isDirectory())
+      .map((d) => d.name);
 
-  entries.push({
-    url: `${baseUrl}/read-aloud-tts`,
-    lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.8,
-  });
-
-  entries.push({
-    url: `${baseUrl}/read-aloud-tts/welcome`,
-    lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.7,
-  });
+    for (const ext of exts) {
+      const dir = path.join(extDir, ext);
+      const baseRoute = `/extensions/${ext}`;
+      if (hasPage(dir) && !isNoIndex(dir)) {
+        entries.push({
+          url: `${BASE_URL}${baseRoute}`,
+          lastModified,
+          changeFrequency: "monthly",
+          priority: 0.9,
+        });
+      }
+      const subRoutes: string[] = [];
+      collectRoutes(dir, baseRoute, subRoutes);
+      for (const route of subRoutes) {
+        entries.push({
+          url: `${BASE_URL}${route}`,
+          lastModified,
+          changeFrequency: "monthly",
+          priority: 0.7,
+        });
+      }
+    }
+  }
 
   return entries;
 }
