@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ChevronDown, ChevronUp, MousePointer, Globe, UserX } from "lucide-react";
 
 const CWS_URL =
-  "https://chromewebstore.google.com/detail/novaview/gkpnedgnhkkloibfigmamhgbikfbmojf";
+  "https://chromewebstore.google.com/detail/ppltok-%E2%80%94-chat-with-strang/hmnajpdcooeoknhpjnofddbbbjoglddc";
 
 function FaqItem({
   question,
