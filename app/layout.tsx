@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://calc-tech.com"),
   title: "Calc-Tech: 200+ Free Online Calculators & Tools",
   description:
     "Free online calculators for finance, health, math, and more. Loan calculators, mortgage calculators, tax calculators, and 200+ other tools. No ads, no tracking, instant results.",

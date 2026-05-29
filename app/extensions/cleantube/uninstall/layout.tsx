@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   description:
     "Help us improve by telling us why you uninstalled CleanTube. Or reinstall it — it's free.",
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

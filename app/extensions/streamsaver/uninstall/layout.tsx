@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   description:
     "Stream Saver has been uninstalled. Let us know why — and reinstall for free anytime.",
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

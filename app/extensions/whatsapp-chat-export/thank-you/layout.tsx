@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   description:
     "Thank you for upgrading to WAExportPro PRO. Activate your license to unlock unlimited WhatsApp chat exports.",
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

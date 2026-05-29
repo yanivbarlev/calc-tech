@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   description:
     "Gracias por actualizar a Exportar Chat WhatsApp PRO. Activa tu licencia para desbloquear exportaciones ilimitadas de chats de WhatsApp.",
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

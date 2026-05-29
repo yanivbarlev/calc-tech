@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   description:
     "Thank you for upgrading to Volume Booster + Equalizer Pro PRO. Your license key is on its way. Here is how to activate 1000% boost and the full 5-band EQ.",
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

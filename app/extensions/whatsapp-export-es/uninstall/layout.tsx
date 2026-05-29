@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   description:
     "¿Cambiaste de opinión? Reinstala Exportar Chat WhatsApp gratis en segundos. Cuéntanos por qué desinstalaste para ayudarnos a mejorar.",
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 
