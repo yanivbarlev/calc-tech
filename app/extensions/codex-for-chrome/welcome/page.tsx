@@ -6,7 +6,6 @@ import Link from "next/link";
 import Script from "next/script";
 import {
   AdUnit,
-  Interstitial,
   DocsStyles,
   useScrollSpy,
   CHROME_STORE_URL,
@@ -67,7 +66,6 @@ function CodexWelcomeInner() {
         onLoad={handleGtagLoaded}
       />
 
-      <Interstitial storageKey="cx_interstitial_welcome" />
       <DocsStyles />
 
       <div className="cx-doc">

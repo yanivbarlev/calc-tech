@@ -3,7 +3,6 @@
 import Link from "next/link";
 import {
   AdUnit,
-  Interstitial,
   DocsStyles,
   useScrollSpy,
   CHROME_STORE_URL,
@@ -27,7 +26,6 @@ export default function CodexThankYouPage() {
 
   return (
     <>
-      <Interstitial storageKey="cx_interstitial_thankyou" />
       <DocsStyles />
 
       <div className="cx-doc">
