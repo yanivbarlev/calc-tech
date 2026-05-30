@@ -1,8 +1,16 @@
 "use client";
 
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useRef } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import Script from "next/script";
+import {
+  AdUnit,
+  Interstitial,
+  DocsStyles,
+  useScrollSpy,
+  CHROME_STORE_URL,
+} from "../_components/docs";
 
 declare global {
   interface Window {
@@ -11,27 +19,25 @@ declare global {
   }
 }
 
+const NAV = [
+  { id: "welcome", label: "Welcome" },
+  { id: "open-panel", label: "Open the panel" },
+  { id: "first-prompt", label: "Send your first prompt" },
+  { id: "shortcuts", label: "Shortcuts cheatsheet" },
+  { id: "make-it-yours", label: "Make it yours" },
+  { id: "whats-next", label: "What's next" },
+];
+const NAV_IDS = NAV.map((n) => n.id);
+
 function CodexWelcomeInner() {
   const searchParams = useSearchParams();
   const reason = searchParams.get("reason");
   const prev = searchParams.get("prev");
   const v = searchParams.get("v") || "";
   const conversionFired = useRef(false);
+  const active = useScrollSpy(NAV_IDS, "welcome");
 
-  useEffect(() => {
-    const eyebrow = document.getElementById("heroEyebrow");
-    const banner = document.getElementById("updateBanner");
-    const bannerText = document.getElementById("updateText");
-    if (reason === "update" && prev) {
-      if (eyebrow) eyebrow.textContent = v ? "Updated to v" + v : "Updated";
-      if (banner) banner.classList.add("active");
-      if (bannerText)
-        bannerText.textContent =
-          "You just updated from v" + prev + ". Thanks for keeping Codex for Chrome up to date.";
-    } else {
-      if (eyebrow) eyebrow.textContent = "You're all set";
-    }
-  }, [reason, prev, v]);
+  const isUpdate = reason === "update" && !!prev;
 
   function handleGtagLoaded() {
     window.dataLayer = window.dataLayer || [];
@@ -61,326 +67,211 @@ function CodexWelcomeInner() {
         onLoad={handleGtagLoaded}
       />
 
-      <style>{`
-        :root {
-          --bg: #f8fafc;
-          --bg-card: #ffffff;
-          --line: #e5e7eb;
-          --line-strong: #d1d5db;
-          --text: #0f172a;
-          --text-muted: #475569;
-          --text-dim: #64748b;
-          --accent: #0d9488;
-          --accent-2: #10b981;
-          --accent-soft: rgba(13,148,136,0.1);
-          --accent-border: rgba(13,148,136,0.25);
-          --shadow-card: 0 1px 2px rgba(15,23,42,0.04), 0 4px 12px -4px rgba(15,23,42,0.06);
-          --shadow-elev: 0 1px 0 rgba(255,255,255,0.6) inset, 0 4px 16px -4px rgba(15,23,42,0.08), 0 24px 48px -16px rgba(15,23,42,0.1);
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-          background: var(--bg);
-          color: var(--text);
-          font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-          -webkit-font-smoothing: antialiased;
-          min-height: 100vh;
-          line-height: 1.5;
-        }
-        .cx-wrap { position: relative; min-height: 100vh; }
-        .cx-wrap::before {
-          content: '';
-          position: fixed; inset: 0;
-          background:
-            radial-gradient(ellipse 800px 600px at 15% 10%, rgba(13,148,136,0.07), transparent 60%),
-            radial-gradient(ellipse 600px 500px at 85% 80%, rgba(16,185,129,0.05), transparent 60%);
-          pointer-events: none; z-index: 0;
-        }
-        .cx-page {
-          position: relative; z-index: 1;
-          max-width: 1000px; margin: 0 auto;
-          padding: 32px 32px 80px;
-        }
-        @media (max-width: 700px) { .cx-page { padding: 20px 16px 60px; } }
+      <Interstitial storageKey="cx_interstitial_welcome" />
+      <DocsStyles />
 
-        /* Brand */
-        .cx-brand {
-          display: flex; align-items: center; gap: 10px;
-          font-size: 13px; color: var(--text-muted);
-          font-weight: 600; letter-spacing: 0.4px;
-          opacity: 0; animation: cxFadeIn 0.6s ease 0.1s forwards;
-          margin-bottom: 28px;
-        }
-        .cx-brand-dot {
-          width: 8px; height: 8px; border-radius: 50%;
-          background: var(--accent);
-          animation: cxDotPulse 2.4s ease-in-out infinite;
-        }
-        @keyframes cxDotPulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(13,148,136,0.5); }
-          50%       { box-shadow: 0 0 0 8px rgba(13,148,136,0); }
-        }
-
-        /* Hero */
-        .cx-hero { opacity: 0; animation: cxFadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.2s forwards; margin-bottom: 44px; }
-        .cx-eyebrow {
-          display: inline-flex; align-items: center; gap: 8px;
-          font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
-          text-transform: uppercase; color: var(--accent);
-          background: var(--accent-soft);
-          padding: 6px 12px; border-radius: 999px;
-          border: 1px solid var(--accent-border);
-          margin-bottom: 18px;
-        }
-        .cx-headline {
-          font-size: clamp(30px, 4.4vw, 46px);
-          font-weight: 700; letter-spacing: -0.03em;
-          line-height: 1.06; margin-bottom: 14px;
-        }
-        .cx-headline .accent {
-          background: linear-gradient(90deg, var(--accent), var(--accent-2));
-          -webkit-background-clip: text; background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-        .cx-sub { font-size: 16px; color: var(--text-muted); max-width: 56ch; }
-        .cx-update-banner {
-          display: none;
-          background: var(--accent-soft);
-          border: 1px solid var(--accent-border);
-          color: var(--text);
-          padding: 12px 16px; border-radius: 10px;
-          font-size: 13px; margin-bottom: 22px;
-          align-items: center; gap: 10px;
-        }
-        .cx-update-banner.active { display: flex; }
-
-        /* Onboarding */
-        .cx-section-label {
-          display: flex; align-items: center; gap: 12px;
-          font-size: 12px; color: var(--text-dim);
-          font-weight: 700; letter-spacing: 1.4px;
-          text-transform: uppercase; margin-bottom: 22px;
-        }
-        .cx-section-label::after {
-          content: ''; flex: 1; height: 1px;
-          background: linear-gradient(90deg, var(--line) 0%, transparent 100%);
-        }
-        .cx-onboarding { opacity: 0; animation: cxFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.35s forwards; margin-bottom: 48px; }
-        .cx-steps {
-          display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
-        }
-        @media (max-width: 760px) { .cx-steps { grid-template-columns: 1fr; } }
-        .cx-step {
-          background: var(--bg-card);
-          border: 1px solid var(--line);
-          border-radius: 16px; padding: 24px 22px;
-          box-shadow: var(--shadow-card);
-          position: relative;
-          transition: transform 200ms ease, box-shadow 200ms ease;
-        }
-        .cx-step:hover { transform: translateY(-2px); box-shadow: 0 1px 2px rgba(15,23,42,0.05), 0 12px 28px -10px rgba(15,23,42,0.12); }
-        .cx-step-num {
-          position: absolute; top: 18px; right: 18px;
-          width: 26px; height: 26px;
-          background: var(--accent); color: white;
-          border-radius: 50%;
-          display: flex; align-items: center; justify-content: center;
-          font-size: 12px; font-weight: 700;
-          box-shadow: 0 2px 6px rgba(13,148,136,0.3);
-        }
-        .cx-step-art {
-          height: 96px; border-radius: 12px;
-          background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 100%);
-          border: 1px solid #d1fae5;
-          display: flex; align-items: center; justify-content: center;
-          margin-bottom: 16px; color: var(--accent);
-        }
-        .cx-step-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; letter-spacing: -0.01em; }
-        .cx-step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
-        .cx-pin {
-          margin-top: 20px;
-          padding: 14px 18px;
-          background: var(--accent-soft);
-          border: 1px solid var(--accent-border);
-          border-radius: 12px;
-          font-size: 13.5px; color: var(--text-muted);
-          display: flex; align-items: center; gap: 10px;
-        }
-        .cx-pin strong { color: var(--text); font-weight: 700; }
-
-        /* Features */
-        .cx-features-wrap { opacity: 0; animation: cxFadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.5s forwards; }
-        .cx-features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-        @media (max-width: 760px) { .cx-features { grid-template-columns: 1fr; } }
-        .cx-feature {
-          background: var(--bg-card);
-          border: 1px solid var(--line);
-          border-radius: 14px; padding: 22px;
-          box-shadow: var(--shadow-card);
-          display: flex; gap: 14px; align-items: flex-start;
-        }
-        .cx-feature-icon {
-          width: 38px; height: 38px; flex-shrink: 0;
-          display: flex; align-items: center; justify-content: center;
-          background: var(--accent-soft); border-radius: 10px; color: var(--accent);
-        }
-        .cx-feature-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-        .cx-feature-desc { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
-
-        /* Footer */
-        .cx-foot {
-          margin-top: 56px; padding-top: 26px;
-          border-top: 1px solid var(--line);
-          display: flex; justify-content: space-between; align-items: center;
-          flex-wrap: wrap; gap: 16px;
-          font-size: 13px; color: var(--text-dim);
-          opacity: 0; animation: cxFadeIn 0.8s ease 0.8s forwards;
-        }
-        .cx-foot a { color: var(--text-muted); text-decoration: none; transition: color 150ms ease; }
-        .cx-foot a:hover { color: var(--text); }
-
-        @keyframes cxFadeIn { to { opacity: 1; } }
-        @keyframes cxFadeUp { to { opacity: 1; transform: translateY(0); } }
-        .cx-hero, .cx-onboarding, .cx-features-wrap { transform: translateY(12px); }
-      `}</style>
-
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-      <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet"
-      />
-
-      <div className="cx-wrap">
-        <div className="cx-page">
-          <div className="cx-brand">
-            <span className="cx-brand-dot"></span>
-            <span>CODEX FOR CHROME · ChatGPT &amp; Codex Sidebar</span>
+      <div className="cx-doc">
+        {/* Top bar */}
+        <header className="cx-topbar">
+          <div className="cx-topbar-inner">
+            <Link href="/" className="cx-logo">
+              <span className="cx-logo-mark">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 17 10 11 4 5" /><line x1="12" y1="19" x2="20" y2="19" /></svg>
+              </span>
+              Codex for Chrome
+            </Link>
+            <div className="cx-topbar-spacer" />
+            <Link href="/extensions/codex-for-chrome" className="cx-topbar-link">
+              Overview
+            </Link>
+            <Link href="/extensions/codex-for-chrome/thank-you" className="cx-topbar-link">
+              Full guide
+            </Link>
+            <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer" className="cx-topbar-cta">
+              Add to Chrome
+            </a>
           </div>
+        </header>
 
-          {/* Hero */}
-          <div className="cx-hero">
-            <div className="cx-update-banner" id="updateBanner">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--accent)", flexShrink: 0 }}>
-                <path d="M21 12a9 9 0 11-3-6.7L21 8" /><path d="M21 3v5h-5" />
-              </svg>
-              <span id="updateText">You just updated to a new version.</span>
-            </div>
-            <span className="cx-eyebrow" id="heroEyebrow">You&apos;re all set</span>
-            <h1 className="cx-headline">
-              Thanks for installing — <br />
-              <span className="accent">here&apos;s how to open it.</span>
+        {/* Hero */}
+        <section className="cx-hero">
+          <div className="cx-hero-inner">
+            <span className="cx-hero-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+              {isUpdate ? (v ? "Updated to v" + v : "Updated") : "You're all set"}
+            </span>
+            <h1>
+              {isUpdate
+                ? "Codex for Chrome just got better"
+                : "Welcome to Codex for Chrome"}
             </h1>
-            <p className="cx-sub">
-              Codex for Chrome adds a side panel with one-click prompt templates
-              and a full keyboard-shortcut cheatsheet right inside ChatGPT,
-              OpenAI and Codex. Chrome doesn&apos;t auto-open side panels, so
-              here are the two clicks to bring it up.
+            <p>
+              {isUpdate
+                ? "Thanks for keeping the extension up to date. Here's a quick refresher on opening the side panel and getting the most out of your prompt templates and shortcuts."
+                : "Thanks for installing. This is the 60-second walkthrough: open the side panel, send your first one-click prompt, and learn where every keyboard shortcut lives. Then you're off."}
             </p>
-          </div>
-
-          {/* Onboarding */}
-          <div className="cx-onboarding">
-            <div className="cx-section-label">How to open the panel</div>
-            <div className="cx-steps">
-              <div className="cx-step">
-                <div className="cx-step-num">1</div>
-                <div className="cx-step-art">
-                  {/* puzzle piece */}
-                  <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.568 1.568c-.23.23-.338.556-.289.878.255 1.687-.654 3.349-2.265 4.013-1.611.664-3.475.157-4.526-1.231-.2-.264-.519-.418-.85-.418s-.65.154-.85.418c-1.051 1.388-2.915 1.895-4.526 1.231-1.611-.664-2.52-2.326-2.265-4.013.049-.322-.059-.648-.289-.878l-1.568-1.568A2.4 2.4 0 0 1 2 11.999c0-.617.235-1.233.706-1.704l1.568-1.568c.23-.23.338-.556.289-.878-.255-1.687.654-3.349 2.265-4.013 1.611-.664 3.475-.157 4.526 1.231.2.264.519.418.85.418s.65-.154.85-.418c1.051-1.388 2.915-1.895 4.526-1.231 1.611.664 2.52 2.326 2.265 4.013z" />
-                  </svg>
-                </div>
-                <div className="cx-step-title">Click the puzzle icon</div>
-                <div className="cx-step-desc">Top-right of Chrome&apos;s toolbar. It opens your list of installed extensions.</div>
-              </div>
-
-              <div className="cx-step">
-                <div className="cx-step-num">2</div>
-                <div className="cx-step-art">
-                  {/* cursor click */}
-                  <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" /><path d="M13 13l6 6" />
-                  </svg>
-                </div>
-                <div className="cx-step-title">Click &quot;Codex for Chrome&quot;</div>
-                <div className="cx-step-desc">In the dropdown, click the extension name. The side panel slides in from the right.</div>
-              </div>
-
-              <div className="cx-step">
-                <div className="cx-step-num">3</div>
-                <div className="cx-step-art">
-                  {/* side panel */}
-                  <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="2" /><line x1="15" y1="3" x2="15" y2="21" />
-                  </svg>
-                </div>
-                <div className="cx-step-title">Prompts &amp; shortcuts appear</div>
-                <div className="cx-step-desc">Or just tap the ⚡ button next to the chat input on ChatGPT and Codex.</div>
-              </div>
-            </div>
-
-            <div className="cx-pin">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--accent)", flexShrink: 0 }}>
-                <line x1="12" y1="17" x2="12" y2="22" /><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24z" />
-              </svg>
+            <div className="cx-hero-meta">
               <span>
-                <strong>Tip:</strong> click the pin next to &quot;Codex for Chrome&quot; in that dropdown to keep the icon permanently in your toolbar — one click to open it from then on.
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                60-second setup
+              </span>
+              <span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
+                ChatGPT · OpenAI · Codex · Sora
+              </span>
+              <span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+                Free · no account
               </span>
             </div>
           </div>
+        </section>
 
-          {/* Feature recap */}
-          <div className="cx-features-wrap">
-            <div className="cx-section-label">What&apos;s inside</div>
-            <div className="cx-features">
-              <div className="cx-feature">
-                <div className="cx-feature-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>
-                </div>
-                <div>
-                  <div className="cx-feature-title">30+ Prompt Templates</div>
-                  <div className="cx-feature-desc">Code, Review, Clarity, and Debug prompts — click one to drop it into the chat input instantly.</div>
-                </div>
+        {/* Shell */}
+        <div className="cx-shell">
+          <aside className="cx-side">
+            <div className="cx-side-title">On this page</div>
+            <nav className="cx-side-nav">
+              {NAV.map((n) => (
+                <a key={n.id} href={`#${n.id}`} className={active === n.id ? "active" : ""}>
+                  {n.label}
+                </a>
+              ))}
+            </nav>
+          </aside>
+
+          <main className="cx-main">
+            {/* Top banner ad */}
+            <AdUnit adSlot="3339483394" adFormat="horizontal" style={{ minHeight: 90 }} />
+
+            <h2 id="welcome">Welcome</h2>
+            {isUpdate && (
+              <div className="cx-call info">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 11-3-6.7L21 8" /><path d="M21 3v5h-5" /></svg>
+                <p>You just updated from <strong>v{prev}</strong>. Thanks for keeping Codex for Chrome current — everything below still applies.</p>
               </div>
+            )}
+            <p className="cx-lead">
+              Codex for Chrome is a side panel that lives next to ChatGPT, OpenAI and Codex. It gives
+              you two things, one click away: 30+ ready-to-use prompt templates, and a full cheatsheet
+              of every keyboard shortcut. No setup, no account, no tracking.
+            </p>
+            <p>
+              This page gets you from &ldquo;just installed&rdquo; to &ldquo;using it like a pro&rdquo; in
+              about a minute. If you ever want the deeper reference — troubleshooting, the full shortcut
+              table, privacy details — head to the <Link className="inline" href="/extensions/codex-for-chrome/thank-you">complete guide</Link>.
+            </p>
 
-              <div className="cx-feature">
-                <div className="cx-feature-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M6 12h.001M10 12h.001M14 12h.001M18 12h.001M7 16h10" /></svg>
-                </div>
-                <div>
-                  <div className="cx-feature-title">Shortcut Cheatsheet</div>
-                  <div className="cx-feature-desc">Every ChatGPT &amp; Codex keyboard shortcut, organized and always one click away.</div>
-                </div>
+            <h2 id="open-panel">Open the panel</h2>
+            <p>
+              Chrome won&apos;t auto-open an extension&apos;s side panel — that&apos;s a deliberate privacy
+              protection. So you open it once by hand, then pin it so it&apos;s always a single click away.
+            </p>
+            <div className="cx-steps">
+              <div className="cx-step">
+                <h4>Click the puzzle-piece icon</h4>
+                <p>Top-right of Chrome&apos;s toolbar. It lists every extension you&apos;ve installed.</p>
               </div>
-
-              <div className="cx-feature">
-                <div className="cx-feature-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /></svg>
-                </div>
-                <div>
-                  <div className="cx-feature-title">Dark &amp; Light Mode</div>
-                  <div className="cx-feature-desc">Match the panel to how you work. Your choice is saved locally on your device.</div>
-                </div>
+              <div className="cx-step">
+                <h4>Pin &ldquo;Codex for Chrome&rdquo;</h4>
+                <p>Click the pin next to it so the icon stays visible in your toolbar from now on.</p>
               </div>
-
-              <div className="cx-feature">
-                <div className="cx-feature-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
-                </div>
-                <div>
-                  <div className="cx-feature-title">Private &amp; Free</div>
-                  <div className="cx-feature-desc">No tracking, no account, no data collected. Active only on OpenAI sites.</div>
-                </div>
+              <div className="cx-step">
+                <h4>Click the icon — the panel opens</h4>
+                <p>It slides in from the right, next to your chat. Or tap the ⚡ button by the chat input.</p>
               </div>
             </div>
-          </div>
+            <div className="cx-call tip">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18h6" /><path d="M10 22h4" /><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V18h6v-1.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z" /></svg>
+              <p><strong>Do this now:</strong> open a <a className="inline" href="https://chatgpt.com" target="_blank" rel="noopener noreferrer">ChatGPT tab</a>, then click the Codex icon. Seeing the panel appear is the whole &ldquo;aha&rdquo; moment.</p>
+            </div>
 
-          <div className="cx-foot">
-            <div>Enjoying it? Leave a review on the Chrome Web Store — it really helps.</div>
-            <div><a href="/extensions/codex-for-chrome">Learn more about Codex for Chrome →</a></div>
-          </div>
+            <h2 id="first-prompt">Send your first prompt</h2>
+            <p>
+              Open the <strong>Prompts</strong> tab in the panel. You&apos;ll see prompts grouped into Code,
+              Review, Clarity, and Debug. Click any one of them and it drops straight into the ChatGPT or
+              Codex input box (and onto your clipboard as a backup). Add your specifics and hit send.
+            </p>
+            <h3>Try this 3-click code review</h3>
+            <ol>
+              <li>Paste some code into ChatGPT, then click <code className="inline">Explain this code step by step</code>.</li>
+              <li>Follow up with <code className="inline">Find all bugs and explain each one</code>.</li>
+              <li>Finish with <code className="inline">Write unit tests for this</code>.</li>
+            </ol>
+            <p>
+              Three clicks, a full review and a test suite — without typing the same instructions you type
+              every day.
+            </p>
+
+            {/* In-content ad */}
+            <AdUnit adSlot="9713320054" style={{ minHeight: 250 }} />
+
+            <h2 id="shortcuts">Shortcuts cheatsheet</h2>
+            <p>
+              Switch to the <strong>Shortcuts</strong> tab any time you forget a key combo. It lists every
+              ChatGPT and Codex shortcut, grouped by area. A few you&apos;ll use constantly:
+            </p>
+            <table className="cx-tbl">
+              <thead>
+                <tr><th>Action</th><th>Shortcut</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>New chat</td><td><kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>O</kbd></td></tr>
+                <tr><td>Focus the chat input</td><td><kbd>Shift</kbd> <kbd>Esc</kbd></td></tr>
+                <tr><td>Send message</td><td><kbd>Enter</kbd></td></tr>
+                <tr><td>Codex — run task</td><td><kbd>Ctrl</kbd> <kbd>Enter</kbd></td></tr>
+                <tr><td>Codex — stop task</td><td><kbd>Esc</kbd></td></tr>
+              </tbody>
+            </table>
+            <p>On macOS, swap <kbd>Ctrl</kbd> for <kbd>⌘</kbd> where it applies.</p>
+
+            <h2 id="make-it-yours">Make it yours</h2>
+            <p>
+              Prefer light mode? Click the <strong>moon / sun icon</strong> in the panel header to toggle
+              between dark and light. Your choice is saved locally and sticks across sessions — it never
+              leaves your device. In fact, the only thing this extension ever stores is that single theme
+              preference; it reads nothing from your conversations and sends no data anywhere.
+            </p>
+            <div className="cx-call warn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
+              <p>Codex for Chrome is an independent third-party tool and is <strong>not affiliated with or endorsed by OpenAI.</strong> ChatGPT and Codex are trademarks of OpenAI.</p>
+            </div>
+
+            <h2 id="whats-next">What&apos;s next</h2>
+            <p>
+              That&apos;s everything you need to start. When you want the full reference — the complete
+              shortcut table, troubleshooting, and the privacy deep-dive — the complete guide has it all.
+              And if the extension&apos;s saving you time, a quick review on the Chrome Web Store genuinely helps.
+            </p>
+
+            {/* Bottom ad */}
+            <AdUnit adSlot="3339483394" style={{ minHeight: 250 }} />
+
+            {/* Prev / Next */}
+            <div className="cx-pn">
+              <Link href="/extensions/codex-for-chrome">
+                <span className="dir">← Overview</span>
+                <span className="t">Codex for Chrome — features</span>
+              </Link>
+              <Link href="/extensions/codex-for-chrome/thank-you" className="next">
+                <span className="dir">Next →</span>
+                <span className="t">The complete guide</span>
+              </Link>
+            </div>
+          </main>
         </div>
+
+        {/* Footer */}
+        <footer className="cx-foot">
+          <div className="cx-foot-inner">
+            <span>&copy; {new Date().getFullYear()} Calc-Tech. Codex for Chrome is an independent tool, not affiliated with OpenAI.</span>
+            <span style={{ display: "flex", gap: 16 }}>
+              <Link href="/">Home</Link>
+              <Link href="/extensions/codex-for-chrome">Overview</Link>
+              <Link href="/privacy">Privacy</Link>
+            </span>
+          </div>
+        </footer>
       </div>
     </>
   );
