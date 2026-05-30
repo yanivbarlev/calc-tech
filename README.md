@@ -68,8 +68,8 @@ This project is optimized for deployment on Vercel with a custom domain from GoD
 
 ### Detailed Instructions
 
-- **Quick Start**: See `VERCEL-QUICK-START.md` for a 5-minute deployment guide
-- **Complete Guide**: See `VERCEL-DEPLOYMENT.md` for detailed instructions including:
+- **Quick Start**: See `docs/VERCEL-QUICK-START.md` for a 5-minute deployment guide
+- **Complete Guide**: See `docs/VERCEL-DEPLOYMENT.md` for detailed instructions including:
   - GitHub setup
   - Vercel deployment
   - GoDaddy domain connection (DNS configuration)
