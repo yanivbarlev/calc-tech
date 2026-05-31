@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAExportPro — Export WhatsApp Chats in One Click</title>
+    <meta name="description" content="Export WhatsApp contacts, chats and media. Download your chat history as HTML, CSV or plain text. Works directly in your browser.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anybody:wght@100;400;700;900&family=Figtree:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fafaf8;
+            --white: #ffffff;
+            --ink: #111;
+            --ink-soft: #444;
+            --ink-muted: #999;
+            --green: #25d366;
+            --green-dark: #1da851;
+            --green-bg: #e8f8ee;
+            --red: #d94f3b;
+            --red-bg: #fdf0ee;
+            --border: #e4e4e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Figtree', sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        a { color: var(--green); text-decoration: none; }
+
+        .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+        /* ── Nav ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(250, 250, 248, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 18px;
+            letter-spacing: -0.03em;
+            color: var(--ink);
+        }
+        .nav-cta {
+            padding: 10px 24px;
+            background: var(--ink);
+            color: #fff;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: all 0.25s;
+            display: inline-block;
+        }
+        .nav-cta:hover { background: var(--green); color: #fff; }
+
+        /* ── Hero ── */
+        .hero {
+            padding: 120px 0 80px;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+        .hero h1 {
+            font-family: 'Anybody', sans-serif;
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 900;
+            line-height: 1.08;
+            letter-spacing: -0.04em;
+            margin-bottom: 24px;
+        }
+        .hero h1 .strike {
+            text-decoration: line-through;
+            text-decoration-color: var(--red);
+            text-decoration-thickness: 3px;
+            color: var(--ink-muted);
+        }
+        .hero-sub {
+            font-size: 18px;
+            color: var(--ink-soft);
+            line-height: 1.7;
+            margin-bottom: 40px;
+            max-width: 520px;
+        }
+
+        /* ── MEGA CTA BUTTON ── */
+        .hero-cta-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .cta-spotlight {
+            position: relative;
+        }
+
+        .btn-mega {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 48px;
+            background: #0d6b3a;
+            color: #fff;
+            border-radius: 60px;
+            font-size: 20px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            letter-spacing: -0.01em;
+            box-shadow:
+                0 4px 16px rgba(13, 107, 58, 0.35),
+                0 0 0 0 rgba(13, 107, 58, 0.4);
+            animation: cta-pulse 2.5s ease infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn-mega svg {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .btn-mega:hover {
+            background: #094d2a;
+            transform: translateY(-3px) scale(1.03);
+            box-shadow:
+                0 8px 32px rgba(13, 107, 58, 0.45),
+                0 0 0 0 rgba(13, 107, 58, 0);
+            animation: none;
+        }
+
+        @keyframes cta-pulse {
+            0%, 100% {
+                box-shadow:
+                    0 4px 16px rgba(13, 107, 58, 0.3),
+                    0 0 0 0 rgba(13, 107, 58, 0.4);
+            }
+            50% {
+                box-shadow:
+                    0 4px 16px rgba(13, 107, 58, 0.3),
+                    0 0 0 12px rgba(13, 107, 58, 0);
+            }
+        }
+
+        /* Animated bouncing arrow */
+        .cta-arrow {
+            position: absolute;
+            top: -52px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: arrow-bounce 1.5s ease infinite;
+            z-index: 3;
+        }
+
+        .cta-arrow-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #0d6b3a;
+            white-space: nowrap;
+            margin-bottom: 4px;
+            letter-spacing: 0.02em;
+        }
+
+        .cta-arrow svg {
+            width: 28px;
+            height: 28px;
+            color: #0d6b3a;
+        }
+
+        @keyframes arrow-bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* Glow ring behind the button */
+        .cta-glow {
+            position: absolute;
+            inset: -8px;
+            border-radius: 68px;
+            background: radial-gradient(circle, rgba(13,107,58,0.2) 0%, transparent 70%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 16px 28px;
+            background: transparent;
+            color: var(--ink-soft);
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .btn-secondary:hover { color: var(--ink); }
+
+        .hero-subtext {
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--ink-muted);
+        }
+        .hero-subtext strong { color: var(--ink-soft); }
+
+        /* ── Before/After ── */
+        .comparison { padding: 80px 0; }
+        .comp-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .comp-card {
+            padding: 40px;
+            border-radius: 16px;
+            border: 2px solid;
+        }
+        .comp-card.before {
+            background: var(--red-bg);
+            border-color: #f0d0ca;
+        }
+        .comp-card.after {
+            background: var(--green-bg);
+            border-color: #b8e8c8;
+        }
+        .comp-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 16px;
+        }
+        .comp-card.before .comp-label { color: var(--red); }
+        .comp-card.after .comp-label { color: var(--green); }
+        .comp-card h3 {
+            font-family: 'Anybody', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+        .comp-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .comp-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--ink-soft);
+        }
+        .comp-list li::before {
+            content: '✕';
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .comp-card.before .comp-list li::before { color: var(--red); }
+        .comp-card.after .comp-list li::before { content: '✓'; color: var(--green); }
+
+        /* ── Benefits ── */
+        .benefits {
+            padding: 80px 0;
+            text-align: center;
+        }
+        .benefits h2 {
+            font-family: 'Anybody', sans-serif;
+            font-size: clamp(28px, 3.5vw, 40px);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 48px;
+        }
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .benefit {
+            background: var(--white);
+            padding: 36px 28px;
+            text-align: left;
+        }
+        .benefit-num {
+            font-family: 'Anybody', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--green);
+            line-height: 1;
+            margin-bottom: 12px;
+            letter-spacing: -0.04em;
+        }
+        .benefit h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .benefit p {
+            font-size: 13px;
+            color: var(--ink-muted);
+            line-height: 1.6;
+        }
+
+        /* ── Guarantee ── */
+        .guarantee {
+            max-width: 600px;
+            margin: 60px auto;
+            text-align: center;
+            padding: 40px;
+            background: var(--white);
+            border: 2px solid var(--green);
+            border-radius: 16px;
+        }
+        .guarantee-icon { font-size: 40px; margin-bottom: 12px; }
+        .guarantee h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+        .guarantee p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
+
+        /* ── Final CTA ── */
+        .final-cta {
+            padding: 80px 0;
+            text-align: center;
+        }
+        .final-cta h2 {
+            font-family: 'Anybody', sans-serif;
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+        }
+        .final-cta p {
+            font-size: 16px;
+            color: var(--ink-soft);
+            margin-bottom: 32px;
+        }
+
+        /* ── Footer ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
+        }
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--ink-muted);
+        }
+        .footer-links { display: flex; gap: 20px; list-style: none; }
+        .footer-links a { color: var(--ink-muted); }
+        .footer-links a:hover { color: var(--ink); }
+
+        /* ── Floating banner ── */
+        .float-banner {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(120px);
+            z-index: 9998;
+            background: var(--ink);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .float-banner.visible { transform: translateX(-50%) translateY(0); }
+        .float-banner a {
+            background: var(--green);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        /* ── Exit Intent Popup ── */
+        .exit-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: exit-fadeIn 0.3s ease;
+        }
+        .exit-overlay.show { display: flex; }
+
+        @keyframes exit-fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .exit-popup {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 48px 40px;
+            max-width: 460px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+            animation: exit-popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes exit-popIn {
+            from { opacity: 0; transform: scale(0.85) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .exit-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: var(--ink-muted);
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        .exit-close:hover { background: #f0f0f0; color: var(--ink); }
+
+        .exit-emoji { font-size: 48px; margin-bottom: 16px; }
+
+        .exit-popup h2 {
+            font-family: 'Anybody', sans-serif;
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 10px;
+            line-height: 1.15;
+        }
+
+        .exit-popup p {
+            font-size: 15px;
+            color: var(--ink-soft);
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .exit-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 18px 40px;
+            background: #0d6b3a;
+            color: #fff;
+            border-radius: 60px;
+            font-size: 18px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(13,107,58,0.35);
+        }
+        .exit-btn:hover {
+            background: #094d2a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(13,107,58,0.4);
+        }
+
+        .exit-subtext {
+            margin-top: 16px;
+            font-size: 12px;
+            color: var(--ink-muted);
+        }
+
+        /* ── Reveal animations ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 800px) {
+            .comp-grid { grid-template-columns: 1fr; }
+            .benefits-grid { grid-template-columns: 1fr; }
+            .btn-mega { padding: 18px 36px; font-size: 18px; }
+        }
+        @media (max-width: 500px) {
+            .hero { padding: 100px 0 60px; }
+            .btn-mega { padding: 16px 28px; font-size: 16px; }
+            .cta-arrow { top: -48px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ── Nav ── -->
+    <nav>
+        <div class="container nav-inner">
+            <div class="logo">WAExportPro</div>
+            <a href="https://chromewebstore.google.com/detail/waexportpro-backup-whatsa/pcbcfneocfimieifgogbkfodlkicemcl" class="nav-cta">Get it free</a>
+        </div>
+    </nav>
+
+    <!-- ── Hero ── -->
+    <section class="hero">
+        <div class="container">
+            <h1>WhatsApp <span class="strike">won't let you</span> export your chats.</h1>
+            <p class="hero-sub">Screenshots? Copy-paste? Scrolling through thousands of messages? There's a better way. Export any chat as a clean file in 10 seconds.</p>
+            <div class="hero-cta-wrapper">
+                <div class="cta-spotlight">
+                    <div class="cta-arrow">
+                        <span class="cta-arrow-label">It's free!</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                    </div>
+                    <div class="cta-glow"></div>
+                    <a href="https://chromewebstore.google.com/detail/waexportpro-backup-whatsa/pcbcfneocfimieifgogbkfodlkicemcl" class="btn-mega">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        Add to Chrome — free
+                    </a>
+                </div>
+                <a href="#how" class="btn-secondary">See how it works ↓</a>
+            </div>
+            <p class="hero-subtext">Available on the Chrome Web Store &middot; No data leaves your browser</p>
+        </div>
+    </section>
+
+    <!-- ── Before/After ── -->
+    <section class="comparison">
+        <div class="container">
+            <div class="comp-grid">
+                <div class="comp-card before reveal">
+                    <div class="comp-label">Without WAExportPro</div>
+                    <h3>Frustrating &amp; manual</h3>
+                    <ul class="comp-list">
+                        <li>Take hundreds of screenshots manually</li>
+                        <li>Copy-paste messages one by one</li>
+                        <li>No way to search exported content</li>
+                        <li>Media files lost or scattered</li>
+                        <li>Group contacts impossible to extract</li>
+                    </ul>
+                </div>
+                <div class="comp-card after reveal">
+                    <div class="comp-label">With WAExportPro</div>
+                    <h3>One click, done</h3>
+                    <ul class="comp-list">
+                        <li>Export entire chats instantly</li>
+                        <li>Clean HTML, CSV, or text files</li>
+                        <li>Fully searchable, organized output</li>
+                        <li>All images &amp; videos included</li>
+                        <li>Group contacts in one CSV download</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Benefits ── -->
+    <section class="benefits" id="how">
+        <div class="container">
+            <h2>Why people are switching</h2>
+            <div class="benefits-grid">
+                <div class="benefit reveal">
+                    <div class="benefit-num">10s</div>
+                    <h4>Average export time</h4>
+                    <p>Select a chat, pick a format, click download. That's it.</p>
+                </div>
+                <div class="benefit reveal">
+                    <div class="benefit-num">0</div>
+                    <h4>Data uploaded</h4>
+                    <p>Everything runs in your browser. Your chats never leave your device.</p>
+                </div>
+                <div class="benefit reveal">
+                    <div class="benefit-num">∞</div>
+                    <h4>Messages with PRO</h4>
+                    <p>No limits on export size. Export your entire chat history at once.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Guarantee ── -->
+    <div class="container">
+        <div class="guarantee reveal">
+            <div class="guarantee-icon">🛡️</div>
+            <h3>30-Day Money-Back Guarantee</h3>
+            <p>Try PRO risk-free. If it doesn't save you time, get a full refund — no questions asked. We're that confident.</p>
+        </div>
+    </div>
+
+    <!-- ── Final CTA ── -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>Stop screenshotting.<br>Start exporting.</h2>
+            <p>Free to install. Upgrade to PRO for $4.99 — one time, lifetime.</p>
+            <div class="cta-spotlight" style="display:inline-block;">
+                <div class="cta-glow"></div>
+                <a href="https://chromewebstore.google.com/detail/waexportpro-backup-whatsa/pcbcfneocfimieifgogbkfodlkicemcl" class="btn-mega">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    Add to Chrome — free
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Footer ── -->
+    <footer>
+        <div class="container footer-inner">
+            <span>&copy; 2026 WAExportPro</span>
+            <ul class="footer-links">
+                <li><a href="/privacy">Privacy</a></li>
+                <li><a href="/terms">Terms</a></li>
+                <li><a href="/eula">EULA</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- ── Exit Intent Popup ── -->
+    <div class="exit-overlay" id="exit-popup">
+        <div class="exit-popup">
+            <button class="exit-close" id="exit-close">&times;</button>
+            <div class="exit-emoji">👋</div>
+            <h2>Wait — don't lose<br>your chats!</h2>
+            <p>Install WAExportPro for free and back up your WhatsApp conversations before it's too late.</p>
+            <a href="https://chromewebstore.google.com/detail/waexportpro-backup-whatsa/pcbcfneocfimieifgogbkfodlkicemcl" class="exit-btn">Add to Chrome — free</a>
+            <div class="exit-subtext">Free forever &middot; No signup &middot; 10 second setup</div>
+        </div>
+    </div>
+
+    <!-- ── Floating Banner ── -->
+    <div class="float-banner" id="float-banner">
+        Still deciding? Try it free first →
+        <a href="https://chromewebstore.google.com/detail/waexportpro-backup-whatsa/pcbcfneocfimieifgogbkfodlkicemcl">Install now</a>
+    </div>
+
+    <script>
+        // Capture gclid from URL and store in localStorage for extension bridging
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const gclid = params.get('gclid');
+            if (gclid) {
+                localStorage.setItem('_wa_gclid', gclid);
+            }
+        })();
+
+        // Floating banner on scroll
+        window.addEventListener('scroll', () => {
+            document.getElementById('float-banner').classList.toggle('visible', window.scrollY > 500);
+        });
+
+        // Scroll reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        reveals.forEach(el => observer.observe(el));
+
+        // Exit intent popup
+        let exitShown = false;
+        document.documentElement.addEventListener('mouseleave', (e) => {
+            if (exitShown) return;
+            if (e.clientY <= 0) {
+                exitShown = true;
+                document.getElementById('exit-popup').classList.add('show');
+            }
+        });
+        document.getElementById('exit-close').addEventListener('click', () => {
+            document.getElementById('exit-popup').classList.remove('show');
+        });
+        document.getElementById('exit-popup').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                document.getElementById('exit-popup').classList.remove('show');
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                const href = a.getAttribute('href');
+                if (href === '#') return;
+                e.preventDefault();
+                document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
