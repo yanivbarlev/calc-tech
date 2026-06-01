@@ -27,7 +27,7 @@ const HTML = `<!DOCTYPE html>
     <script>
       gtag('event', 'conversion', {
           'send_to': 'AW-1006081641/AH84CPblnIccEOms3t8D',
-          'value': 4.99,
+          'value': 9.95,
           'currency': 'USD',
           'transaction_id': ''
           // 'new_customer': true /* calculate dynamically, populate with true/false */,
