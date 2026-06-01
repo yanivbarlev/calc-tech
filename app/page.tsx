@@ -15,6 +15,7 @@ const calculatorCategories = [
     gradient: "from-green-500 to-emerald-600",
     calculators: [
       { name: "AI Chat Summarizer for WhatsApp", href: "/extensions/whatsapp-ai-summarizer" },
+      { name: "WhatsApp Chat Export & Backup — PDF, CSV, TXT", href: "https://www.downloads.services/whatsapp" },
       { name: "WhatsApp Chat Export", href: "/extensions/whatsapp-chat-export" },
       { name: "WhatsApp Sohbet Dışa Aktarma (Türkçe)", href: "/extensions/whatsapp-export-tr" },
     ],
