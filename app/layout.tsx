@@ -74,6 +74,19 @@ export default function RootLayout({
             strategy="beforeInteractive"
           />
           <GoogleAnalytics GA_MEASUREMENT_ID="G-GRVM5D975D" />
+          <Script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=AW-1006081641"
+            strategy="afterInteractive"
+          />
+          <Script id="google-ads-gtag" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'AW-1006081641');
+            `}
+          </Script>
           {children}
         </body>
       </html>
