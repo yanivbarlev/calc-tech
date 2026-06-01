@@ -2,6 +2,10 @@
 
 This is the calc-tech Next.js app. It serves as the hosted backend for Chrome extensions: welcome pages, uninstall pages, and marketing landing pages.
 
+## SEO / Google Indexing — Ongoing Project
+
+**This is an ongoing SEO optimization project.** Before doing any SEO or Google-indexing work, read **[`SEO-STATUS.md`](./SEO-STATUS.md)** — the living source of truth for what's been done, the root-cause diagnosis, the current Google Search Console state, what to expect, and the next steps. **Update `SEO-STATUS.md` (add a dated Changelog entry + refresh the status snapshot) at the end of any session that touches SEO/indexing.** Detailed historical issue write-up: [`GOTCHAS.md`](./GOTCHAS.md).
+
 ## Additional Domains
 
 `ppltok.com` is mapped to this Vercel project and serves the `/chat` page on every path via a host rewrite in `middleware.ts`.
