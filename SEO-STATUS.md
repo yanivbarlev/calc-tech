@@ -10,7 +10,11 @@
 
 Get calc-tech.com's pages **crawled and indexed by Google**, then ranking, for its ~120 calculator/tool pages. The site is the hosted Next.js app (see [`CLAUDE.md`](./CLAUDE.md)); this project is specifically about search discoverability.
 
-## Current status — as of 2026-06-01
+## Current status — as of 2026-06-03
+
+**Indexed: 0 — but the REAL blocker was finally found and fixed.** The whole site was being served an **`X-Robots-Tag: noindex` HTTP header** (injected by Vercel because the apex domain was on a *non-Production* deployment). An HTTP-header noindex overrides the HTML, so every meta-tag fix we'd made was invisible to Google. The header is **gone now** (verified live + GSC live test = "Page can be indexed"). What remains is purely **recrawl time** — Google last crawled the homepage 2026-05-16 (pre-fix) and caches that verdict until it recrawls. See the 2026-06-03 root-cause entry in [`GOTCHAS.md`](./GOTCHAS.md). **This supersedes the earlier "young domain / authority" framing as the primary cause.**
+
+### Earlier snapshot — as of 2026-06-01
 
 **Indexed: 0.** Not blocked technically — Google has *started* re-crawling and we're waiting for it to index. Early movement is positive.
 
@@ -29,9 +33,9 @@ Google Search Console (property: **`sc-domain:calc-tech.com`**, a Domain propert
 
 ## Why this happened (root-cause diagnosis)
 
-Four stacked problems, in order of impact:
+**Primary cause (found 2026-06-03): `X-Robots-Tag: noindex` HTTP *header*.** Vercel auto-stamps this header on any deployment **not connected to the Production environment**. The apex `calc-tech.com` was on a non-Production deployment, so every page was served a header-level `noindex` — which **overrides the HTML**, making all the `<meta robots>`/metadata work invisible to Google. Not in the repo (it's a platform behavior). **Fixed by the 2026-05-29 domain flip** (apex → Production). Verified gone 2026-06-03 (live header = NONE; GSC live test = "Page can be indexed"). Full detail in [`GOTCHAS.md`](./GOTCHAS.md). The four items below were real but secondary; #1 below describes the *meta-tag* noindex, a separate, lesser issue.
 
-1. **Stale `noindex` (the homepage killer).** Earlier deploys served a `noindex` tag. Google crawled the homepage 2026-05-16, recorded "excluded by noindex," and hadn't re-crawled since — so even the homepage was unindexed. The live code was already fixed before this project; GSC was showing the *last-crawl* verdict, not live state. (GSC "Google Index" tab = last crawl; "TEST LIVE URL" = current truth.)
+1. **Stale `noindex` meta tag (secondary).** Earlier deploys also served an HTML `noindex` meta tag. Google crawled the homepage 2026-05-16, recorded "excluded by noindex," and hadn't re-crawled since. The live code was already fixed before this project; GSC was showing the *last-crawl* verdict, not live state. (GSC "Google Index" tab = last crawl; "TEST LIVE URL" = current truth.)
 2. **Duplicate `<title>` across 100+ pages.** Calculator pages are `"use client"` components, which **cannot export `metadata`**, so they all inherited the root layout's generic title. Identical titles read as low-value/duplicate → Google parks pages in "Discovered" without crawling.
 3. **apex ⇄ www mismatch.** `calc-tech.com` did a **307 (temporary)** redirect to `www.calc-tech.com`, while the sitemap + all metadata pointed at the non-www apex — so every submitted URL was a redirect. (Configured in the **Vercel dashboard → Settings → Domains**, NOT in code.)
 4. **Young, no-authority domain.** Registered **2025-11-11** (~6 months old) with almost no backlinks, in the brutally saturated "calculator" niche. Google crawls such domains conservatively regardless of technical health. **This is now the main remaining bottleneck.**
@@ -48,6 +52,14 @@ Four stacked problems, in order of impact:
 
 ### 2026-06-01
 - Confirmed early progress in GSC (Discovered 216→102, now "Started"). Created this status doc; referenced it from `CLAUDE.md`.
+
+### 2026-06-03 — found & verified the REAL root cause
+- **Diagnosed the `X-Robots-Tag: noindex` HTTP header** as the true site-wide blocker (GSC URL Inspection on homepage: "Indexing allowed? No — 'noindex' detected in X-Robots-Tag http header"). Confirmed it was a Vercel non-Production-deployment behavior, not in our code (`git log --all -S "X-Robots-Tag"` = empty).
+- **Verified it's fixed:** live `fetch()` on `/`, `/mortgage`, `/bmi`, `/loan` → all 200 + `x-robots-tag` NONE; GSC TEST LIVE URL on homepage → "URL is available to Google / Page can be indexed."
+- Checked **Manual Actions** and **Security Issues** → both "No issues detected" (no penalty; rules out the re-registered-domain-penalty theory).
+- **Requested indexing** for the homepage from the clean live result.
+- **Added durable safeguard:** explicit `X-Robots-Tag: index, follow` for `/(.*)` in `vercel.json` — commit pending this session.
+- Confirmed live `robots.txt` (allows all) and `sitemap.xml` (170 apex URLs) are correct.
 
 ## Key facts & access
 

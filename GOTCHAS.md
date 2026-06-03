@@ -4,6 +4,35 @@ Detailed issue log. Add newest entries on top.
 
 ---
 
+## 2026-06-03 — THE REAL ROOT CAUSE: `X-Robots-Tag: noindex` HTTP header from a non-Production Vercel deployment
+
+**This is the actual reason nothing indexed — supersedes the "stale noindex meta tag" theory below.**
+
+**Symptom:** After weeks of fixes (removing `<meta robots>` noindex, adding unique per-page metadata, flipping the domain, resubmitting the sitemap), `Indexed` was still **0** and showed zero movement. Felt like there was a hidden blocker. There was.
+
+**How it was found (2026-06-03):** GSC → URL Inspection on `https://calc-tech.com/` → the *last crawl* (May 16) detail showed:
+- Crawl allowed? **Yes** · Page fetch **Successful**
+- **Indexing allowed? → No: 'noindex' detected in 'X-Robots-Tag' http header**
+- Page indexing: **Excluded by 'noindex' tag**
+
+**Root cause:** The `noindex` was being sent as an **HTTP response header (`X-Robots-Tag: noindex`)**, NOT as an HTML meta tag. **An HTTP-header noindex overrides everything in the HTML** — which is exactly why all the `<meta robots>`/metadata work changed nothing; Google read the header and ignored the HTML. The header is **not in the repo** (confirmed: `git log --all -S "X-Robots-Tag"` returns nothing, ever). It was injected by the **Vercel platform**, which automatically stamps `X-Robots-Tag: noindex` on any deployment that is **not connected to the Production environment**. Before the 2026-05-29 domain flip, the apex `calc-tech.com` was served by a non-Production deployment → every page got the noindex header.
+
+**What actually fixed it:** the **2026-05-29 Vercel domain flip** (apex `calc-tech.com` → "Connect to environment: Production"). That stopped Vercel sending the header. The meta-tag edits were good housekeeping but were never the blocker.
+
+**Verified fixed (2026-06-03):**
+- Live header gone site-wide: same-origin `fetch()` on `/`, `/mortgage`, `/bmi`, `/loan` → all `200`, `x-robots-tag` = **NONE**.
+- GSC **TEST LIVE URL** on homepage → **"URL is available to Google" / "Page can be indexed."**
+- Manual Actions: **No issues**. Security Issues: **No issues**.
+- Requested indexing for the homepage from the clean live result.
+
+**Durable safeguard added:** explicit `X-Robots-Tag: index, follow` header for `/(.*)` in `vercel.json`. On Production it's a clean "index me" signal; on preview deployments Vercel's own noindex still wins (restrictive header takes precedence), so previews stay out of the index. If the Production environment assignment ever regresses, this keeps the live site indexable.
+
+**Why GSC still shows old noindex counts:** the "Google Index" tab is the *last-crawl* verdict (homepage last crawled May 16, pre-fix). It clears only on recrawl. The remaining wait is recrawl time, not a code/config problem.
+
+**Lesson:** when GSC says "Excluded by noindex" but the HTML has no noindex, **check the HTTP response headers** (`X-Robots-Tag`), and on Vercel **check that the custom domain is connected to the Production environment** — a non-prod deployment auto-noindexes the whole site.
+
+---
+
 ## 2026-05-29 — Site not indexed by Google ("Discovered – currently not indexed", Indexed: 0)
 
 **Symptom:** Google Search Console showed `Indexed: 0`, `Not indexed: 271`. Even the homepage was excluded. GSC buckets: 216 "Discovered – currently not indexed", 54 "Excluded by 'noindex' tag" (Failed validation), 1 "Not found (404)".
