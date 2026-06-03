@@ -58,8 +58,9 @@ Google Search Console (property: **`sc-domain:calc-tech.com`**, a Domain propert
 - **Verified it's fixed:** live `fetch()` on `/`, `/mortgage`, `/bmi`, `/loan` → all 200 + `x-robots-tag` NONE; GSC TEST LIVE URL on homepage → "URL is available to Google / Page can be indexed."
 - Checked **Manual Actions** and **Security Issues** → both "No issues detected" (no penalty; rules out the re-registered-domain-penalty theory).
 - **Requested indexing** for the homepage from the clean live result.
-- **Added durable safeguard:** explicit `X-Robots-Tag: index, follow` for `/(.*)` in `vercel.json` — commit pending this session.
+- **Added durable safeguard:** explicit `X-Robots-Tag: index, follow` for `/(.*)` in `vercel.json` — commit `a52acaf`, deployed and **verified live** (`/` and `/mortgage` return `X-Robots-Tag: index, follow`).
 - Confirmed live `robots.txt` (allows all) and `sitemap.xml` (170 apex URLs) are correct.
+- **Noted:** the GitHub repo has a *second*, abandoned Vercel project `calculator-net-clone` (its builds are failing). It does not serve calc-tech.com (the `calc-tech` project does), but it's worth deleting in Vercel to avoid confusion / accidental domain reattachment. The original noindex likely traces to the apex being served by a non-Production deployment before the 2026-05-29 flip.
 
 ## Key facts & access
 
