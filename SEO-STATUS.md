@@ -2,7 +2,7 @@
 
 > **This is the living source of truth for the Google indexing / SEO effort.**
 > Read it before doing any SEO work, and **update it at the end of any session that touches SEO/indexing** (add a dated entry to the Changelog and refresh the "Current status" snapshot).
-> Detailed one-off issue write-up lives in [`GOTCHAS.md`](./GOTCHAS.md).
+> Detailed one-off issue write-up lives in [`GOTCHAS.md`](./GOTCHAS.md). Full chronological history of the indexing fix lives in [`SEO-FIX-LOG.md`](./SEO-FIX-LOG.md).
 
 ---
 
@@ -61,6 +61,12 @@ Google Search Console (property: **`sc-domain:calc-tech.com`**, a Domain propert
 - **Added durable safeguard:** explicit `X-Robots-Tag: index, follow` for `/(.*)` in `vercel.json` — commit `a52acaf`, deployed and **verified live** (`/` and `/mortgage` return `X-Robots-Tag: index, follow`).
 - Confirmed live `robots.txt` (allows all) and `sitemap.xml` (170 apex URLs) are correct.
 - **Noted:** the GitHub repo has a *second*, abandoned Vercel project `calculator-net-clone` (its builds are failing). It does not serve calc-tech.com (the `calc-tech` project does), but it's worth deleting in Vercel to avoid confusion / accidental domain reattachment. The original noindex likely traces to the apex being served by a non-Production deployment before the 2026-05-29 flip.
+
+### 2026-06-05 — cleanup of the two loose ends
+- **Removed both 2016 "ghost" sitemaps** in GSC (`http://www.calc-tech.com/sitemap_index.xml`, `http://calc-tech.com/sitemap_index.xml` — HTML, 0 pages, erroring). Only `https://calc-tech.com/sitemap.xml` remains.
+- **Re-submitted** `https://calc-tech.com/sitemap.xml` so Google re-reads it (last read 2026-05-29 with 108 URLs; live file now has 170). Status: submitted successfully.
+- **Deleted the abandoned `calculator-net-clone` Vercel project.** Verified safe first: no custom domain (only the default `*.vercel.app`), no live deployment. The `yanivbarlev/calc-tech` repo now has exactly one Vercel project (`calc-tech`).
+- **Wrote [`SEO-FIX-LOG.md`](./SEO-FIX-LOG.md)** — the full chronological record of the whole fix across all sessions.
 
 ## Key facts & access
 
