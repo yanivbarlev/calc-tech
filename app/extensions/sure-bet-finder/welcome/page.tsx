@@ -19,7 +19,6 @@ function SureBetFinderWelcomeInner() {
   const v = searchParams.get("v") || "";
   const checkout = searchParams.get("checkout"); // 'gumroad' | 'lemonsqueezy' | null
   const conversionFired = useRef(false);
-  const [permDone, setPermDone] = useState(false);
   const [showTour, setShowTour] = useState(true);
 
   const checkoutUrl = checkout === "gumroad"
@@ -32,13 +31,27 @@ function SureBetFinderWelcomeInner() {
 
   // Start the in-panel tour. The welcome-relay content script also fires on the
   // #psbf-tour-btn click to open the side panel + flag the tour with a preserved
-  // user gesture (sidePanel.open needs one). Here we open the Lemon Squeezy
-  // checkout (so the user sees the offer right away) and post the tour flag as a
-  // fallback in case the relay isn't present.
+  // user gesture (sidePanel.open needs one).
+  //
+  // NOTE: the checkout no longer opens here. It now opens automatically the FIRST
+  // time the side panel opens after install (handled in the extension's sidepanel.js
+  // via the psbf_show_checkout_on_open flag), so the offer lands once the user is
+  // actually in the product rather than on this button click.
+  //
+  // Best-effort + guidance: opening the side panel from a web page is unreliable
+  // (Chrome usually drops the click token across the page→worker hop), so we ALWAYS
+  // also point the user at the "how to open the panel" steps and highlight them. The
+  // tour flag is already set, so the in-panel tour runs the moment they open it.
   function startTour() {
     try { window.postMessage({ type: 'psbf_start_tour' }, '*'); } catch {}
-    try { window.open(checkoutUrl, '_blank', 'noopener,noreferrer'); } catch {}
     setShowTour(false);
+    setTimeout(() => {
+      const el = document.getElementById('howToOpen');
+      if (!el) return;
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      el.classList.add('sbf-onboarding-flash');
+      setTimeout(() => el.classList.remove('sbf-onboarding-flash'), 2600);
+    }, 80);
   }
 
   useEffect(() => {
@@ -331,6 +344,18 @@ function SureBetFinderWelcomeInner() {
         .sbf-onboarding {
           opacity: 0; animation: sbfFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;
           margin-bottom: 40px;
+          border-radius: 16px;
+        }
+        /* Flash to draw the eye after "Start the tour" — the panel can't be force-opened
+           from a web page, so we point the user at these steps. */
+        .sbf-onboarding-flash {
+          animation: sbfFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.2s forwards,
+                     sbfOnboardingFlash 2.6s ease-out;
+        }
+        @keyframes sbfOnboardingFlash {
+          0%   { box-shadow: 0 0 0 0 var(--accent-border); }
+          15%  { box-shadow: 0 0 0 6px var(--accent-soft); }
+          100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); }
         }
         .sbf-onboarding-eyebrow {
           display: inline-flex; align-items: center; gap: 8px;
@@ -556,7 +581,7 @@ function SureBetFinderWelcomeInner() {
           </div>
 
           {/* ── How to open the panel — always visible ── */}
-          <div className="sbf-onboarding">
+          <div className="sbf-onboarding" id="howToOpen">
             <span className="sbf-onboarding-eyebrow">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2L4 9l8 7 8-7-8-7z"/><path d="M4 16l8 7 8-7"/>
@@ -614,66 +639,8 @@ function SureBetFinderWelcomeInner() {
             </div>
           </div>
 
-          {/* ── PERMISSION CTA — most important element on the page ── */}
-          <div className="sbf-perm-banner">
-            <div className="sbf-perm-inner">
-              <div>
-                <div className="sbf-perm-step">
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
-                  Step 1 of 2 — Do this first
-                </div>
-                <div className="sbf-perm-headline">
-                  Enable inline buttons on Polymarket
-                </div>
-                <div className="sbf-perm-sub">
-                  Grant one-click access so the &ldquo;Find Sure Bets&rdquo; button appears directly on every Polymarket market page — right next to the YES/NO buttons.
-                </div>
-
-                {/* Expandable hint — shown after button click */}
-                <div className="sbf-perm-steps-hint" id="permHint">
-                  <div className="sbf-perm-hint-step">
-                    <span className="sbf-perm-hint-num">1</span>
-                    <span>Click the extension icon in Chrome&apos;s toolbar (top-right)</span>
-                  </div>
-                  <span className="sbf-perm-hint-arrow">→</span>
-                  <div className="sbf-perm-hint-step">
-                    <span className="sbf-perm-hint-num">2</span>
-                    <span>Click <strong style={{color:"#d1fae5"}}>&quot;Enable on Polymarket&quot;</strong> in the panel that opens</span>
-                  </div>
-                  <span className="sbf-perm-hint-arrow">→</span>
-                  <div className="sbf-perm-hint-step">
-                    <span className="sbf-perm-hint-num">3</span>
-                    <span>Click <strong style={{color:"#d1fae5"}}>&quot;Allow&quot;</strong> in the Chrome permission dialog</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="sbf-perm-btn-wrap">
-                {permDone ? (
-                  <button className="sbf-perm-btn sbf-perm-btn-done" disabled>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    Done — see you on Polymarket!
-                  </button>
-                ) : (
-                  <button
-                    id="psbf-perm-btn"
-                    className="sbf-perm-btn"
-                    onClick={() => {
-                      setPermDone(true);
-                      document.getElementById("permHint")?.classList.add("open");
-                      openPanel();
-                    }}
-                  >
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                    </svg>
-                    Enable on Polymarket
-                  </button>
-                )}
-                <div className="sbf-perm-note">Free · Takes 10 seconds</div>
-              </div>
-            </div>
-          </div>
+          {/* Permission CTA removed: the extension now works on Polymarket by default
+              (host permission granted at install), so no "Enable on Polymarket" step. */}
 
           {/* ── Hero ── */}
           <div className="sbf-hero">
