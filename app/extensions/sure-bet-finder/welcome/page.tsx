@@ -20,6 +20,7 @@ function SureBetFinderWelcomeInner() {
   const checkout = searchParams.get("checkout"); // 'gumroad' | 'lemonsqueezy' | null
   const conversionFired = useRef(false);
   const [permDone, setPermDone] = useState(false);
+  const [showTour, setShowTour] = useState(true);
 
   const checkoutUrl = checkout === "gumroad"
     ? "https://gumroad.com/l/zfldyt"
@@ -27,6 +28,17 @@ function SureBetFinderWelcomeInner() {
 
   function openPanel() {
     window.postMessage({ type: 'psbf_open_panel' }, '*');
+  }
+
+  // Start the in-panel tour. The welcome-relay content script also fires on the
+  // #psbf-tour-btn click to open the side panel + flag the tour with a preserved
+  // user gesture (sidePanel.open needs one). Here we open the Lemon Squeezy
+  // checkout (so the user sees the offer right away) and post the tour flag as a
+  // fallback in case the relay isn't present.
+  function startTour() {
+    try { window.postMessage({ type: 'psbf_start_tour' }, '*'); } catch {}
+    try { window.open(checkoutUrl, '_blank', 'noopener,noreferrer'); } catch {}
+    setShowTour(false);
   }
 
   useEffect(() => {
@@ -467,6 +479,43 @@ function SureBetFinderWelcomeInner() {
 
         @keyframes sbfFadeIn { to { opacity: 1; } }
         @keyframes sbfFadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* ── First-run tour popup ── */
+        .sbf-tour-ov {
+          position: fixed; inset: 0; z-index: 9999;
+          display: flex; align-items: center; justify-content: center;
+          background: rgba(2,6,23,0.66); padding: 18px;
+        }
+        .sbf-tour-card {
+          width: 380px; max-width: 100%;
+          background: linear-gradient(160deg,#1f2937,#0f172a);
+          border: 1px solid #14532d; border-radius: 18px;
+          box-shadow: 0 22px 60px rgba(0,0,0,0.6);
+          padding: 28px 26px; text-align: center;
+          animation: sbfTourIn .25s ease;
+        }
+        @keyframes sbfTourIn {
+          from { opacity: 0; transform: translateY(10px) scale(.98); }
+          to   { opacity: 1; transform: none; }
+        }
+        .sbf-tour-emoji { font-size: 36px; line-height: 1; }
+        .sbf-tour-h { margin: 12px 0 6px; font-size: 22px; font-weight: 800; color: #fff; }
+        .sbf-tour-p { margin: 0 0 20px; font-size: 14px; line-height: 1.55; color: #cbd5e1; }
+        .sbf-tour-p b { color: #fff; }
+        .sbf-tour-start {
+          display: block; width: 100%; background: #16a34a; color: #fff;
+          border: none; border-radius: 12px; font-size: 16px; font-weight: 800;
+          padding: 14px; cursor: pointer; font-family: inherit;
+          box-shadow: 0 6px 18px rgba(22,163,74,.5);
+          transition: background .15s ease;
+        }
+        .sbf-tour-start:hover { background: #15803d; }
+        .sbf-tour-skip {
+          display: block; width: 100%; background: none; border: none;
+          color: #94a3b8; font-size: 13px; cursor: pointer; margin-top: 12px;
+          padding: 6px; font-family: inherit;
+        }
+        .sbf-tour-skip:hover { color: #cbd5e1; text-decoration: underline; }
       `}</style>
 
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -476,6 +525,28 @@ function SureBetFinderWelcomeInner() {
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
         rel="stylesheet"
       />
+
+      {showTour && (
+        <div
+          className="sbf-tour-ov"
+          onClick={(e) => { if (e.target === e.currentTarget) setShowTour(false); }}
+        >
+          <div className="sbf-tour-card" role="dialog" aria-label="Sure Bet Finder tour">
+            <div className="sbf-tour-emoji">👋</div>
+            <div className="sbf-tour-h">Welcome to Sure Bet Finder</div>
+            <p className="sbf-tour-p">
+              Take a <b>20-second tour</b> and we&apos;ll show you how to spot
+              high-probability Polymarket bets ending soon — right inside the side panel.
+            </p>
+            <button id="psbf-tour-btn" className="sbf-tour-start" onClick={startTour}>
+              Start the tour →
+            </button>
+            <button className="sbf-tour-skip" onClick={() => setShowTour(false)}>
+              Maybe later
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="sbf-wrap">
         <div className="sbf-page">
