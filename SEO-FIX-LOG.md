@@ -83,6 +83,11 @@ So Google could reach and fetch the page fine — it was *explicitly told not to
 - **Deleted the abandoned `calculator-net-clone` Vercel project.** It was wired to the same GitHub repo and failing to build on every push. Verified safe before deleting: it had **no custom domain** (only the default `calculator-net-clone.vercel.app`) and **no live deployment** ("No Deployment"). After deletion, the `yanivbarlev/calc-tech` repo has exactly one Vercel project — `calc-tech` (serving calc-tech.com).
 - Wrote this file (`SEO-FIX-LOG.md`).
 
+### 2026-06-09 — Google validated the 216-page "Discovered" fix
+- **GSC sent the validation-success email:** *"Page indexing issues successfully fixed for site calc-tech.com … The specific issue validated was: Discovered - currently not indexed. 216 pages on your site were validated as fixed."*
+- This is Google formally closing the validation it ran after the recrawl: the **entire original 216-page "Discovered – currently not indexed" bucket** (the 2026-05-29 baseline) passed. It is the clearest external confirmation yet that the `X-Robots-Tag: noindex` root-cause fix (Production domain flip) actually removed the blocker.
+- **Caveat captured for honesty:** "validated as fixed" means the *issue* is resolved and the pages are eligible — **not** that all 216 are indexed and ranking. That converts gradually and shows up in the **Indexed** count over the following 1–3 weeks. Next SEO session should record how many of the 216 became Indexed, and watch for any sliding back into "Discovered" (which would point to thin/duplicate content as the next lever).
+
 ---
 
 ## How to verify the fix yourself (repeatable checks)

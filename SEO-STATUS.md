@@ -10,7 +10,13 @@
 
 Get calc-tech.com's pages **crawled and indexed by Google**, then ranking, for its ~120 calculator/tool pages. The site is the hosted Next.js app (see [`CLAUDE.md`](./CLAUDE.md)); this project is specifically about search discoverability.
 
-## Current status — as of 2026-06-03
+## Current status — as of 2026-06-09
+
+**Google validated the "Discovered – currently not indexed" fix — all 216 pages passed.** GSC sent the email *"Page indexing issues successfully fixed for site calc-tech.com … The specific issue validated was: Discovered - currently not indexed. 216 pages on your site were validated as fixed."* This is the **validation pass closing out the original 216-page "Discovered" bucket** (the baseline from 2026-05-29). It confirms the root-cause fix (the `X-Robots-Tag: noindex` header removal via the Production domain flip) cleared the blocker Google was checking for.
+
+**Important nuance — "validated as fixed" ≠ "indexed."** It means Google agreed the *issue* is resolved and the pages are eligible again; it does NOT by itself mean all 216 are now in the index and ranking. The number that matters is the **Indexed** count, which should climb over the next 1–3 weeks as Google works through the re-crawl. **Next session: read the Indexed count and log how many of the 216 actually converted.** If pages slide *back* into "Discovered – currently not indexed" later, the underlying thin/duplicate-content cause wasn't fully solved (→ lever #4, content differentiation).
+
+### Earlier snapshot — as of 2026-06-03
 
 **Indexed: 0 — but the REAL blocker was finally found and fixed.** The whole site was being served an **`X-Robots-Tag: noindex` HTTP header** (injected by Vercel because the apex domain was on a *non-Production* deployment). An HTTP-header noindex overrides the HTML, so every meta-tag fix we'd made was invisible to Google. The header is **gone now** (verified live + GSC live test = "Page can be indexed"). What remains is purely **recrawl time** — Google last crawled the homepage 2026-05-16 (pre-fix) and caches that verdict until it recrawls. See the 2026-06-03 root-cause entry in [`GOTCHAS.md`](./GOTCHAS.md). **This supersedes the earlier "young domain / authority" framing as the primary cause.**
 
@@ -67,6 +73,11 @@ Google Search Console (property: **`sc-domain:calc-tech.com`**, a Domain propert
 - **Re-submitted** `https://calc-tech.com/sitemap.xml` so Google re-reads it (last read 2026-05-29 with 108 URLs; live file now has 170). Status: submitted successfully.
 - **Deleted the abandoned `calculator-net-clone` Vercel project.** Verified safe first: no custom domain (only the default `*.vercel.app`), no live deployment. The `yanivbarlev/calc-tech` repo now has exactly one Vercel project (`calc-tech`).
 - **Wrote [`SEO-FIX-LOG.md`](./SEO-FIX-LOG.md)** — the full chronological record of the whole fix across all sessions.
+
+### 2026-06-09 — Google validated the 216-page "Discovered" fix
+- **GSC email received:** *"Page indexing issues successfully fixed … issue validated: Discovered - currently not indexed. 216 pages validated as fixed."* This closes the validation Google started after the recrawl — the original 216-page "Discovered" bucket (2026-05-29 baseline) passed.
+- **What it confirms:** the `X-Robots-Tag: noindex` root-cause fix worked; Google no longer considers these pages blocked. **What it does NOT confirm:** that they're all indexed/ranking yet — that shows up in the **Indexed** count over the next 1–3 weeks.
+- **Action for next session:** read the Indexed count in GSC and record how many of the 216 actually converted to Indexed (not just "validated"). Watch for any regression back into "Discovered."
 
 ## Key facts & access
 
