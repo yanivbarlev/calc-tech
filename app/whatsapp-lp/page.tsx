@@ -485,7 +485,7 @@ export default function WhatsAppLpPage() {
               <div className="wai-step-item">
                 <div className={`wai-step-circle ${step === 1 ? "active" : step > 1 ? "complete" : ""}`}>
                   {step > 1 ? (
-                    <svg viewBox="0 0 14 14" width="10" height="10"><path fill="#05bc05" d="M1 7l4 4 8-8" stroke="#05bc05" strokeWidth="2" fill="none"/></svg>
+                    <svg viewBox="0 0 14 14" width="10" height="10"><path d="M1 7l4 4 8-8" stroke="#05bc05" strokeWidth="2" fill="none"/></svg>
                   ) : "1"}
                 </div>
                 <div className="wai-step-label">Step One</div>
@@ -503,7 +503,7 @@ export default function WhatsAppLpPage() {
                 <div className={`wai-step-circle ${step === 2 ? "active" : step > 2 ? "complete" : ""}`}
                      style={{position: "relative", zIndex: 2}}>
                   {step > 2 ? (
-                    <svg viewBox="0 0 14 14" width="10" height="10"><path fill="#05bc05" d="M1 7l4 4 8-8" stroke="#05bc05" strokeWidth="2" fill="none"/></svg>
+                    <svg viewBox="0 0 14 14" width="10" height="10"><path d="M1 7l4 4 8-8" stroke="#05bc05" strokeWidth="2" fill="none"/></svg>
                   ) : "2"}
                 </div>
                 <div className="wai-step-label">
