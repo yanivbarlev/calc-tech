@@ -1,697 +1,568 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Zap,
-  Shield,
-  FileText,
-  Download,
-  Calendar,
-  ChevronDown,
-  ChevronUp,
-  MessageSquare,
-  Users,
-  Clock,
-  FileSpreadsheet,
-  Lock,
-  Image,
-  CheckCircle,
-  Settings,
-  HelpCircle,
-  Calculator,
-  Globe,
-} from "lucide-react";
 
 const CHROME_STORE_URL =
   "https://chromewebstore.google.com/detail/whatsapp-chat-export-back/mmfnoflakijglhcmejaeoajpcgidompn?authuser=8&hl=en";
-
 const EDGE_STORE_URL =
   "https://microsoftedge.microsoft.com/addons/detail/whatsapp-chat-export-ba/hjkeddpelchcfinoifbkhnhghfjdddeo";
 
-type Browser = "chrome" | "edge" | "other";
+type Browser = "chrome" | "edge";
 
 function detectBrowser(): Browser {
   if (typeof navigator === "undefined") return "chrome";
-  const ua = navigator.userAgent;
-  if (ua.includes("Edg/")) return "edge";
-  if (ua.includes("Chrome/")) return "chrome";
-  return "chrome";
-}
-
-function ChromeIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden>
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6z" />
-    </svg>
-  );
-}
-
-function EdgeIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden>
-      <path d="M21.86 17.86c-.35.19-.72.35-1.1.49a9.93 9.93 0 0 1-3.25.54c-4.3 0-8.07-2.6-9.73-6.36H21a2 2 0 0 0 2-2v-.02a10 10 0 1 0-4.07 8.1l.11-.07c.93-.66 1.75-1.46 2.4-2.38.14-.2.3-.4.42-.3zM12 4a8 8 0 0 1 7.94 7H4.06c.44-1.97 1.53-3.72 3.04-5.02A7.96 7.96 0 0 1 12 4z" />
-    </svg>
-  );
-}
-
-function CtaButton({
-  className = "",
-  browser,
-}: {
-  className?: string;
-  browser: Browser;
-}) {
-  const isEdge = browser === "edge";
-  const href = isEdge ? EDGE_STORE_URL : CHROME_STORE_URL;
-  const label = isEdge ? "Add to Edge — It's Free" : "Add to Chrome — It's Free";
-
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-lg rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 ${className}`}
-    >
-      {isEdge ? <EdgeIcon /> : <ChromeIcon />}
-      {label}
-    </a>
-  );
-}
-
-function BothBrowserButtons() {
-  return (
-    <div className="flex flex-col sm:flex-row items-center gap-3">
-      <a
-        href={CHROME_STORE_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-base rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200"
-      >
-        <ChromeIcon />
-        Add to Chrome
-      </a>
-      <a
-        href={EDGE_STORE_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-base rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200"
-      >
-        <EdgeIcon />
-        Add to Edge
-      </a>
-    </div>
-  );
-}
-
-function FaqItem({
-  question,
-  answer,
-  isOpen,
-  onToggle,
-}: {
-  question: string;
-  answer: string;
-  isOpen: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <div
-      className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden cursor-pointer"
-      onClick={onToggle}
-    >
-      <div className="flex items-center justify-between p-5">
-        <span className="font-semibold text-slate-800 text-left pr-4">
-          {question}
-        </span>
-        {isOpen ? (
-          <ChevronUp className="w-5 h-5 text-slate-500 flex-shrink-0" />
-        ) : (
-          <ChevronDown className="w-5 h-5 text-slate-500 flex-shrink-0" />
-        )}
-      </div>
-      {isOpen && (
-        <div className="px-5 pb-5 text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
-          {answer}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function ExportMockup() {
-  const chats = [
-    { name: "Family Group", messages: "2,847", lastMsg: "Mom: See you Sunday!", selected: true },
-    { name: "Work Team", messages: "1,203", lastMsg: "Alice: Meeting at 3pm", selected: true },
-    { name: "John Smith", messages: "956", lastMsg: "Thanks for the update!", selected: false },
-    { name: "Book Club", messages: "412", lastMsg: "Next book: Dune", selected: false },
-  ];
-
-  return (
-    <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden max-w-sm w-full">
-      <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-4 py-3 flex items-center gap-2">
-        <MessageSquare className="w-5 h-5 text-white" />
-        <span className="text-white font-semibold text-sm">
-          WhatsApp Chat Export &amp; Backup
-        </span>
-        <span className="ml-auto text-green-100 text-xs">Ready</span>
-      </div>
-      <div className="px-3 py-2 border-b border-slate-100 flex gap-2 text-xs text-slate-500">
-        <span className="bg-green-50 text-green-600 px-2 py-1 rounded font-medium">2 selected</span>
-        <span className="bg-slate-100 px-2 py-1 rounded">Format: PDF</span>
-        <span className="bg-slate-100 px-2 py-1 rounded">All dates</span>
-      </div>
-      <div className="divide-y divide-slate-100">
-        {chats.map((chat, i) => (
-          <div key={i} className="px-4 py-2.5 flex items-center gap-3">
-            <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${chat.selected ? "bg-green-500 border-green-500" : "border-slate-300"}`}>
-              {chat.selected && <CheckCircle className="w-3 h-3 text-white" />}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-slate-800">{chat.name}</p>
-              <p className="text-xs text-slate-400 truncate">{chat.lastMsg}</p>
-            </div>
-            <span className="text-xs text-slate-400">{chat.messages} msgs</span>
-          </div>
-        ))}
-      </div>
-      <div className="px-4 py-3 bg-slate-50 border-t border-slate-100">
-        <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold text-center py-2 rounded-lg">
-          Export Selected Chats
-        </div>
-      </div>
-    </div>
-  );
+  return navigator.userAgent.includes("Edg/") ? "edge" : "chrome";
 }
 
 export default function WhatsAppLpPage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [step, setStep] = useState(1);
   const [browser, setBrowser] = useState<Browser>("chrome");
+  const [showExit, setShowExit] = useState(false);
+  const [step2Anim, setStep2Anim] = useState(false);
+  const exitShown = useRef(false);
 
   useEffect(() => {
     setBrowser(detectBrowser());
   }, []);
 
-  const faqs = [
-    {
-      q: "Is WhatsApp Chat Export & Backup free?",
-      a: "The free plan lets you export up to 100 messages per chat in text format. The Pro plan unlocks unlimited messages, all export formats (PDF, HTML, CSV, Text), media export, and contact and group participant export.",
-    },
-    {
-      q: "Does it work on both Chrome and Edge?",
-      a: "Yes. The extension is available on both the Chrome Web Store and the Microsoft Edge Add-ons store. It works identically on both browsers with WhatsApp Web.",
-    },
-    {
-      q: "Does it collect my data?",
-      a: "No. All processing happens locally in your browser. No chat data, messages, or personal information is sent to any external server. Your conversations stay completely private.",
-    },
-    {
-      q: "What export formats are supported?",
-      a: "You can export chats as plain text (.txt), PDF documents, HTML web view with full formatting, and CSV for spreadsheets. The free plan supports text format, while Pro unlocks all formats.",
-    },
-    {
-      q: "Do I need to install WhatsApp on my computer?",
-      a: "No. The extension works with WhatsApp Web (web.whatsapp.com) in your browser. Just open WhatsApp Web, click the extension icon, and start exporting.",
-    },
-    {
-      q: "Can I export media like photos and videos?",
-      a: "Yes, with the Pro plan you can export chats with media attachments included. The HTML export format preserves images and formatting for a complete record of your conversations.",
-    },
-  ];
+  useEffect(() => {
+    const onLeave = (e: MouseEvent) => {
+      if (e.clientY <= 0 && !exitShown.current && step < 2) {
+        exitShown.current = true;
+        setShowExit(true);
+      }
+    };
+    document.addEventListener("mouseleave", onLeave);
+    return () => document.removeEventListener("mouseleave", onLeave);
+  }, [step]);
+
+  const storeUrl = browser === "edge" ? EDGE_STORE_URL : CHROME_STORE_URL;
+  const browserLabel = browser === "edge" ? "Edge" : "Chrome";
+  const storeLabel = browser === "edge" ? "Edge Add-ons" : "Chrome Web Store";
+  const addToLabel = browser === "edge" ? "Add to Edge" : "Add to Chrome";
+
+  const goStep2 = () => {
+    setStep(2);
+    setStep2Anim(true);
+  };
+
+  const goStep3 = () => {
+    window.open(storeUrl, "_blank");
+    setStep(3);
+  };
+
+  const tryAgain = () => {
+    window.open(storeUrl, "_blank");
+  };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-xl font-bold">
-            <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-amber-500 rounded-lg flex items-center justify-center">
-              <Calculator className="w-5 h-5 text-white" />
-            </div>
-            <span className="bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
-              Calc-Tech
-            </span>
-          </Link>
-          <a
-            href={browser === "edge" ? EDGE_STORE_URL : CHROME_STORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold rounded-full transition-colors"
-          >
-            {browser === "edge" ? <EdgeIcon /> : <ChromeIcon />}
-            {browser === "edge" ? "Add to Edge" : "Add to Chrome"}
-          </a>
-        </div>
-      </header>
+    <>
+      {/* Scoped styles — prefixed wai- to avoid conflicts */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
-      {/* Hero Section */}
-      <section className="bg-white border-b border-slate-200">
-        <div className="max-w-6xl mx-auto px-4 py-16 md:py-20">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-            <div className="flex-1 text-center lg:text-left">
-              <span className="inline-block px-3 py-1 bg-green-100 text-green-700 text-sm font-semibold rounded-full mb-4">
-                Free Chrome &amp; Edge Extension
-              </span>
-              <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-5">
-                Export Your WhatsApp Chats in One Click
-              </h1>
-              <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-xl mx-auto lg:mx-0">
-                Save your WhatsApp conversations as PDF, HTML, CSV, or plain
-                text. Select individual chats or export everything at once —
-                directly from WhatsApp Web.
+        .wai-root {
+          font-family: Roboto, sans-serif;
+          font-size: 13px;
+          color: rgb(38, 38, 38);
+          background: rgb(249, 249, 249);
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          padding-bottom: 40px;
+        }
+        .wai-root::after {
+          content: "";
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(0, 0, 0, 0.4);
+          z-index: 1;
+          pointer-events: none;
+        }
+        .wai-card {
+          width: 800px;
+          max-width: calc(100% - 32px);
+          background: rgb(255, 255, 255);
+          border-radius: 10px;
+          box-shadow: rgba(0, 0, 0, 0.75) 0px 0px 20px 1px;
+          padding: 35px 40px;
+          position: relative;
+          z-index: 2;
+          margin: 40px auto;
+          box-sizing: border-box;
+        }
+        .wai-h1 {
+          font-size: 34px;
+          font-weight: 400;
+          margin: 0 0 1.68rem;
+          text-align: center;
+          font-family: Roboto, sans-serif;
+        }
+        .wai-subtitle {
+          font-size: 28px;
+          font-weight: 300;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 0 1.68rem;
+          font-family: Roboto, sans-serif;
+        }
+        .wai-subtitle img {
+          height: 30px;
+          margin-right: 10px;
+        }
+        .wai-description {
+          font-size: 13px;
+          text-align: center;
+          display: grid;
+          width: fit-content;
+          margin: 0 auto 1.68rem;
+          line-height: 1.7;
+          font-family: Roboto, sans-serif;
+        }
+        .wai-compatible {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 1.3rem;
+          font-size: 13px;
+          font-family: Roboto, sans-serif;
+        }
+        .wai-compatible .material-icons {
+          font-size: 28px;
+          color: rgb(83, 166, 86);
+          margin-right: 5px;
+          vertical-align: sub;
+        }
+        .wai-compatible img {
+          height: 30px;
+          vertical-align: bottom;
+          margin-left: 5px;
+        }
+        .wai-btn {
+          cursor: pointer;
+          border: none;
+          display: block;
+          margin: 0 auto;
+          text-align: center;
+          border-radius: 10px;
+          font-family: Roboto, sans-serif;
+        }
+        .wai-btn-blue {
+          background-color: rgb(26, 115, 232);
+          color: rgb(255, 255, 255);
+          width: 400px;
+          max-width: 100%;
+          height: 65px;
+          line-height: 65px;
+          font-size: 1.7rem;
+        }
+        .wai-btn-blue:hover { background-color: rgb(34, 150, 245); }
+        .wai-btn-green {
+          background-color: rgb(33, 140, 73);
+          color: rgb(255, 255, 255);
+          width: 400px;
+          max-width: 100%;
+          height: 65px;
+          line-height: 65px;
+          font-size: 1.7rem;
+        }
+        .wai-btn-green:hover { background-color: rgb(59, 160, 98); }
+        .wai-step2-subheading {
+          font-weight: bold;
+          text-align: center;
+          font-size: 18px;
+          margin-bottom: 4px;
+          font-family: Roboto, sans-serif;
+        }
+        .wai-step2-subtext {
+          text-align: center;
+          font-size: 13px;
+          margin-bottom: 10px;
+          color: rgb(38, 38, 38);
+          font-family: Roboto, sans-serif;
+        }
+        .wai-step2-instructions {
+          font-size: 13px;
+          text-align: center;
+          margin-bottom: 14px;
+          line-height: 2;
+          font-family: Roboto, sans-serif;
+        }
+        .wai-step2-instructions a { color: #1a73e8; text-decoration: none; }
+        .wai-step2-instructions a:hover { text-decoration: underline; }
+
+        /* Stepper */
+        .wai-stepper {
+          position: relative;
+          margin-top: 2rem;
+        }
+        .wai-stepper-progress {
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          counter-reset: step;
+          position: relative;
+        }
+        .wai-stepper-track {
+          position: absolute;
+          top: 9px;
+          width: 70%;
+          left: 15%;
+          height: 5px;
+          background: #dfe3e4;
+          z-index: 0;
+        }
+        .wai-step-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 33.33%;
+          position: relative;
+          z-index: 1;
+        }
+        .wai-step-circle {
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          border: 2px solid #dfe3e4;
+          background: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+          font-family: Roboto, sans-serif;
+          color: black;
+          position: relative;
+          z-index: 2;
+        }
+        .wai-step-circle.active {
+          border-color: rgb(33, 115, 189);
+          animation: waiPulse 2s ease infinite;
+        }
+        .wai-step-circle.complete {
+          border-color: #05bc05;
+          transform: scale(1.5);
+          background: white;
+        }
+        .wai-step-line {
+          position: absolute;
+          top: 11px;
+          left: 50%;
+          width: 100%;
+          height: 5px;
+          background: #dfe3e4;
+          z-index: 0;
+        }
+        .wai-step-line.filled {
+          background: #2183dd;
+          animation: waiNextStep 1s ease forwards;
+        }
+        .wai-step-label {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          white-space: nowrap;
+          font-size: 13px;
+          margin-top: 10px;
+          font-family: Roboto, sans-serif;
+        }
+        .wai-step-extra {
+          font-size: 13px;
+          font-weight: 500;
+          padding-top: 4px;
+          font-family: Roboto, sans-serif;
+        }
+
+        @keyframes waiPulse {
+          0%   { box-shadow: 0 0 0 0 rgba(33,131,221,0.4); }
+          70%  { box-shadow: 0 0 0 10px rgba(33,131,221,0); }
+          100% { box-shadow: 0 0 0 0 rgba(33,131,221,0); }
+        }
+        @keyframes waiNextStep {
+          0%   { width: 0; }
+          100% { width: 100%; }
+        }
+        @keyframes waiPopIn {
+          0%   { transform: scale(0.88); opacity: 0; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Footer */
+        .wai-footer {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          z-index: 10;
+        }
+        .wai-footer ul {
+          list-style: none;
+          text-align: center;
+          font-size: 11px;
+          padding: 8px 0;
+          margin: 0;
+          background: rgb(249, 249, 249);
+          border-top: 1px solid rgb(221, 221, 221);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          flex-wrap: wrap;
+          font-family: Roboto, sans-serif;
+          color: rgb(38,38,38);
+        }
+        .wai-footer a { color: rgb(38,38,38); text-decoration: none; }
+        .wai-footer a:hover { text-decoration: underline; }
+        .wai-footer-sep { color: #aaa; }
+
+        /* Exit popup */
+        .wai-exit-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.65);
+          z-index: 1000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .wai-exit-popup {
+          background: rgb(255, 255, 255);
+          border-radius: 10px;
+          box-shadow: rgba(0,0,0,0.75) 0px 0px 30px 2px;
+          padding: 40px 44px 36px;
+          width: 520px;
+          max-width: calc(100% - 32px);
+          text-align: center;
+          position: relative;
+          animation: waiPopIn 0.25s ease-out;
+          font-family: Roboto, sans-serif;
+        }
+        .wai-exit-close {
+          position: absolute;
+          top: 12px;
+          right: 16px;
+          font-size: 22px;
+          color: #aaa;
+          cursor: pointer;
+          background: none;
+          border: none;
+          line-height: 1;
+        }
+        .wai-exit-close:hover { color: #555; }
+        .wai-exit-popup h2 { font-size: 24px; font-weight: 500; margin: 0 0 10px; color: rgb(38,38,38); }
+        .wai-exit-popup p { font-size: 14px; color: #555; line-height: 1.6; margin: 0 0 24px; }
+        .wai-exit-cta {
+          background: rgb(26, 115, 232);
+          color: white;
+          border: none;
+          border-radius: 10px;
+          width: 100%;
+          height: 56px;
+          font-size: 1.3rem;
+          font-family: Roboto, sans-serif;
+          cursor: pointer;
+          margin-bottom: 12px;
+          display: block;
+        }
+        .wai-exit-cta:hover { background: rgb(34, 150, 245); }
+        .wai-exit-dismiss {
+          font-size: 12px;
+          color: #aaa;
+          cursor: pointer;
+          text-decoration: underline;
+          background: none;
+          border: none;
+          padding: 0;
+          font-family: Roboto, sans-serif;
+        }
+        .wai-exit-dismiss:hover { color: #777; }
+      `}</style>
+
+      <div className="wai-root">
+        <div className="wai-card">
+
+          {/* H1 */}
+          <h1 className="wai-h1">Install {browserLabel} Extension</h1>
+
+          {/* Subtitle with icon */}
+          <div className="wai-subtitle">
+            {/* WhatsApp icon SVG */}
+            <svg viewBox="0 0 48 48" style={{height: 30, marginRight: 10, flexShrink: 0}} aria-hidden="true">
+              <circle cx="24" cy="24" r="24" fill="#25D366"/>
+              <path fill="#fff" d="M24 11C17 11 11 17 11 24c0 2.3.6 4.5 1.7 6.4L11 37l6.8-1.7A13 13 0 0 0 24 37c7 0 13-6 13-13S31 11 24 11zm6.4 17.8c-.3.8-1.5 1.5-2.1 1.6-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-5-4.4-5.1-4.6-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-1.9 1-2.2.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1l.5-.6c.2-.2.4-.3.6-.2l2 .9c.2.1.4.2.4.4 0 .3 0 1-.3 1.8z"/>
+            </svg>
+            WhatsApp Chat Export &amp; Backup
+          </div>
+
+          {/* Description */}
+          <p className="wai-description">
+            Click Next to go to the {storeLabel} and install our {browserLabel} extension.<br/>
+            Export and backup your WhatsApp chats to PDF, TXT, CSV, or HTML — with full history, media, and date filters.<br/>
+            Free to use — up to 100 messages. PRO unlocks full history and media export.
+          </p>
+
+          {/* Compatible row */}
+          <div className="wai-compatible">
+            <i className="material-icons">check</i>
+            Compatible with your browser
+            {browser === "edge" ? (
+              /* Edge icon */
+              <svg viewBox="0 0 48 48" style={{height: 30, marginLeft: 5, verticalAlign: "bottom"}} aria-label="Edge">
+                <defs>
+                  <linearGradient id="wai-edge-a" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#0078D4"/>
+                    <stop offset="100%" stopColor="#00B4F0"/>
+                  </linearGradient>
+                </defs>
+                <ellipse cx="24" cy="26" rx="16" ry="14" fill="url(#wai-edge-a)"/>
+                <path fill="#50E6FF" d="M8 26c0-8.8 7.2-16 16-16 3.8 0 7.3 1.3 10 3.5C31.4 11.2 27.8 10 24 10 15.2 10 8 17.2 8 26z"/>
+                <path fill="#fff" d="M24 16c5.5 0 10 4.5 10 10 0 2-.6 3.9-1.6 5.5H14c-.6-1.5-1-3.2-1-5 0-5.5 4.5-10 11-10.5z" opacity=".3"/>
+                <path fill="#fff" d="M38 32c-2 3.6-5.9 6-10.3 6-4 0-7.6-2-9.8-5H38z"/>
+              </svg>
+            ) : (
+              /* Chrome icon */
+              <svg viewBox="0 0 48 48" style={{height: 30, marginLeft: 5, verticalAlign: "bottom"}} aria-label="Chrome">
+                <circle cx="24" cy="24" r="10" fill="#4285F4"/>
+                <path fill="#EA4335" d="M24 14h18.3A24 24 0 0 0 5.2 11.2L14.6 27A10 10 0 0 1 24 14z"/>
+                <path fill="#FBBC05" d="M5.2 11.2A24 24 0 0 0 0 24a24 24 0 0 0 4.2 13.6L13.8 21.8A10 10 0 0 1 14.6 27z"/>
+                <path fill="#34A853" d="M24 34a10 10 0 0 1-9.8-8.2L4.2 37.6A24 24 0 0 0 24 48a24 24 0 0 0 18.3-10H24z"/>
+                <circle cx="24" cy="24" r="7" fill="#4285F4"/>
+                <circle cx="24" cy="24" r="5" fill="#fff"/>
+              </svg>
+            )}
+          </div>
+
+          {/* Step 1 */}
+          {step === 1 && (
+            <button className="wai-btn wai-btn-blue" onClick={goStep2}>
+              Next
+            </button>
+          )}
+
+          {/* Step 2 */}
+          {step === 2 && (
+            <div className={step2Anim ? "wai-expend" : ""}>
+              <div className="wai-step2-subheading">Before we continue</div>
+              <div className="wai-step2-subtext">to {storeLabel}</div>
+              <div className="wai-step2-instructions">
+                1. Click <a href={storeUrl} target="_blank" rel="noopener noreferrer">&ldquo;{addToLabel}&rdquo;</a><br/>
+                2. Click <a href={storeUrl} target="_blank" rel="noopener noreferrer">&ldquo;Add extension&rdquo;</a>
+              </div>
+              <button className="wai-btn wai-btn-blue" onClick={goStep3}>
+                Add Extension
+              </button>
+            </div>
+          )}
+
+          {/* Step 3 */}
+          {step === 3 && (
+            <div>
+              <p style={{textAlign: "center", fontSize: 14, marginBottom: "1rem", color: "#555"}}>
+                If the store didn&apos;t open, try again:
               </p>
-              <div className="mb-6 flex flex-col sm:flex-row items-center lg:items-start gap-3">
-                <CtaButton browser={browser} />
-              </div>
-              <div className="text-sm text-slate-500 mb-3 flex flex-wrap items-center justify-center lg:justify-start gap-2">
-                <span>Also available for:</span>
-                {browser === "edge" ? (
-                  <a
-                    href={CHROME_STORE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-green-600 hover:underline font-medium"
-                  >
-                    <ChromeIcon />
-                    Chrome Web Store
-                  </a>
-                ) : (
-                  <a
-                    href={EDGE_STORE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-blue-600 hover:underline font-medium"
-                  >
-                    <EdgeIcon />
-                    Microsoft Edge
-                  </a>
-                )}
-              </div>
-              <p className="text-sm text-slate-500 flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-1">
-                <span className="flex items-center gap-1">
-                  <Shield className="w-3.5 h-3.5" /> 100% private
-                </span>
-                <span>&bull;</span>
-                <span>No data collection</span>
-                <span>&bull;</span>
-                <span className="flex items-center gap-1">
-                  <FileText className="w-3.5 h-3.5" /> Multiple formats
-                </span>
-                <span>&bull;</span>
-                <span>4.3 star rating</span>
-              </p>
+              <button className="wai-btn wai-btn-green" onClick={tryAgain}>
+                Try Again
+              </button>
             </div>
-            <div className="flex-shrink-0 lg:rotate-1">
-              <ExportMockup />
-            </div>
-          </div>
-        </div>
-      </section>
+          )}
 
-      {/* Social Proof Bar */}
-      <section className="bg-slate-100 border-b border-slate-200">
-        <div className="max-w-4xl mx-auto px-4 py-5 flex flex-wrap items-center justify-center gap-8 md:gap-16 text-sm text-slate-600">
-          <div className="flex items-center gap-2">
-            <FileText className="w-4 h-4 text-green-500" />
-            <span className="font-medium">PDF, HTML, CSV, TXT</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Lock className="w-4 h-4 text-green-500" />
-            <span className="font-medium">100% Local Processing</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Globe className="w-4 h-4 text-green-500" />
-            <span className="font-medium">Chrome &amp; Edge</span>
-          </div>
-        </div>
-      </section>
+          {/* Stepper */}
+          <div className="wai-stepper">
+            <div className="wai-stepper-progress">
+              {/* Track */}
+              <div className="wai-stepper-track" />
 
-      {/* Problem Section */}
-      <section className="py-16 md:py-20">
-        <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 text-center mb-4">
-            Need to Save Your WhatsApp Conversations?
-          </h2>
-          <p className="text-slate-500 text-center mb-12 max-w-2xl mx-auto">
-            WhatsApp does not make it easy to export or back up your chats in
-            a useful format. Important conversations deserve better.
-          </p>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: HelpCircle,
-                title: "No Built-In Export",
-                desc: "WhatsApp Web has no native way to export your chats to PDF, CSV, or any format you can actually use for records, legal, or personal backup.",
-              },
-              {
-                icon: Clock,
-                title: "Manual Copy-Paste Wastes Hours",
-                desc: "Copying messages one by one is painfully slow. For long conversations with thousands of messages, it is simply not practical.",
-              },
-              {
-                icon: Image,
-                title: "Media Gets Lost",
-                desc: "Photos, documents, and voice messages shared in chats are difficult to save. Without a proper export tool, your media attachments scatter or disappear.",
-              },
-            ].map((card, i) => (
-              <Card
-                key={i}
-                className="border-t-4 border-t-green-500 shadow-md hover:shadow-lg transition-shadow"
-              >
-                <CardHeader className="pb-2">
-                  <card.icon className="w-8 h-8 text-green-500 mb-2" />
-                  <CardTitle className="text-lg">{card.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-slate-600 text-sm leading-relaxed">
-                    {card.desc}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-16 md:py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 text-center mb-4">
-            Everything You Need to Export WhatsApp Chats
-          </h2>
-          <p className="text-slate-500 text-center mb-16 max-w-2xl mx-auto">
-            A powerful browser extension that turns your WhatsApp Web
-            conversations into clean, downloadable files.
-          </p>
-
-          <div className="space-y-20">
-            {/* Feature 1 */}
-            <div className="flex flex-col md:flex-row items-center gap-10">
-              <div className="flex-1">
-                <span className="text-green-500 text-sm font-bold uppercase tracking-wider">
-                  Multiple Formats
-                </span>
-                <h3 className="text-2xl font-bold text-slate-900 mt-2 mb-4">
-                  Export as PDF, HTML, CSV, or Text
-                </h3>
-                <p className="text-slate-600 mb-4 leading-relaxed">
-                  Choose the format that fits your needs. PDF for sharing and
-                  printing, HTML for a rich web view with formatting, CSV for
-                  spreadsheets and analysis, or plain text for simplicity.
-                </p>
-                <ul className="space-y-2 text-slate-600 text-sm">
-                  <li className="flex items-start gap-2">
-                    <FileText className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    PDF documents with full message formatting
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Globe className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    HTML web view with dark mode support
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <FileSpreadsheet className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    CSV for data analysis in Excel or Google Sheets
-                  </li>
-                </ul>
+              {/* Step 1 */}
+              <div className="wai-step-item">
+                <div className={`wai-step-circle ${step === 1 ? "active" : step > 1 ? "complete" : ""}`}>
+                  {step > 1 ? (
+                    <svg viewBox="0 0 14 14" width="10" height="10"><path fill="#05bc05" d="M1 7l4 4 8-8" stroke="#05bc05" strokeWidth="2" fill="none"/></svg>
+                  ) : "1"}
+                </div>
+                <div className="wai-step-label">Step One</div>
               </div>
-              <div className="flex-shrink-0 w-full md:w-80 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 flex items-center justify-center">
-                <div className="text-center">
-                  <FileText className="w-16 h-16 text-green-500 mx-auto mb-3" />
-                  <p className="text-sm font-semibold text-slate-700">
-                    4 Export Formats
-                  </p>
-                  <p className="text-xs text-slate-500 mt-1">
-                    PDF, HTML, CSV, and plain text
-                  </p>
+
+              {/* Step 2 */}
+              <div className="wai-step-item">
+                {/* Filled line between 1 and 2 */}
+                <div className="wai-step-line" style={{
+                  position: "absolute", top: 11, left: "-50%", width: "100%",
+                  height: 5, zIndex: 0,
+                  background: step >= 2 ? "#2183dd" : "#dfe3e4",
+                  ...(step === 2 ? {animation: "waiNextStep 1s ease forwards"} : {})
+                }}/>
+                <div className={`wai-step-circle ${step === 2 ? "active" : step > 2 ? "complete" : ""}`}
+                     style={{position: "relative", zIndex: 2}}>
+                  {step > 2 ? (
+                    <svg viewBox="0 0 14 14" width="10" height="10"><path fill="#05bc05" d="M1 7l4 4 8-8" stroke="#05bc05" strokeWidth="2" fill="none"/></svg>
+                  ) : "2"}
+                </div>
+                <div className="wai-step-label">
+                  Step Two
+                  {step >= 2 && <span className="wai-step-extra">Almost there!</span>}
                 </div>
               </div>
-            </div>
 
-            {/* Feature 2 */}
-            <div className="flex flex-col md:flex-row-reverse items-center gap-10">
-              <div className="flex-1">
-                <span className="text-green-500 text-sm font-bold uppercase tracking-wider">
-                  Flexible Selection
-                </span>
-                <h3 className="text-2xl font-bold text-slate-900 mt-2 mb-4">
-                  Pick Individual Chats or Export All
-                </h3>
-                <p className="text-slate-600 mb-4 leading-relaxed">
-                  Select exactly which conversations you want to save. Export a
-                  single important chat, pick a few, or export your entire
-                  WhatsApp history in one go.
-                </p>
-                <ul className="space-y-2 text-slate-600 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    Select individual or multiple chats
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Calendar className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    Custom date ranges to export specific time periods
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Users className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    Export contacts and group participant lists
-                  </li>
-                </ul>
-              </div>
-              <div className="flex-shrink-0 w-full md:w-80 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 flex items-center justify-center">
-                <div className="text-center">
-                  <MessageSquare className="w-16 h-16 text-blue-500 mx-auto mb-3" />
-                  <p className="text-sm font-semibold text-slate-700">
-                    Flexible Selection
-                  </p>
-                  <p className="text-xs text-slate-500 mt-1">
-                    One chat, many, or all at once
-                  </p>
+              {/* Step 3 */}
+              <div className="wai-step-item">
+                <div className="wai-step-line" style={{
+                  position: "absolute", top: 11, left: "-50%", width: "100%",
+                  height: 5, zIndex: 0,
+                  background: step >= 3 ? "#2183dd" : "#dfe3e4",
+                }}/>
+                <div className={`wai-step-circle ${step === 3 ? "active" : ""}`}
+                     style={{position: "relative", zIndex: 2}}>
+                  3
                 </div>
-              </div>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="flex flex-col md:flex-row items-center gap-10">
-              <div className="flex-1">
-                <span className="text-green-500 text-sm font-bold uppercase tracking-wider">
-                  Media Support
-                </span>
-                <h3 className="text-2xl font-bold text-slate-900 mt-2 mb-4">
-                  Export with Photos and Attachments
-                </h3>
-                <p className="text-slate-600 mb-4 leading-relaxed">
-                  Keep your media intact. Export chats with images, documents,
-                  and attachments included so you have a complete record of
-                  every conversation.
-                </p>
-                <ul className="space-y-2 text-slate-600 text-sm">
-                  <li className="flex items-start gap-2">
-                    <Image className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    Photos and images preserved in exports
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Download className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    Background download mode for large exports
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Settings className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    Choose to include or exclude media per export
-                  </li>
-                </ul>
-              </div>
-              <div className="flex-shrink-0 w-full md:w-80 bg-gradient-to-br from-purple-50 to-violet-50 rounded-2xl p-6 flex items-center justify-center">
-                <div className="text-center">
-                  <Image className="w-16 h-16 text-purple-500 mx-auto mb-3" />
-                  <p className="text-sm font-semibold text-slate-700">
-                    Media Export
-                  </p>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Photos, docs, and attachments included
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="flex flex-col md:flex-row-reverse items-center gap-10">
-              <div className="flex-1">
-                <span className="text-green-500 text-sm font-bold uppercase tracking-wider">
-                  Privacy First
-                </span>
-                <h3 className="text-2xl font-bold text-slate-900 mt-2 mb-4">
-                  Your Chats Stay on Your Machine
-                </h3>
-                <p className="text-slate-600 mb-4 leading-relaxed">
-                  All processing happens locally in your browser. No messages,
-                  contacts, or personal data ever leaves your computer. Your
-                  conversations remain completely private.
-                </p>
-                <ul className="space-y-2 text-slate-600 text-sm">
-                  <li className="flex items-start gap-2">
-                    <Lock className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    100% local processing — nothing sent to servers
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    Zero data collection, zero tracking
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Zap className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    No account or login required
-                  </li>
-                </ul>
-              </div>
-              <div className="flex-shrink-0 w-full md:w-80 bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl p-6 flex items-center justify-center">
-                <div className="text-center">
-                  <Lock className="w-16 h-16 text-emerald-500 mx-auto mb-3" />
-                  <p className="text-sm font-semibold text-slate-700">
-                    100% Private
-                  </p>
-                  <p className="text-xs text-slate-500 mt-1">
-                    All data stays in your browser
-                  </p>
-                </div>
+                <div className="wai-step-label">{storeLabel}</div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* How It Works */}
-      <section className="py-16 md:py-20 bg-slate-50">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 text-center mb-14">
-            How It Works
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8 relative">
-            <div className="hidden md:block absolute top-8 left-[20%] right-[20%] h-0.5 border-t-2 border-dashed border-slate-300" />
-            {[
-              {
-                step: 1,
-                title: "Install",
-                desc: "One click to add from Chrome Web Store or Microsoft Edge Add-ons. No signup or configuration needed.",
-              },
-              {
-                step: 2,
-                title: "Select Chats",
-                desc: "Open WhatsApp Web, click the extension icon, and choose which chats to export.",
-              },
-              {
-                step: 3,
-                title: "Download",
-                desc: "Pick your format and date range, then download your chats instantly.",
-              },
-            ].map((item) => (
-              <div key={item.step} className="text-center relative z-10">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4 shadow-lg">
-                  {item.step}
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-slate-600 text-sm leading-relaxed max-w-xs mx-auto">
-                  {item.desc}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
-      </section>
+      </div>
 
-      {/* Mid-page CTA */}
-      <section className="py-14 md:py-16 bg-gradient-to-r from-green-50 to-emerald-50">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
-            Start Exporting Your WhatsApp Chats Today
-          </h2>
-          <p className="text-slate-600 mb-8">
-            Install in seconds. No account needed. Your data stays private.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <BothBrowserButtons />
-          </div>
-        </div>
-      </section>
+      {/* Fixed Footer */}
+      <div className="wai-footer">
+        <ul>
+          <li>Copyright &copy; 2026 WhatsApp Chat Export</li>
+          <li className="wai-footer-sep">|</li>
+          <li><Link href="/privacy">Privacy Policy</Link></li>
+          <li className="wai-footer-sep">|</li>
+          <li><Link href="/terms">Terms and Conditions</Link></li>
+          <li className="wai-footer-sep">|</li>
+          <li><Link href="/contact">Contact Us</Link></li>
+        </ul>
+      </div>
 
-      {/* FAQ */}
-      <section className="py-16 md:py-20 bg-white">
-        <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 text-center mb-12">
-            Frequently Asked Questions
-          </h2>
-          <div className="space-y-3">
-            {faqs.map((faq, i) => (
-              <FaqItem
-                key={i}
-                question={faq.q}
-                answer={faq.a}
-                isOpen={openFaq === i}
-                onToggle={() => setOpenFaq(openFaq === i ? null : i)}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="py-16 md:py-20 bg-slate-900">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Your Conversations Deserve a Backup
-          </h2>
-          <p className="text-slate-400 mb-8">
-            Important chats can disappear. Export them now and keep a permanent
-            record of the conversations that matter.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a
-              href={CHROME_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-7 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-base rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200"
-            >
-              <ChromeIcon />
-              Add to Chrome
+      {/* Exit-intent popup */}
+      {showExit && (
+        <div className="wai-exit-overlay" onClick={() => setShowExit(false)}>
+          <div className="wai-exit-popup" onClick={e => e.stopPropagation()}>
+            <button className="wai-exit-close" onClick={() => setShowExit(false)}>&times;</button>
+            <h2>Wait — don&apos;t miss out!</h2>
+            <p>
+              WhatsApp Chat Export &amp; Backup is free to install.<br/>
+              Export any chat to PDF, TXT, or CSV in seconds — no account needed, works right in your browser.
+            </p>
+            <a href={storeUrl} target="_blank" rel="noopener noreferrer">
+              <button className="wai-exit-cta">Get It Free — Install Now</button>
             </a>
-            <a
-              href={EDGE_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-7 py-4 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-base rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200"
-            >
-              <EdgeIcon />
-              Add to Edge
-            </a>
+            <button className="wai-exit-dismiss" onClick={() => setShowExit(false)}>
+              No thanks, I&apos;ll skip it
+            </button>
           </div>
-          <p className="text-sm text-slate-500 mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
-            <span>Free to start</span>
-            <span>&bull;</span>
-            <span>No account required</span>
-            <span>&bull;</span>
-            <span>100% private</span>
-            <span>&bull;</span>
-            <span>Install in seconds</span>
-          </p>
         </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-slate-950 text-slate-400 py-8">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
-          <Link href="/" className="text-slate-300 hover:text-white font-medium">
-            Calc-Tech.com
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/privacy" className="hover:text-slate-200 transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="hover:text-slate-200 transition-colors">
-              Terms
-            </Link>
-          </div>
-          <p>&copy; {new Date().getFullYear()} Calc-Tech. All rights reserved.</p>
-        </div>
-      </footer>
-    </div>
+      )}
+    </>
   );
 }
