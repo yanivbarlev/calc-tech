@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import GoogleAnalytics from "./components/GoogleAnalytics";
+import AdSense from "./components/AdSense";
 import Script from "next/script";
 import "./globals.css";
 
@@ -67,12 +68,7 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <Script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2201920716197483"
-            crossOrigin="anonymous"
-            strategy="beforeInteractive"
-          />
+          <AdSense />
           <GoogleAnalytics GA_MEASUREMENT_ID="G-GRVM5D975D" />
           <Script
             async
