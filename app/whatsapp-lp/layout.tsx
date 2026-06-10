@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  // google: "noads" — official AdSense page-level exclusion tag.
+  // Renders as <meta name="google" content="noads"> and tells AdSense
+  // to show NO ads on this URL ever, regardless of layout or ad units added later.
+  other: { google: "noads" },
   title: "WhatsApp Chat Export & Backup — Free Chrome & Edge Extension",
   description:
     "Export and backup your WhatsApp chats to PDF, TXT, CSV, or HTML with full history, media, and date filters. Free Chrome and Edge extension. 100% private — all processing happens locally.",
