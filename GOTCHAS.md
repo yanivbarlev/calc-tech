@@ -4,6 +4,18 @@ Detailed issue log. Add newest entries on top.
 
 ---
 
+## 2026-06-10 — `<meta name="google" content="noads">` does NOT block AdSense in the browser
+
+**Symptom:** Added `other: { google: "noads" }` to a route's `layout.tsx` metadata. Tag appeared correctly in the rendered HTML. AdSense ads kept showing on the page.
+
+**Root cause:** The `noads` meta tag is a **crawler hint** — it tells Google's indexing bot to stop placing Auto Ads on that URL. It does **not** prevent adsbygoogle.js from loading and running in the browser. The script was still being loaded unconditionally from the root `app/layout.tsx`, so ads showed immediately regardless of the meta tag.
+
+**Fix:** Move the `<Script>` tag for adsbygoogle.js into a client component (`app/components/AdSense.tsx`) that reads `usePathname()` and returns `null` for excluded paths. The script never loads → no ads can render, ever.
+
+**To permanently exclude a page from AdSense**, add its path to `NO_ADS_PATHS` in `app/components/AdSense.tsx`. The `noads` meta tag can stay as a belt-and-suspenders signal to the crawler, but the component is the actual enforcement.
+
+---
+
 ## 2026-06-03 — THE REAL ROOT CAUSE: `X-Robots-Tag: noindex` HTTP header from a non-Production Vercel deployment
 
 **This is the actual reason nothing indexed — supersedes the "stale noindex meta tag" theory below.**
