@@ -1,25 +1,64 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
 
-const CHROME_STORE_URL =
-  "https://chromewebstore.google.com/detail/whatsapp-chat-export-back/mmfnoflakijglhcmejaeoajpcgidompn?authuser=8&hl=en";
-const EDGE_STORE_URL =
-  "https://microsoftedge.microsoft.com/addons/detail/whatsapp-chat-export-ba/hjkeddpelchcfinoifbkhnhghfjdddeo";
+const CWS_URL = "https://chromewebstore.google.com/detail/waexportpro-backup-whatsa/pcbcfneocfimieifgogbkfodlkicemcl";
+const EDGE_URL = "https://microsoftedge.microsoft.com/addons/detail/whatsapp-chat-export-ba/hjkeddpelchcfinoifbkhnhghfjdddeo";
 
 type Browser = "chrome" | "edge";
 
 function detectBrowser(): Browser {
   if (typeof navigator === "undefined") return "chrome";
-  return navigator.userAgent.includes("Edg/") ? "edge" : "chrome";
+  return /Edg\//.test(navigator.userAgent) ? "edge" : "chrome";
+}
+
+/* WhatsApp logo SVG (card-band + product-line) */
+function WaLogo({ size = 26, fill = "#25D366" }: { size?: number; fill?: string }) {
+  return (
+    <svg viewBox="0 0 448 512" width={size} height={size} style={{ fill }}>
+      <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+    </svg>
+  );
+}
+
+/* Checkmark circle SVG */
+function CheckCircle() {
+  return (
+    <svg viewBox="0 0 24 24" fill="#1fa855" width={19} height={19} style={{ flexShrink: 0 }}>
+      <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.2 14.6-4-4 1.7-1.7 2.3 2.3 5-5.5 1.8 1.6-6.8 7.3z"/>
+    </svg>
+  );
+}
+
+/* Chrome icon SVG */
+function ChromeIcon() {
+  return (
+    <svg viewBox="0 0 256 256" width={26} height={26} aria-label="Chrome">
+      <path d="M128.003 199.216c39.335 0 71.221-31.888 71.221-71.223 0-39.335-31.886-71.223-71.221-71.223-39.335 0-71.222 31.888-71.222 71.223 0 39.335 31.887 71.223 71.222 71.223Z" fill="#fff"/>
+      <path d="M35.89 92.997c-5.313-9.203-11.558-18.862-18.736-28.977a127.98 127.98 0 0 0 110.857 191.981c11.78-16.523 19.78-28.437 23.996-35.74 8.099-14.028 18.573-34.112 31.423-60.251v-.015a63.993 63.993 0 0 1-110.857.015c-17.453-32.548-29.68-54.886-36.683-67.013Z" fill="#229342"/>
+      <path d="M128.008 255.996A127.972 127.972 0 0 0 255.996 128a127.983 127.983 0 0 0-17.196-64H128.002a63.993 63.993 0 0 1 55.428 95.997c-8.55 15.11-14.808 26.052-18.777 32.825-3.969 6.774-16.184 27.832-36.645 63.173Z" fill="#fbc116"/>
+      <path d="M128.003 178.677c27.984 0 50.669-22.685 50.669-50.67 0-27.986-22.685-50.67-50.67-50.67-27.983 0-50.669 22.686-50.669 50.67 0 27.985 22.686 50.67 50.67 50.67Z" fill="#1a73e8"/>
+      <path d="M128.003 64.004H238.84a127.973 127.973 0 0 0-221.685.015l55.419 95.99.015.008a63.993 63.993 0 0 1 55.415-96.014Z" fill="#e33b2e"/>
+    </svg>
+  );
+}
+
+/* Edge icon (4-square MS logo) */
+function EdgeIcon() {
+  return (
+    <span style={{ display: "inline-grid", gridTemplateColumns: "1fr 1fr", gap: 2, width: 22, height: 22, verticalAlign: "middle" }}>
+      <i style={{ display: "block", background: "#F25022" }} />
+      <i style={{ display: "block", background: "#7FBA00" }} />
+      <i style={{ display: "block", background: "#00A4EF" }} />
+      <i style={{ display: "block", background: "#FFB900" }} />
+    </span>
+  );
 }
 
 export default function WhatsAppLpPage() {
   const [step, setStep] = useState(1);
   const [browser, setBrowser] = useState<Browser>("chrome");
   const [showExit, setShowExit] = useState(false);
-  const [step2Anim, setStep2Anim] = useState(false);
   const exitShown = useRef(false);
 
   useEffect(() => {
@@ -27,8 +66,15 @@ export default function WhatsAppLpPage() {
   }, []);
 
   useEffect(() => {
+    // GCLID passthrough
+    const p = new URLSearchParams(window.location.search);
+    const g = p.get("gclid") || p.get("pclid");
+    if (g) localStorage.setItem("waex_gclid", g);
+  }, []);
+
+  useEffect(() => {
     const onLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0 && !exitShown.current && step < 2) {
+      if (e.clientY < 10 && !exitShown.current && step < 2) {
         exitShown.current = true;
         setShowExit(true);
       }
@@ -37,529 +83,266 @@ export default function WhatsAppLpPage() {
     return () => document.removeEventListener("mouseleave", onLeave);
   }, [step]);
 
-  const storeUrl = browser === "edge" ? EDGE_STORE_URL : CHROME_STORE_URL;
-  const browserLabel = browser === "edge" ? "Edge" : "Chrome";
-  const storeLabel = browser === "edge" ? "Edge Add-ons" : "Chrome Web Store";
-  const addToLabel = browser === "edge" ? "Add to Edge" : "Add to Chrome";
+  const isEdge = browser === "edge";
+  const storeUrl = isEdge ? EDGE_URL : CWS_URL;
+  const browserLabel = isEdge ? "Edge" : "Chrome";
+  const storeLabel = isEdge ? "Microsoft Edge Add-ons" : "Chrome Web Store";
+  const storeLabelShort = isEdge ? "Edge Add-ons" : "Chrome Web Store";
+  const addToLabel = isEdge ? '"Get"' : '"Add to Chrome"';
 
-  const goStep2 = () => {
-    setStep(2);
-    setStep2Anim(true);
-  };
-
+  const goStep2 = () => setStep(2);
   const goStep3 = () => {
     window.open(storeUrl, "_blank");
-    setStep(3);
+    setTimeout(() => setStep(3), 1000);
   };
-
-  const tryAgain = () => {
-    window.open(storeUrl, "_blank");
-  };
+  const tryAgain = () => window.open(storeUrl, "_blank");
 
   return (
     <>
-      {/* Scoped styles — prefixed wai- to avoid conflicts */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
-        @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+        @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
-        .wai-root {
-          font-family: Roboto, sans-serif;
-          font-size: 13px;
-          color: rgb(38, 38, 38);
-          background: rgb(249, 249, 249);
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+          --green: #25D366; --green-hover: #1fc25b;
+          --teal: #128C7E; --teal-dark: #075E54;
+          --ink: #111b21; --sub: #54656f; --grey2: #dfe3e4;
+        }
+        .waf-body {
+          font-family: 'Inter', 'Segoe UI', Helvetica, Arial, sans-serif;
+          color: var(--ink);
           min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
+          display: flex; flex-direction: column; align-items: center; justify-content: center;
           position: relative;
-          padding-bottom: 40px;
+          background-color: #efeae2;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cg fill='none' stroke='%23cfc7ba' stroke-width='1.4'%3E%3Cpath d='M30 40h28a8 8 0 0 1 8 8v14a8 8 0 0 1-8 8H44l-10 8v-8h-4a8 8 0 0 1-8-8V48a8 8 0 0 1 8-8z'/%3E%3Ccircle cx='150' cy='60' r='12'/%3E%3Cpath d='M140 170c6-10 18-10 24 0s18 10 24 0'/%3E%3Cpath d='M60 150l8 8 14-16'/%3E%3Cpath d='M180 120l6 12 12 2-9 9 2 13-11-6-11 6 2-13-9-9 12-2z'/%3E%3Ccircle cx='105' cy='105' r='3'/%3E%3C/g%3E%3C/svg%3E");
+          padding-bottom: 44px;
         }
-        .wai-root::after {
-          content: "";
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background: rgba(0, 0, 0, 0.4);
-          z-index: 1;
-          pointer-events: none;
+        .waf-body::after {
+          content: ""; position: fixed; inset: 0;
+          background: rgba(11,20,26,0.45); z-index: 1; pointer-events: none;
         }
-        .wai-card {
-          width: 800px;
-          max-width: calc(100% - 32px);
-          background: rgb(255, 255, 255);
-          border-radius: 10px;
-          box-shadow: rgba(0, 0, 0, 0.75) 0px 0px 20px 1px;
-          padding: 35px 40px;
-          position: relative;
-          z-index: 2;
-          margin: 40px auto;
-          box-sizing: border-box;
+        .waf-card {
+          width: 780px; max-width: 96vw;
+          background: #fff; border-radius: 24px;
+          box-shadow: 0 24px 64px rgba(11,20,26,0.45);
+          padding: 0 0 38px; position: relative; z-index: 2; margin: 40px auto;
+          overflow: hidden;
         }
-        .wai-h1 {
-          font-size: 34px;
-          font-weight: 400;
-          margin: 0 0 1.68rem;
-          text-align: center;
-          font-family: Roboto, sans-serif;
+        .waf-band {
+          background: var(--teal-dark); color: #fff;
+          display: flex; align-items: center; gap: 11px;
+          padding: 15px 28px;
+          font-family: 'Inter Tight', sans-serif; font-size: 17px; font-weight: 600;
         }
-        .wai-subtitle {
-          font-size: 28px;
-          font-weight: 300;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 0 1.68rem;
-          font-family: Roboto, sans-serif;
+        .waf-band-right { margin-left: auto; font-size: 11.5px; font-weight: 500; opacity: 0.85; display: flex; align-items: center; gap: 6px; }
+        .waf-inner { padding: 30px 44px 0; }
+        h1.waf-h1 { font-family: 'Inter Tight', sans-serif; font-size: 33px; font-weight: 600; letter-spacing: -0.02em; text-align: center; margin-bottom: 16px; }
+        .waf-product-line { display: flex; align-items: center; justify-content: center; gap: 11px; font-size: 21px; font-weight: 500; color: var(--ink); margin-bottom: 20px; font-family: 'Inter Tight', sans-serif; }
+        .waf-benefits { width: fit-content; margin: 0 auto 14px; font-size: 14.5px; line-height: 2.1; }
+        .waf-benefits div { display: flex; align-items: center; gap: 9px; }
+        .waf-format-row { display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; }
+        .waf-chip { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; padding: 5px 14px; border-radius: 999px; border: 1px solid; }
+        .waf-chip-pdf  { color: #c62828; border-color: #f3c1c1; background: #fdf3f3; }
+        .waf-chip-csv  { color: #1e7e34; border-color: #bfe3c8; background: #f2faf4; }
+        .waf-chip-txt  { color: #455a64; border-color: #cfd8dc; background: #f4f7f8; }
+        .waf-chip-html { color: #b25b00; border-color: #f0d4ae; background: #fdf7ee; }
+        .waf-free-note { text-align: center; font-size: 11.5px; color: #8696a0; margin-bottom: 16px; }
+        .waf-compat { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px; font-size: 13.5px; color: var(--ink); }
+        .waf-compat-check { color: #1fa855; font-size: 19px; font-weight: 700; }
+        .waf-btn-main {
+          display: block; margin: 0 auto;
+          background: var(--green); color: #0a3d1e;
+          width: 400px; max-width: 100%; height: 62px;
+          font-size: 22px; font-weight: 700; font-family: 'Inter', sans-serif;
+          border: none; border-radius: 999px; cursor: pointer;
         }
-        .wai-subtitle img {
-          height: 30px;
-          margin-right: 10px;
+        .waf-btn-main:hover { background: var(--green-hover); }
+        .waf-btn-teal {
+          display: block; margin: 0 auto;
+          background: var(--teal); color: #fff;
+          width: 400px; max-width: 100%; height: 62px;
+          font-size: 22px; font-weight: 700; font-family: 'Inter', sans-serif;
+          border: none; border-radius: 999px; cursor: pointer;
         }
-        .wai-description {
-          font-size: 13px;
-          text-align: center;
-          display: grid;
-          width: fit-content;
-          margin: 0 auto 1.68rem;
-          line-height: 1.7;
-          font-family: Roboto, sans-serif;
-        }
-        .wai-compatible {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-bottom: 1.3rem;
-          font-size: 13px;
-          font-family: Roboto, sans-serif;
-        }
-        .wai-compatible .material-icons {
-          font-size: 28px;
-          color: rgb(83, 166, 86);
-          margin-right: 5px;
-          vertical-align: sub;
-        }
-        .wai-compatible img {
-          height: 30px;
-          vertical-align: bottom;
-          margin-left: 5px;
-        }
-        .wai-btn {
-          cursor: pointer;
-          border: none;
-          display: block;
-          margin: 0 auto;
-          text-align: center;
-          border-radius: 10px;
-          font-family: Roboto, sans-serif;
-        }
-        .wai-btn-blue {
-          background-color: rgb(26, 115, 232);
-          color: rgb(255, 255, 255);
-          width: 400px;
-          max-width: 100%;
-          height: 65px;
-          line-height: 65px;
-          font-size: 1.7rem;
-        }
-        .wai-btn-blue:hover { background-color: rgb(34, 150, 245); }
-        .wai-btn-green {
-          background-color: rgb(33, 140, 73);
-          color: rgb(255, 255, 255);
-          width: 400px;
-          max-width: 100%;
-          height: 65px;
-          line-height: 65px;
-          font-size: 1.7rem;
-        }
-        .wai-btn-green:hover { background-color: rgb(59, 160, 98); }
-        .wai-step2-subheading {
-          font-weight: bold;
-          text-align: center;
-          font-size: 18px;
-          margin-bottom: 4px;
-          font-family: Roboto, sans-serif;
-        }
-        .wai-step2-subtext {
-          text-align: center;
-          font-size: 13px;
-          margin-bottom: 10px;
-          color: rgb(38, 38, 38);
-          font-family: Roboto, sans-serif;
-        }
-        .wai-step2-instructions {
-          font-size: 13px;
-          text-align: center;
-          margin-bottom: 14px;
-          line-height: 2;
-          font-family: Roboto, sans-serif;
-        }
-        .wai-step2-instructions a { color: #1a73e8; text-decoration: none; }
-        .wai-step2-instructions a:hover { text-decoration: underline; }
+        .waf-btn-teal:hover { background: #0f7a6e; }
+        .waf-microcopy { text-align: center; font-size: 12px; color: #8696a0; margin-top: 10px; }
+        .waf-s2-heading { font-weight: 700; text-align: center; font-size: 19px; margin-bottom: 4px; }
+        .waf-s2-subtext { text-align: center; font-size: 13.5px; margin-bottom: 12px; color: var(--sub); }
+        .waf-s2-instructions { font-size: 14px; text-align: center; margin-bottom: 16px; line-height: 2.1; }
+        .waf-s2-instructions b { color: var(--teal); }
 
         /* Stepper */
-        .wai-stepper {
-          position: relative;
-          margin-top: 2rem;
+        .waf-stepper { counter-reset: step; margin: 38px 22% 0; }
+        .waf-sp { position: relative; display: flex; z-index: 1; }
+        .waf-track { position: absolute; top: 5px; width: 70%; left: 14%; height: 5px; background: var(--grey2); z-index: -1; }
+        .waf-si { position: relative; width: 100%; font-size: 12.5px; }
+        .waf-si::before {
+          content: counter(step); counter-increment: step;
+          display: flex; margin: 0 auto 10px; width: 18px; height: 18px;
+          background: #fff; border: 2px solid var(--grey2); border-radius: 100%;
+          color: var(--ink); line-height: 1; transform: scale(1.2);
+          justify-content: center; align-items: center; font-size: 12px;
         }
-        .wai-stepper-progress {
-          display: flex;
-          align-items: flex-start;
-          justify-content: center;
-          counter-reset: step;
-          position: relative;
+        .waf-si::after {
+          content: ""; position: absolute; top: 6px; left: 50%; width: 0%;
+          height: 5px; background: var(--grey2); z-index: -1;
         }
-        .wai-stepper-track {
-          position: absolute;
-          top: 9px;
-          width: 70%;
-          left: 15%;
-          height: 5px;
-          background: #dfe3e4;
-          z-index: 0;
-        }
-        .wai-step-item {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          width: 33.33%;
-          position: relative;
-          z-index: 1;
-        }
-        .wai-step-circle {
-          width: 22px;
-          height: 22px;
-          border-radius: 50%;
-          border: 2px solid #dfe3e4;
-          background: white;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          font-family: Roboto, sans-serif;
-          color: black;
-          position: relative;
-          z-index: 2;
-        }
-        .wai-step-circle.active {
-          border-color: rgb(33, 115, 189);
-          animation: waiPulse 2s ease infinite;
-        }
-        .wai-step-circle.complete {
-          border-color: #05bc05;
+        .waf-si.active::before { border: 2px solid var(--green); animation: wafPulse 2s infinite; }
+        .waf-si.done::before {
           transform: scale(1.5);
-          background: white;
+          content: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%2325D366' d='M437.019 74.98C388.667 26.629 324.38 0 256 0 187.619 0 123.332 26.629 74.98 74.98 26.629 123.332 0 187.62 0 256s26.629 132.667 74.98 181.019C123.332 485.371 187.62 512 256 512s132.667-26.629 181.019-74.98C485.371 388.667 512 324.38 512 256s-26.629-132.667-74.981-181.02zm-58.713 120.093L235.241 338.139a14.953 14.953 0 01-10.606 4.393 14.953 14.953 0 01-10.607-4.393l-80.334-80.333c-5.858-5.857-5.858-15.354 0-21.213 5.857-5.858 15.355-5.858 21.213 0l69.728 69.727 132.458-132.46c5.857-5.858 15.355-5.858 21.213 0s5.858 15.355 0 21.213z'/%3E%3C%2Fsvg%3E");
+          justify-content: unset; align-items: baseline;
         }
-        .wai-step-line {
-          position: absolute;
-          top: 11px;
-          left: 50%;
-          width: 100%;
-          height: 5px;
-          background: #dfe3e4;
-          z-index: 0;
-        }
-        .wai-step-line.filled {
-          background: #2183dd;
-          animation: waiNextStep 1s ease forwards;
-        }
-        .wai-step-label {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          white-space: nowrap;
-          font-size: 13px;
-          margin-top: 10px;
-          font-family: Roboto, sans-serif;
-        }
-        .wai-step-extra {
-          font-size: 13px;
-          font-weight: 500;
-          padding-top: 4px;
-          font-family: Roboto, sans-serif;
-        }
+        .waf-si.done::after { background: var(--teal); animation: wafFill 1s forwards; }
+        .waf-si-text { display: flex; flex-direction: column; width: 33%; align-items: center; white-space: nowrap; }
+        .waf-si-extra { display: none; color: var(--teal); font-size: 12.5px; font-weight: 600; padding-top: 4px; }
+        .waf-si.active .waf-si-extra { display: block; }
 
-        @keyframes waiPulse {
-          0%   { box-shadow: 0 0 0 0 rgba(33,131,221,0.4); }
-          70%  { box-shadow: 0 0 0 10px rgba(33,131,221,0); }
-          100% { box-shadow: 0 0 0 0 rgba(33,131,221,0); }
-        }
-        @keyframes waiNextStep {
-          0%   { width: 0; }
-          100% { width: 100%; }
-        }
-        @keyframes waiPopIn {
-          0%   { transform: scale(0.88); opacity: 0; }
-          100% { transform: scale(1); opacity: 1; }
-        }
+        @keyframes wafPulse { 0% { box-shadow: 0 0 0 0 rgba(37,211,102,.5); } 70% { box-shadow: 0 0 0 10px rgba(37,211,102,0); } 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); } }
+        @keyframes wafFill  { 0% { width: 0%; } 100% { width: 100%; } }
 
         /* Footer */
-        .wai-footer {
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          z-index: 10;
-        }
-        .wai-footer ul {
-          list-style: none;
-          text-align: center;
-          font-size: 11px;
-          padding: 8px 0;
-          margin: 0;
-          background: rgb(249, 249, 249);
-          border-top: 1px solid rgb(221, 221, 221);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 12px;
-          flex-wrap: wrap;
-          font-family: Roboto, sans-serif;
-          color: rgb(38,38,38);
-        }
-        .wai-footer a { color: rgb(38,38,38); text-decoration: none; }
-        .wai-footer a:hover { text-decoration: underline; }
-        .wai-footer-sep { color: #aaa; }
+        .waf-footer { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 10; }
+        .waf-footer ul { list-style: none; text-align: center; font-size: 11px; padding: 7px 0; margin: 0; background: rgba(255,255,255,.95); border-top: 1px solid #ddd; color: #54656f; }
+        .waf-footer li { display: inline; padding: 0 7px; }
+        .waf-footer li + li { border-left: 1px solid #b9c0c5; }
+        .waf-footer a { color: #54656f; text-decoration: none; }
 
         /* Exit popup */
-        .wai-exit-overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.65);
-          z-index: 1000;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+        .waf-overlay { position: fixed; inset: 0; background: rgba(11,20,26,.7); z-index: 1000; display: flex; align-items: center; justify-content: center; }
+        .waf-popup { background: #fff; border-radius: 20px; padding: 40px 44px 34px; width: 520px; max-width: 94vw; text-align: center; position: relative; animation: wafPopIn .25s ease-out; }
+        @keyframes wafPopIn { from { transform: scale(.88); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .waf-popup-x { position: absolute; top: 13px; right: 17px; font-size: 22px; color: #aaa; cursor: pointer; background: none; border: none; }
+        .waf-popup h2 { font-size: 24px; font-weight: 700; margin-bottom: 10px; font-family: 'Inter Tight', sans-serif; }
+        .waf-popup p { font-size: 14.5px; color: var(--sub); line-height: 1.6; margin-bottom: 22px; }
+        .waf-popup-cta { width: 100%; background: var(--green); color: #0a3d1e; font-weight: 700; font-size: 17px; border: none; border-radius: 999px; padding: 16px; cursor: pointer; font-family: 'Inter', sans-serif; }
+        .waf-popup-cta:hover { background: var(--green-hover); }
+        .waf-popup-dismiss { display: inline-block; margin-top: 13px; font-size: 12px; color: #9aa6ac; cursor: pointer; text-decoration: underline; background: none; border: none; }
+
+        @media (max-width: 860px) {
+          .waf-inner { padding: 22px 18px 0; }
+          h1.waf-h1 { font-size: 24px; }
+          .waf-product-line { font-size: 17px; }
+          .waf-btn-main, .waf-btn-teal { font-size: 18px; }
+          .waf-stepper { margin: 30px 8% 0; }
         }
-        .wai-exit-popup {
-          background: rgb(255, 255, 255);
-          border-radius: 10px;
-          box-shadow: rgba(0,0,0,0.75) 0px 0px 30px 2px;
-          padding: 40px 44px 36px;
-          width: 520px;
-          max-width: calc(100% - 32px);
-          text-align: center;
-          position: relative;
-          animation: waiPopIn 0.25s ease-out;
-          font-family: Roboto, sans-serif;
-        }
-        .wai-exit-close {
-          position: absolute;
-          top: 12px;
-          right: 16px;
-          font-size: 22px;
-          color: #aaa;
-          cursor: pointer;
-          background: none;
-          border: none;
-          line-height: 1;
-        }
-        .wai-exit-close:hover { color: #555; }
-        .wai-exit-popup h2 { font-size: 24px; font-weight: 500; margin: 0 0 10px; color: rgb(38,38,38); }
-        .wai-exit-popup p { font-size: 14px; color: #555; line-height: 1.6; margin: 0 0 24px; }
-        .wai-exit-cta {
-          background: rgb(26, 115, 232);
-          color: white;
-          border: none;
-          border-radius: 10px;
-          width: 100%;
-          height: 56px;
-          font-size: 1.3rem;
-          font-family: Roboto, sans-serif;
-          cursor: pointer;
-          margin-bottom: 12px;
-          display: block;
-        }
-        .wai-exit-cta:hover { background: rgb(34, 150, 245); }
-        .wai-exit-dismiss {
-          font-size: 12px;
-          color: #aaa;
-          cursor: pointer;
-          text-decoration: underline;
-          background: none;
-          border: none;
-          padding: 0;
-          font-family: Roboto, sans-serif;
-        }
-        .wai-exit-dismiss:hover { color: #777; }
       `}</style>
 
-      <div className="wai-root">
-        <div className="wai-card">
-
-          {/* H1 */}
-          <h1 className="wai-h1">Install {browserLabel} Extension</h1>
-
-          {/* Subtitle with icon */}
-          <div className="wai-subtitle">
-            {/* WhatsApp icon SVG */}
-            <svg viewBox="0 0 48 48" style={{height: 30, marginRight: 10, flexShrink: 0}} aria-hidden="true">
-              <circle cx="24" cy="24" r="24" fill="#25D366"/>
-              <path fill="#fff" d="M24 11C17 11 11 17 11 24c0 2.3.6 4.5 1.7 6.4L11 37l6.8-1.7A13 13 0 0 0 24 37c7 0 13-6 13-13S31 11 24 11zm6.4 17.8c-.3.8-1.5 1.5-2.1 1.6-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-5-4.4-5.1-4.6-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-1.9 1-2.2.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1l.5-.6c.2-.2.4-.3.6-.2l2 .9c.2.1.4.2.4.4 0 .3 0 1-.3 1.8z"/>
-            </svg>
-            WhatsApp Chat Export &amp; Backup
+      <div className="waf-body">
+        <div className="waf-card">
+          {/* Teal header band */}
+          <div className="waf-band">
+            <WaLogo size={26} fill="#25D366" />
+            WhatsApp Exporter
+            <span className="waf-band-right">🔒 100% private — runs locally</span>
           </div>
 
-          {/* Description */}
-          <p className="wai-description">
-            Click Next to go to the {storeLabel} and install our {browserLabel} extension.<br/>
-            Export and backup your WhatsApp chats to PDF, TXT, CSV, or HTML — with full history, media, and date filters.<br/>
-            Free to use — up to 100 messages. PRO unlocks full history and media export.
-          </p>
+          <div className="waf-inner">
+            <h1 className="waf-h1">WhatsApp Exporter for {browserLabel}</h1>
 
-          {/* Compatible row */}
-          <div className="wai-compatible">
-            <i className="material-icons">check</i>
-            Compatible with your browser
-            {browser === "edge" ? (
-              /* Edge icon */
-              <svg viewBox="0 0 48 48" style={{height: 30, marginLeft: 5, verticalAlign: "bottom"}} aria-label="Edge">
-                <defs>
-                  <linearGradient id="wai-edge-a" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#0078D4"/>
-                    <stop offset="100%" stopColor="#00B4F0"/>
-                  </linearGradient>
-                </defs>
-                <ellipse cx="24" cy="26" rx="16" ry="14" fill="url(#wai-edge-a)"/>
-                <path fill="#50E6FF" d="M8 26c0-8.8 7.2-16 16-16 3.8 0 7.3 1.3 10 3.5C31.4 11.2 27.8 10 24 10 15.2 10 8 17.2 8 26z"/>
-                <path fill="#fff" d="M24 16c5.5 0 10 4.5 10 10 0 2-.6 3.9-1.6 5.5H14c-.6-1.5-1-3.2-1-5 0-5.5 4.5-10 11-10.5z" opacity=".3"/>
-                <path fill="#fff" d="M38 32c-2 3.6-5.9 6-10.3 6-4 0-7.6-2-9.8-5H38z"/>
-              </svg>
-            ) : (
-              /* Chrome icon */
-              <svg viewBox="0 0 48 48" style={{height: 30, marginLeft: 5, verticalAlign: "bottom"}} aria-label="Chrome">
-                <circle cx="24" cy="24" r="10" fill="#4285F4"/>
-                <path fill="#EA4335" d="M24 14h18.3A24 24 0 0 0 5.2 11.2L14.6 27A10 10 0 0 1 24 14z"/>
-                <path fill="#FBBC05" d="M5.2 11.2A24 24 0 0 0 0 24a24 24 0 0 0 4.2 13.6L13.8 21.8A10 10 0 0 1 14.6 27z"/>
-                <path fill="#34A853" d="M24 34a10 10 0 0 1-9.8-8.2L4.2 37.6A24 24 0 0 0 24 48a24 24 0 0 0 18.3-10H24z"/>
-                <circle cx="24" cy="24" r="7" fill="#4285F4"/>
-                <circle cx="24" cy="24" r="5" fill="#fff"/>
-              </svg>
+            <div className="waf-product-line">
+              <WaLogo size={36} fill="#25D366" />
+              WhatsApp Chat Export &amp; Backup
+            </div>
+
+            <div className="waf-benefits">
+              <div><CheckCircle />Export any chat to PDF, CSV, TXT or HTML — in one click</div>
+              <div><CheckCircle />Names, dates &amp; timestamps included · filter by date range</div>
+              <div><CheckCircle />100% private — runs locally in your browser, no sign-up</div>
+            </div>
+
+            <div className="waf-format-row">
+              <span className="waf-chip waf-chip-pdf">PDF</span>
+              <span className="waf-chip waf-chip-csv">CSV</span>
+              <span className="waf-chip waf-chip-txt">TXT</span>
+              <span className="waf-chip waf-chip-html">HTML</span>
+            </div>
+
+            <p className="waf-free-note">Free to install · free plan exports up to 100 messages per chat · PRO unlocks unlimited history &amp; media</p>
+
+            <div className="waf-compat">
+              <span className="waf-compat-check">✓</span>
+              Compatible with your browser
+              {isEdge ? <EdgeIcon /> : <ChromeIcon />}
+            </div>
+
+            {/* Step 1 */}
+            {step === 1 && (
+              <div>
+                <button className="waf-btn-main" onClick={goStep2}>Next</button>
+                <div className="waf-microcopy">Free &nbsp;·&nbsp; No sign-up &nbsp;·&nbsp; Takes 30 seconds</div>
+              </div>
             )}
-          </div>
 
-          {/* Step 1 */}
-          {step === 1 && (
-            <button className="wai-btn wai-btn-blue" onClick={goStep2}>
-              Next
-            </button>
-          )}
-
-          {/* Step 2 */}
-          {step === 2 && (
-            <div className={step2Anim ? "wai-expend" : ""}>
-              <div className="wai-step2-subheading">Before we continue</div>
-              <div className="wai-step2-subtext">to {storeLabel}</div>
-              <div className="wai-step2-instructions">
-                1. Click <a href={storeUrl} target="_blank" rel="noopener noreferrer">&ldquo;{addToLabel}&rdquo;</a><br/>
-                2. Click <a href={storeUrl} target="_blank" rel="noopener noreferrer">&ldquo;Add extension&rdquo;</a>
+            {/* Step 2 */}
+            {step === 2 && (
+              <div>
+                <div className="waf-s2-heading">Before we continue</div>
+                <div className="waf-s2-subtext">to the {storeLabel}</div>
+                <div className="waf-s2-instructions">
+                  1. Click <b>{addToLabel}</b><br />
+                  2. Click <b>&ldquo;Add extension&rdquo;</b>
+                </div>
+                <button className="waf-btn-main" onClick={goStep3}>Add Extension</button>
               </div>
-              <button className="wai-btn wai-btn-blue" onClick={goStep3}>
-                Add Extension
-              </button>
-            </div>
-          )}
+            )}
 
-          {/* Step 3 */}
-          {step === 3 && (
-            <div>
-              <p style={{textAlign: "center", fontSize: 14, marginBottom: "1rem", color: "#555"}}>
-                If the store didn&apos;t open, try again:
-              </p>
-              <button className="wai-btn wai-btn-green" onClick={tryAgain}>
-                Try Again
-              </button>
-            </div>
-          )}
-
-          {/* Stepper */}
-          <div className="wai-stepper">
-            <div className="wai-stepper-progress">
-              {/* Track */}
-              <div className="wai-stepper-track" />
-
-              {/* Step 1 */}
-              <div className="wai-step-item">
-                <div className={`wai-step-circle ${step === 1 ? "active" : step > 1 ? "complete" : ""}`}>
-                  {step > 1 ? (
-                    <svg viewBox="0 0 14 14" width="10" height="10"><path d="M1 7l4 4 8-8" stroke="#05bc05" strokeWidth="2" fill="none"/></svg>
-                  ) : "1"}
-                </div>
-                <div className="wai-step-label">Step One</div>
+            {/* Step 3 */}
+            {step === 3 && (
+              <div>
+                <button className="waf-btn-teal" onClick={tryAgain}>Try Again</button>
+                <div className="waf-microcopy">The store tab may have been blocked — click to reopen it</div>
               </div>
+            )}
 
-              {/* Step 2 */}
-              <div className="wai-step-item">
-                {/* Filled line between 1 and 2 */}
-                <div className="wai-step-line" style={{
-                  position: "absolute", top: 11, left: "-50%", width: "100%",
-                  height: 5, zIndex: 0,
-                  background: step >= 2 ? "#2183dd" : "#dfe3e4",
-                  ...(step === 2 ? {animation: "waiNextStep 1s ease forwards"} : {})
-                }}/>
-                <div className={`wai-step-circle ${step === 2 ? "active" : step > 2 ? "complete" : ""}`}
-                     style={{position: "relative", zIndex: 2}}>
-                  {step > 2 ? (
-                    <svg viewBox="0 0 14 14" width="10" height="10"><path d="M1 7l4 4 8-8" stroke="#05bc05" strokeWidth="2" fill="none"/></svg>
-                  ) : "2"}
+            {/* Stepper */}
+            <div className="waf-stepper">
+              <div className="waf-sp">
+                <div className="waf-track" />
+                <div className={`waf-si ${step === 1 ? "active" : step > 1 ? "done" : ""}`}>
+                  <div className="waf-si-text">
+                    <span>Step One</span>
+                    <span className="waf-si-extra" />
+                  </div>
                 </div>
-                <div className="wai-step-label">
-                  Step Two
-                  {step >= 2 && <span className="wai-step-extra">Almost there!</span>}
+                <div className={`waf-si ${step === 2 ? "active" : step > 2 ? "done" : ""}`}>
+                  <div className="waf-si-text">
+                    <span>Step Two</span>
+                    <span className="waf-si-extra">Almost there!</span>
+                  </div>
                 </div>
-              </div>
-
-              {/* Step 3 */}
-              <div className="wai-step-item">
-                <div className="wai-step-line" style={{
-                  position: "absolute", top: 11, left: "-50%", width: "100%",
-                  height: 5, zIndex: 0,
-                  background: step >= 3 ? "#2183dd" : "#dfe3e4",
-                }}/>
-                <div className={`wai-step-circle ${step === 3 ? "active" : ""}`}
-                     style={{position: "relative", zIndex: 2}}>
-                  3
+                <div className={`waf-si ${step === 3 ? "active" : ""}`}>
+                  <div className="waf-si-text">
+                    <span>{storeLabelShort}</span>
+                  </div>
                 </div>
-                <div className="wai-step-label">{storeLabel}</div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
-      {/* Fixed Footer */}
-      <div className="wai-footer">
+      {/* Footer */}
+      <div className="waf-footer">
         <ul>
-          <li>Copyright &copy; 2026 WhatsApp Chat Export</li>
-          <li className="wai-footer-sep">|</li>
-          <li><Link href="/privacy">Privacy Policy</Link></li>
-          <li className="wai-footer-sep">|</li>
-          <li><Link href="/terms">Terms and Conditions</Link></li>
-          <li className="wai-footer-sep">|</li>
-          <li><Link href="/contact">Contact Us</Link></li>
+          <li>2026 © WhatsApp Chat Export &amp; Backup — an independent extension, not affiliated with WhatsApp LLC or Meta</li>
+          <li><a href="https://calc-tech.com/waexportpro/privacy.html" target="_blank" rel="noopener">Privacy Policy</a></li>
+          <li><a href="mailto:support@calc-tech.com">Contact Us</a></li>
         </ul>
       </div>
 
       {/* Exit-intent popup */}
       {showExit && (
-        <div className="wai-exit-overlay" onClick={() => setShowExit(false)}>
-          <div className="wai-exit-popup" onClick={e => e.stopPropagation()}>
-            <button className="wai-exit-close" onClick={() => setShowExit(false)}>&times;</button>
-            <h2>Wait — don&apos;t miss out!</h2>
-            <p>
-              WhatsApp Chat Export &amp; Backup is free to install.<br/>
-              Export any chat to PDF, TXT, or CSV in seconds — no account needed, works right in your browser.
-            </p>
-            <a href={storeUrl} target="_blank" rel="noopener noreferrer">
-              <button className="wai-exit-cta">Get It Free — Install Now</button>
-            </a>
-            <button className="wai-exit-dismiss" onClick={() => setShowExit(false)}>
-              No thanks, I&apos;ll skip it
-            </button>
+        <div className="waf-overlay" onClick={() => setShowExit(false)}>
+          <div className="waf-popup" onClick={e => e.stopPropagation()}>
+            <button className="waf-popup-x" onClick={() => setShowExit(false)}>&#x2715;</button>
+            <div style={{ fontSize: 44, marginBottom: 12 }}>💬</div>
+            <h2>Wait — your chats aren&apos;t backed up!</h2>
+            <p>The exporter is <strong>free to install</strong>. Save any WhatsApp chat to PDF, CSV or TXT in one click — everything stays on your own computer.</p>
+            <button className="waf-popup-cta" onClick={() => { setShowExit(false); goStep2(); }}>Get the Free Exporter</button>
+            <br />
+            <button className="waf-popup-dismiss" onClick={() => setShowExit(false)}>No thanks — I&apos;ll risk losing them</button>
           </div>
         </div>
       )}
