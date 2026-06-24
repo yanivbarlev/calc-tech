@@ -54,6 +54,11 @@ function SureBetFinderWelcomeInner() {
     }, 80);
   }
 
+  function skipTour() {
+    try { window.postMessage({ type: 'psbf_later' }, '*'); } catch {}
+    setShowTour(false);
+  }
+
   useEffect(() => {
     const eyebrow = document.getElementById("heroEyebrow");
     const banner = document.getElementById("updateBanner");
@@ -566,7 +571,7 @@ function SureBetFinderWelcomeInner() {
             <button id="psbf-tour-btn" className="sbf-tour-start" onClick={startTour}>
               Start the tour →
             </button>
-            <button className="sbf-tour-skip" onClick={() => setShowTour(false)}>
+            <button id="psbf-tour-later-btn" className="sbf-tour-skip" onClick={skipTour}>
               Maybe later
             </button>
           </div>
