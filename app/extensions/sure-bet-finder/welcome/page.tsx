@@ -673,7 +673,7 @@ function SureBetFinderWelcomeInner() {
                   className="sbf-btn sbf-btn-primary"
                   onClick={openPanel}
                 >
-                  Unlock Premium — $4.99 lifetime
+                  Unlock Premium — $7.99 lifetime
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
                 </a>
                 <button className="sbf-btn sbf-btn-ghost" onClick={() => { openPanel(); window.close(); }}>
@@ -732,7 +732,7 @@ function SureBetFinderWelcomeInner() {
               <p className="sbf-pricing-sub">One-time payment. No subscriptions. No recurring charges. Yours forever — including every future update.</p>
               <div className="sbf-price">
                 <span className="sbf-price-currency">$</span>
-                <span className="sbf-price-num">4.99</span>
+                <span className="sbf-price-num">7.99</span>
                 <span className="sbf-price-period">/ lifetime</span>
               </div>
               <a
@@ -740,7 +740,7 @@ function SureBetFinderWelcomeInner() {
                 target="_blank" rel="noopener noreferrer"
                 className="sbf-btn sbf-btn-primary"
               >
-                Buy License — $4.99
+                Buy License — $7.99
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
               </a>
             </div>

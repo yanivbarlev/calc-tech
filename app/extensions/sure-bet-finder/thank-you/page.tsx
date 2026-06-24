@@ -41,7 +41,7 @@ export default function SureBetFinderThankYou() {
       conversionFired.current = true;
       window.gtag("event", "conversion", {
         send_to: PURCHASE_CONVERSION_LABEL,
-        value: 4.99,
+        value: 7.99,
         currency: "USD",
       });
       console.log("[Polymarket Thank-You] Purchase conversion fired (placeholder label).");
