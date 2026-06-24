@@ -55,7 +55,9 @@ function SureBetFinderWelcomeInner() {
   }
 
   function skipTour() {
-    try { window.postMessage({ type: 'psbf_later' }, '*'); } catch {}
+    // Use the existing open-panel event so this works for already-installed
+    // extension versions, not only versions with the newer psbf_later relay.
+    try { window.postMessage({ type: 'psbf_open_panel' }, '*'); } catch {}
     setShowTour(false);
   }
 
