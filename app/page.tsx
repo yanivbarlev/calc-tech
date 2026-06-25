@@ -552,6 +552,12 @@ export default function Home() {
             <Link href="/privacy" className="hover:text-blue-600 transition-colors font-medium">
               Privacy Policy
             </Link>
+            <Link href="/pricing" className="hover:text-blue-600 transition-colors font-medium">
+              Pricing
+            </Link>
+            <Link href="/refund-policy" className="hover:text-blue-600 transition-colors font-medium">
+              Refund Policy
+            </Link>
           </div>
           <p className="text-center text-sm text-slate-500">
             © 2025 Calc-Tech.com. All rights reserved. Made with ❤️ for accuracy

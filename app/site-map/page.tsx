@@ -104,6 +104,8 @@ export default function SitemapPage() {
     { name: "About Us", href: "/about" },
     { name: "Terms of Use", href: "/terms" },
     { name: "Privacy Policy", href: "/privacy" },
+    { name: "Pricing", href: "/pricing" },
+    { name: "Refund Policy", href: "/refund-policy" },
     { name: "Sitemap", href: "/site-map" },
   ];
 
