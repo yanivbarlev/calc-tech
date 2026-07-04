@@ -10,7 +10,38 @@
 
 Get calc-tech.com's pages **crawled and indexed by Google**, then ranking, for its ~120 calculator/tool pages. The site is the hosted Next.js app (see [`CLAUDE.md`](./CLAUDE.md)); this project is specifically about search discoverability.
 
-## Current status — as of 2026-06-09
+## Current status - as of 2026-07-03
+
+**Investigated fresh GSC evidence from 2026-06-24 15:06:30 IDT for `http://www.calc-tech.com/`: GSC still reported `No: 'noindex' detected in 'X-Robots-Tag' http header`.** Live verification on 2026-07-03 did **not** reproduce a live noindex on the custom domain:
+
+- `http://www.calc-tech.com/` -> 308 -> `https://www.calc-tech.com/` -> 308 -> `https://calc-tech.com/`.
+- Final `https://calc-tech.com/` returns `200` with `X-Robots-Tag: index, follow`, including with a Googlebot smartphone user agent.
+- The production deployment active around the crawl (`calc-tech-9f7ca4rrf`, created 2026-06-24 14:45 IDT) is now an old protected Vercel deployment URL and returns Vercel SSO + `X-Robots-Tag: noindex` when accessed directly. That is expected for deployment URLs and should not affect the active custom-domain apex, but it explains why deployment-url tests can look scary.
+- Found one real code issue from the GSC snippet: homepage had **User-declared canonical: None** because `app/page.tsx` was a client component and could not export metadata. Fixed by moving the UI to `app/HomePageClient.tsx` and making `app/page.tsx` a server component exporting `alternates.canonical = "https://calc-tech.com/"`.
+- Verified production build with Vercel production env vars; generated homepage HTML now contains `rel="canonical"` for `https://calc-tech.com` and robots `index, follow`.
+- Deployed the canonical fix to Production on 2026-07-03: `calc-tech-pmi4ltx0c-yanivs-projects-faa86cc8.vercel.app`, deployment id `dpl_DNkwGrkYgKcKkBWPxV94o4vjcP7f`, aliased to `https://calc-tech.com` and `https://www.calc-tech.com`.
+- Post-deploy verification: Googlebot-smartphone-style request to `http://www.calc-tech.com/` redirects to `https://calc-tech.com/`; final response is `200`, `X-Robots-Tag: index, follow`, `X-Vercel-Cache: PRERENDER`, and the live homepage HTML includes `<link rel="canonical" href="https://calc-tech.com">`.
+- 2026-07-04 GSC follow-up: **Test Live URL succeeded** for the homepage, and a fresh indexing request was submitted. This confirms Google can now fetch the live page as indexable after the canonical/header cleanup.
+
+**Conclusion:** the old site-wide `X-Robots-Tag: noindex` blocker is still not reproducible on the live custom domain today. The homepage canonical ambiguity is fixed, production serves `index, follow`, and GSC live testing now confirms the homepage is eligible for indexing. Next step is to monitor the Indexed count and the specific homepage URL over the next crawl cycle.
+
+## Current status — as of 2026-06-13
+
+**Indexed: 0. Not indexed: 59 (3 reasons): noindex 55 · redirect error 3 · 404 1.** Investigated the persistent "noindex" bucket deeply this session and reached a calibrated conclusion: **there is no reproducible live technical blocker. The live apex serves `X-Robots-Tag: index, follow` on 38/38 sampled requests, and Google's own LIVE TEST returns "Page can be indexed."** The residual not-indexed count is **stale per-page crawl verdicts + crawl-coverage lag on a young, low-authority domain**, not an active site-wide noindex.
+
+**The decisive evidence (read this before re-investigating — don't repeat the dead ends):**
+- I inspected 3 representative URLs and got **3 different states from 3 different crawl times** — the signature of recrawl lag, NOT one live bug:
+  - `https://calc-tech.com/` → "Redirect error", **last crawl Jun 3** (the day of the domain flip; caught a redirect mid-transition).
+  - `https://calc-tech.com/privacy` → "Excluded by noindex" in the GOOGLE INDEX tab, last crawl Jun 13 — **but its LIVE TEST = "Page can be indexed"** (clean). The "Last crawl" date is recent; the noindex *verdict* beside it is a carried-over index-time determination, not a fresh re-judgment.
+  - `https://calc-tech.com/age` → "URL is unknown to Google", **never crawled** (Last crawl N/A, no referring sitemap detected).
+- **Vercel deploy history disproves the "intermittent/old-deployment noindex" theory:** the last deploy was **Jun 11 06:35 UTC** — 2 days before the Jun 13 crawl, so there was no deploy-swap window for Googlebot to hit. Every deployment is `target: production` + `READY`; there are **no preview deployments** serving the apex. The apex is always aliased to the newest production build, which serves `index, follow`.
+- Vercel auto-injects `X-Robots-Tag: noindex` on **preview + outdated-production deployment URLs** — this is platform behavior on **all tiers (incl. paid), NOT a free/Hobby-tier penalty**. It does not affect the custom-domain apex once it's on Production (which it is). See `GOTCHAS.md`.
+
+**Action taken this session:** requested indexing on `/`, `/privacy`, `/age` (priority crawl queue). **Next session: re-inspect these 3 — if they flip to Indexed, it confirms live-clean + GSC-lag and the fix is done. If any re-flags noindex AFTER a fresh forced crawl, there's a real ghost still to find.**
+
+> **Migration note (2026-06-13):** Considered moving the site to PythonAnywhere (user has a paid slot). **Rejected — not viable:** this is a Next.js/Node app (API routes, middleware host-rewrite, Clerk, server-side Supabase, build-time sitemap); PythonAnywhere only runs Python/WSGI apps. A move = full rewrite, and it wouldn't speed indexing (new host resets crawl trust). Stay on Vercel.
+
+### Earlier snapshot — as of 2026-06-09
 
 **Google validated the "Discovered – currently not indexed" fix — all 216 pages passed.** GSC sent the email *"Page indexing issues successfully fixed for site calc-tech.com … The specific issue validated was: Discovered - currently not indexed. 216 pages on your site were validated as fixed."* This is the **validation pass closing out the original 216-page "Discovered" bucket** (the baseline from 2026-05-29). It confirms the root-cause fix (the `X-Robots-Tag: noindex` header removal via the Production domain flip) cleared the blocker Google was checking for.
 
@@ -78,6 +109,16 @@ Google Search Console (property: **`sc-domain:calc-tech.com`**, a Domain propert
 - **GSC email received:** *"Page indexing issues successfully fixed … issue validated: Discovered - currently not indexed. 216 pages validated as fixed."* This closes the validation Google started after the recrawl — the original 216-page "Discovered" bucket (2026-05-29 baseline) passed.
 - **What it confirms:** the `X-Robots-Tag: noindex` root-cause fix worked; Google no longer considers these pages blocked. **What it does NOT confirm:** that they're all indexed/ranking yet — that shows up in the **Indexed** count over the next 1–3 weeks.
 - **Action for next session:** read the Indexed count in GSC and record how many of the 216 actually converted to Indexed (not just "validated"). Watch for any regression back into "Discovered."
+
+### 2026-06-13 — deep re-investigation of the persistent "noindex 55" bucket; ruled out a live blocker
+- **Re-checked GSC:** Indexed 0, not-indexed 59 (noindex 55 / redirect error 3 / 404 1). The noindex validation last "Failed" on 5/23 — i.e. it failed *before* the 5/29–6/3 root-cause fix, so GSC never re-validated it.
+- **Sampled the live header 38× across 6 pages** (`/`, `/privacy`, `/mortgage`, `/bmi`, `/scientific`, `/age`) via in-browser `fetch` (browser UA avoids the bot-protection 403s) → **all 38 returned `index, follow`. Zero noindex.** Confirmed repo is clean too: `vercel.json` forces `X-Robots-Tag: index, follow`; nothing in `next.config.ts`/`middleware.ts`.
+- **Tested the "intermittent / outdated-deployment" hypothesis and DISPROVED it** via `list_deployments`: last deploy Jun 11 06:35 UTC (2 days before the Jun-13 crawl), all deployments `production`+`READY`, no preview deployments. No swap window. So Googlebot was NOT hitting a transient bad deployment.
+- **Inspected 3 URLs → 3 different stale states** (homepage redirect-error/crawled Jun 3; /privacy noindex-in-index-tab but LIVE TEST clean; /age never crawled). This variety = recrawl-coverage lag, not a single live defect. **Corrected an earlier over-alarm**: the GSC "Last crawl" date being recent does NOT mean the noindex verdict is fresh — the verdict is carried over from an earlier evaluation.
+- **Confirmed the Vercel auto-noindex is all-tier platform behavior** (preview + outdated-production deployment URLs), not a free-tier penalty — answered the user's explicit question. Researched + recorded.
+- **Requested indexing** on `/`, `/privacy`, `/age` (priority crawl queue) as the cheap pass/fail test. Watch these next session.
+- **Rejected a proposed PythonAnywhere migration** (Node app can't run on Python-only WSGI host; wouldn't help indexing). Noted inline above.
+- **Bottom line:** no code change made — none is warranted. The blocker is time + authority (backlinks), consistent with lever #1 below.
 
 ## Key facts & access
 
