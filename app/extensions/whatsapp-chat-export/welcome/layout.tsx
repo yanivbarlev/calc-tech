@@ -1,21 +1,14 @@
 import type { Metadata } from "next";
-import { Outfit, Syne } from "next/font/google";
+import { Outfit } from "next/font/google";
 
 const outfit = Outfit({
   subsets: ["latin"],
-  variable: "--font-wty-body",
-  display: "swap",
-});
-
-const syne = Syne({
-  subsets: ["latin"],
-  weight: ["700", "800"],
-  variable: "--font-wty-display",
+  variable: "--font-wty",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Thank you — unlock WAExportPro",
+  title: "Thank you — WAExportPro",
   description:
     "WAExportPro is installed. Unlock PRO to export full WhatsApp chats, Excel, contacts, and media.",
   robots: {
@@ -29,7 +22,5 @@ export default function WhatsAppChatExportWelcomeLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className={`${outfit.variable} ${syne.variable}`}>{children}</div>
-  );
+  return <div className={outfit.variable}>{children}</div>;
 }

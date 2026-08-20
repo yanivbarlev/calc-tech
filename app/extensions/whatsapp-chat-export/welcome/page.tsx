@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Script from "next/script";
 
-// Live CWS still activates Gumroad keys. Keep this until 1.2.8+ is published, then switch to LS $9.99.
+// Live CWS still activates Gumroad keys. Keep until 1.2.8+ is published.
 const PRO_CHECKOUT_URL = "https://goldbaryaniv.gumroad.com/l/fznkf";
 const WA_URL = "https://web.whatsapp.com";
 const EXTENSION_ID = "pcbcfneocfimieifgogbkfodlkicemcl";
@@ -12,40 +12,36 @@ const GADS_ID = "AW-1006081641";
 const INSTALL_CONVERSION_LABEL = "9_OQCPjxmoccEOms3t8D";
 
 const ROWS: { feature: string; free: string; pro: string }[] = [
-  { feature: "Messages per chat", free: "First 100", pro: "Whole chat" },
-  { feature: "Text file (TXT)", free: "Yes", pro: "Yes" },
-  { feature: "HTML backup", free: "—", pro: "Yes" },
-  { feature: "Excel / CSV", free: "—", pro: "Yes" },
-  { feature: "Photos, video, audio", free: "—", pro: "Yes" },
-  { feature: "All contacts", free: "—", pro: "Excel file" },
-  { feature: "Group members", free: "—", pro: "Excel file" },
+  { feature: "Messages", free: "First 100", pro: "Whole chat" },
+  { feature: "TXT", free: "Yes", pro: "Yes" },
+  { feature: "HTML", free: "—", pro: "Yes" },
+  { feature: "Excel", free: "—", pro: "Yes" },
+  { feature: "Photos & audio", free: "—", pro: "Yes" },
+  { feature: "Contacts", free: "—", pro: "Yes" },
+  { feature: "Group members", free: "—", pro: "Yes" },
 ];
 
 const FAQS = [
   {
-    q: "What do I get for free?",
-    a: "TXT export of the first 100 messages in a chat. That is the cap. Longer chats, Excel, HTML, media, contacts, and group lists need PRO.",
+    q: "What is free?",
+    a: "TXT of the first 100 messages in a chat. Full chats, Excel, media, contacts, and groups need PRO.",
   },
   {
     q: "How do I unlock PRO?",
-    a: "Click Get PRO. Pay. Gumroad emails a license key. Open WhatsApp Web, open WAExportPro, paste the key, click Activate.",
+    a: "Click Get PRO, finish checkout, then paste the license key from your email into the WAExportPro side panel.",
   },
   {
-    q: "Does anything leave my computer?",
-    a: "No. Chats stay in Chrome. We never upload your messages.",
+    q: "Do my chats leave this computer?",
+    a: "No. Everything stays in Chrome.",
   },
   {
-    q: "Do I need to install anything on my phone?",
+    q: "Do I need the phone app?",
     a: "No. This only works with WhatsApp Web in Chrome.",
-  },
-  {
-    q: "Can I get a refund?",
-    a: "Yes. 30 days, no questions. Reply to the receipt email.",
   },
 ];
 
 export default function WhatsAppChatExportWelcomePage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
     try {
@@ -87,158 +83,63 @@ export default function WhatsAppChatExportWelcomePage() {
       <style>{CSS}</style>
 
       <div className="wty">
-        <header className="wty-top">
-          <div className="wty-brand">
-            <span className="wty-mark" aria-hidden="true">
-              WP
-            </span>
-            <div>
-              <strong>WAExportPro</strong>
-              <em>Installed in Chrome</em>
-            </div>
-          </div>
-          <span className="wty-chip">Thank you</span>
-        </header>
+        <div className="wty-card">
+          <header className="wty-bar">
+            <span className="wty-dot" aria-hidden="true" />
+            <span>WAExportPro</span>
+            <em>Installed</em>
+          </header>
 
-        <main>
-          <section className="wty-hero">
-            <div className="wty-copy">
-              <p className="wty-kicker">Installed · one more click</p>
-              <h1>
-                Thank you.
-                <span>Don&apos;t stop at 100 messages.</span>
-              </h1>
-              <p className="wty-sub">
-                PRO saves the whole chat — Excel, HTML, photos, contacts, and
-                group lists.
-              </p>
-              <a
-                className="wty-cta"
-                href={PRO_CHECKOUT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span className="wty-cta-label">Get PRO</span>
-                <span className="wty-cta-price">$4.99</span>
-              </a>
-              <p className="wty-trust">
-                Instant license key · 30-day refund · Stays on your computer
-              </p>
-              <a className="wty-skip" href={WA_URL} target="_blank" rel="noopener noreferrer">
-                Continue with the free 100-message limit →
-              </a>
+          <div className="wty-body">
+            <div className="wty-thread" aria-hidden="true">
+              <div className="wty-in">Installed. You can export from WhatsApp Web.</div>
+              <div className="wty-out">Free covers the first 100 messages.</div>
+              <div className="wty-in">Need the whole chat, Excel, or photos?</div>
+              <div className="wty-out">That’s PRO.</div>
             </div>
 
-            <aside className="wty-stage" aria-hidden="true">
-              <div className="wty-sheet wty-sheet-free">
-                <header>
-                  <b>Free</b>
-                  <span>100 messages</span>
-                </header>
-                <div className="wty-bubbles">
-                  <div className="wty-b in">Are we still on for Thursday?</div>
-                  <div className="wty-b out">Yes — I&apos;ll send the files.</div>
-                  <div className="wty-b in">Invoice + photos attached</div>
-                  <div className="wty-cut">
-                    <span>CUT — older messages not saved</span>
-                  </div>
-                  <div className="wty-ghost">Yesterday&apos;s thread</div>
-                  <div className="wty-ghost">Last month&apos;s photos</div>
-                </div>
-              </div>
-              <div className="wty-sheet wty-sheet-pro">
-                <header>
-                  <b>PRO</b>
-                  <span>Full archive</span>
-                </header>
-                <div className="wty-bubbles">
-                  <div className="wty-b in">Are we still on for Thursday?</div>
-                  <div className="wty-b out">Yes — I&apos;ll send the files.</div>
-                  <div className="wty-media">IMG · VID · XLSX</div>
-                  <div className="wty-b in">Invoice + photos attached</div>
-                  <div className="wty-b out">Got it. Saved.</div>
-                </div>
-              </div>
-            </aside>
-          </section>
+            <h1>Thank you</h1>
+            <p className="wty-sub">
+              Unlock PRO for the full backup — or start with the free limit.
+            </p>
 
-          <section className="wty-compare" aria-labelledby="wty-compare-h">
-            <h2 id="wty-compare-h">Free vs PRO</h2>
-            <div className="wty-table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>What you get</th>
-                    <th>Free</th>
-                    <th>PRO</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ROWS.map((row) => (
-                    <tr key={row.feature}>
-                      <td>{row.feature}</td>
-                      <td className={row.free === "—" ? "off" : ""}>{row.free}</td>
-                      <td className="on">{row.pro}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
             <a
-              className="wty-cta wty-cta-mid"
+              className="wty-cta"
               href={PRO_CHECKOUT_URL}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <span className="wty-cta-label">Unlock every column</span>
-              <span className="wty-cta-price">$4.99</span>
+              Get PRO
             </a>
-          </section>
+            <a className="wty-skip" href={WA_URL} target="_blank" rel="noopener noreferrer">
+              Continue with free
+            </a>
+            <p className="wty-micro">Key arrives by email · stays on your computer</p>
 
-          <section className="wty-why">
-            <h2>Why people upgrade on this screen</h2>
-            <ul>
-              <li>
-                <strong>Long chats don&apos;t fit in 100 lines.</strong>
-                Family, work, and legal threads are thousands of messages.
-              </li>
-              <li>
-                <strong>Excel has real columns.</strong>
-                Dates, names, and phones sit in separate cells — not one blob of
-                text.
-              </li>
-              <li>
-                <strong>Media is the proof.</strong>
-                Photos, voice notes, and PDFs stay with the backup.
-              </li>
-            </ul>
-          </section>
+            <table>
+              <thead>
+                <tr>
+                  <th> </th>
+                  <th>Free</th>
+                  <th>PRO</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ROWS.map((row) => (
+                  <tr key={row.feature}>
+                    <td>{row.feature}</td>
+                    <td className={row.free === "—" ? "off" : ""}>{row.free}</td>
+                    <td className="on">{row.pro}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-          <section className="wty-pay">
-            <h2>Pay once. Paste the key. Export.</h2>
-            <ol>
-              <li>
-                <b>Checkout</b>
-                <span>Opens in a new tab. Takes about a minute.</span>
-              </li>
-              <li>
-                <b>Email</b>
-                <span>Your license key arrives in the receipt.</span>
-              </li>
-              <li>
-                <b>Activate</b>
-                <span>WhatsApp Web → WAExportPro → paste → Activate.</span>
-              </li>
-            </ol>
-          </section>
-
-          <section className="wty-faq" aria-labelledby="wty-faq-h">
-            <h2 id="wty-faq-h">Questions</h2>
-            <div className="wty-faq-list">
+            <div className="wty-faq">
               {FAQS.map((faq, i) => {
                 const open = openFaq === i;
                 return (
-                  <div key={faq.q} className={open ? "open" : ""}>
+                  <div key={faq.q}>
                     <button
                       type="button"
                       aria-expanded={open}
@@ -252,26 +153,13 @@ export default function WhatsAppChatExportWelcomePage() {
                 );
               })}
             </div>
-          </section>
-        </main>
-
-        <div className="wty-sticky">
-          <p>
-            PRO · full chats · Excel · media
-            <b>$4.99</b>
-          </p>
-          <a href={PRO_CHECKOUT_URL} target="_blank" rel="noopener noreferrer">
-            Get PRO
-          </a>
+          </div>
         </div>
 
-        <footer className="wty-foot">
+        <footer>
           <Link href="/">Calc-Tech</Link>
           <Link href="/privacy">Privacy</Link>
           <Link href="/terms">Terms</Link>
-          <a href={WA_URL} target="_blank" rel="noopener noreferrer">
-            WhatsApp Web
-          </a>
         </footer>
       </div>
     </>
@@ -280,230 +168,181 @@ export default function WhatsAppChatExportWelcomePage() {
 
 const CSS = `
 .wty {
-  --ink: #13251c;
-  --muted: #5b6d64;
-  --paper: #eef3ea;
-  --sheet: #f7faf5;
-  --line: #cdd8ce;
-  --leaf: #0c5c45;
-  --leaf-2: #083f30;
-  --gold: #c4a035;
-  --cut: #b42318;
-  --pro: #0f3d2e;
+  --ink: #111b21;
+  --sub: #667781;
+  --line: #e9edef;
+  --green: #25d366;
+  --green-ink: #054c29;
+  --teal: #008069;
+  --out: #d9fdd3;
+  --paper: #efeae2;
   min-height: 100vh;
-  background:
-    radial-gradient(1200px 480px at 80% -10%, #dce8d8 0%, transparent 60%),
-    var(--paper);
+  font-family: var(--font-wty), "Segoe UI", Helvetica, Arial, sans-serif;
   color: var(--ink);
-  font-family: var(--font-wty-body), Outfit, ui-sans-serif, system-ui, sans-serif;
-  padding-bottom: 88px;
+  background-color: var(--paper);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cg fill='none' stroke='%23d5cfc4' stroke-width='1.2'%3E%3Cpath d='M36 48h30a8 8 0 0 1 8 8v16a8 8 0 0 1-8 8H50l-10 8v-8h-4a8 8 0 0 1-8-8V56a8 8 0 0 1 8-8z'/%3E%3Ccircle cx='168' cy='70' r='11'/%3E%3Cpath d='M70 168l7 7 13-14'/%3E%3C/g%3E%3C/svg%3E");
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px 40px;
 }
 .wty * { box-sizing: border-box; }
 .wty a { color: inherit; }
-.wty-top {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 18px 20px 0;
+.wty-card {
+  width: 100%;
+  max-width: 440px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(11, 20, 26, 0.12);
+}
+.wty-bar {
+  background: var(--teal);
+  color: #fff;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-}
-.wty-brand { display: flex; align-items: center; gap: 12px; }
-.wty-brand strong { display: block; font-size: 15px; letter-spacing: .02em; }
-.wty-brand em { display: block; font-style: normal; font-size: 12px; color: var(--muted); }
-.wty-mark {
-  width: 40px; height: 40px; border-radius: 10px;
-  background: var(--leaf); color: #f4f7f1;
-  display: grid; place-items: center;
-  font-family: var(--font-wty-display), Syne, sans-serif;
-  font-weight: 800; font-size: 13px;
-}
-.wty-chip {
-  font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
-  border: 1px dashed var(--leaf); color: var(--leaf);
-  padding: 6px 10px; background: #e7f1e6;
-}
-.wty-hero {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 28px 20px 40px;
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
-  gap: 32px;
-  align-items: center;
-}
-.wty-kicker {
-  font-size: 12px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
-  color: var(--leaf); margin: 0 0 12px;
-}
-.wty-copy h1 {
-  font-family: var(--font-wty-display), Syne, sans-serif;
-  font-weight: 800;
-  font-size: clamp(28px, 3.2vw, 40px);
-  line-height: 1.12;
-  letter-spacing: -0.03em;
-  margin: 0 0 12px;
-  max-width: 16ch;
-}
-.wty-copy h1 span { display: block; color: var(--leaf-2); max-width: 18ch; }
-.wty-sub { font-size: 16px; line-height: 1.4; color: var(--muted); margin: 0 0 18px; max-width: 36ch; }
-.wty-cta {
-  display: inline-flex; align-items: stretch;
-  text-decoration: none; color: #f7f3e4;
-  background: linear-gradient(180deg, #14785a 0%, #0b4f3b 100%);
-  border-radius: 6px;
-  box-shadow: 0 10px 24px rgba(11, 79, 59, .28);
-  overflow: hidden;
-  min-height: 58px;
-}
-.wty-cta:hover { filter: brightness(1.06); }
-.wty-cta:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
-.wty-cta-label {
-  padding: 14px 22px;
-  font-family: var(--font-wty-display), Syne, sans-serif;
-  font-weight: 800; font-size: 20px; letter-spacing: .02em;
-}
-.wty-cta-price {
+  gap: 10px;
   padding: 14px 18px;
-  background: #c9a227;
-  color: #1a1404;
-  font-weight: 800; font-size: 20px;
-  display: grid; place-items: center;
-  min-width: 92px;
+  font-size: 16px;
+  font-weight: 600;
 }
-.wty-trust { margin: 12px 0 16px; font-size: 13px; color: var(--muted); }
-.wty-skip { font-size: 14px; color: var(--muted); }
-.wty-skip:hover { color: var(--ink); }
-.wty-stage { position: relative; min-height: 340px; }
-.wty-sheet {
-  background: var(--sheet);
+.wty-bar em {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.85;
+}
+.wty-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.25);
+}
+.wty-body { padding: 22px 22px 28px; }
+.wty-thread { display: grid; gap: 8px; margin-bottom: 22px; }
+.wty-in, .wty-out {
+  max-width: 88%;
+  padding: 8px 12px;
+  font-size: 13.5px;
+  line-height: 1.4;
+  box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.06);
+}
+.wty-in {
+  background: #fff;
   border: 1px solid var(--line);
-  border-radius: 4px 18px 18px 4px;
-  padding: 14px;
-  width: 78%;
-  box-shadow: 0 16px 40px rgba(19, 37, 28, .08);
+  border-radius: 8px 8px 8px 2px;
 }
-.wty-sheet header {
-  display: flex; justify-content: space-between; align-items: baseline;
-  font-size: 12px; text-transform: uppercase; letter-spacing: .12em;
-  margin-bottom: 10px; color: var(--muted);
+.wty-out {
+  margin-left: auto;
+  background: var(--out);
+  border-radius: 8px 8px 2px 8px;
 }
-.wty-sheet header b { color: var(--ink); font-size: 13px; letter-spacing: .08em; }
-.wty-sheet-free { transform: rotate(-2.2deg); }
-.wty-sheet-pro {
-  position: absolute; right: 0; top: 54px; width: 72%;
-  background: #12372c; color: #e7f3ea; border-color: #1d5a46;
-  transform: rotate(3deg);
-  z-index: 1;
+.wty h1 {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 0 0 8px;
 }
-.wty-sheet-pro header { color: #9fbfb1; }
-.wty-sheet-pro header b { color: #f3e3a6; }
-.wty-bubbles { display: grid; gap: 8px; }
-.wty-b { max-width: 92%; padding: 8px 11px; font-size: 13px; line-height: 1.35; }
-.wty-b.in { background: #e4ece2; border-radius: 12px 12px 12px 4px; }
-.wty-b.out { margin-left: auto; background: #d5ead8; border-radius: 12px 12px 4px 12px; }
-.wty-sheet-pro .wty-b.in { background: #1c4d3d; }
-.wty-sheet-pro .wty-b.out { background: #2a6a52; }
-.wty-cut {
-  border-top: 2px dashed var(--cut);
-  color: var(--cut);
-  font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
-  padding-top: 8px; margin-top: 4px;
-}
-.wty-ghost { color: #9aa89e; font-size: 12px; filter: blur(0.4px); opacity: .55; }
-.wty-media {
-  font-size: 11px; font-weight: 800; letter-spacing: .16em;
-  color: #f3e3a6; border: 1px dashed #f3e3a6; padding: 7px 10px; text-align: center;
-}
-.wty-compare, .wty-why, .wty-pay, .wty-faq {
-  max-width: 860px; margin: 0 auto; padding: 8px 20px 36px;
-}
-.wty h2 {
-  font-family: var(--font-wty-display), Syne, sans-serif;
-  font-size: 28px; letter-spacing: -.02em; margin: 0 0 18px;
-}
-.wty-table-wrap { overflow-x: auto; border: 1px solid var(--line); background: var(--sheet); }
-.wty table { width: 100%; border-collapse: collapse; min-width: 520px; }
-.wty th, .wty td {
-  text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line);
+.wty-sub {
+  margin: 0 0 20px;
+  color: var(--sub);
   font-size: 15px;
+  line-height: 1.45;
+}
+.wty-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  background: var(--green);
+  color: var(--green-ink);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 16px;
+  border-radius: 24px;
+}
+.wty-cta:hover { filter: brightness(0.97); }
+.wty-cta:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+.wty-skip {
+  display: block;
+  text-align: center;
+  margin-top: 12px;
+  color: var(--teal);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.wty-skip:hover { text-decoration: underline; }
+.wty-micro {
+  text-align: center;
+  margin: 10px 0 22px;
+  font-size: 12px;
+  color: #8696a0;
+}
+.wty table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.wty th, .wty td {
+  text-align: left;
+  padding: 9px 6px;
+  border-bottom: 1px solid var(--line);
 }
 .wty th:nth-child(2), .wty td:nth-child(2),
-.wty th:nth-child(3), .wty td:nth-child(3) { text-align: center; width: 22%; }
+.wty th:nth-child(3), .wty td:nth-child(3) {
+  text-align: center;
+  width: 26%;
+}
 .wty thead th {
-  background: #e4eee3; font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sub);
 }
-.wty thead th:last-child { background: #12372c; color: #f3e3a6; }
-.wty td.on { font-weight: 700; color: var(--leaf); }
-.wty td.off { color: #9aa89e; }
+.wty td.on { color: var(--teal); font-weight: 600; }
+.wty td.off { color: #c5c9cc; }
 .wty tbody tr:last-child td { border-bottom: 0; }
-.wty-cta-mid { margin-top: 18px; }
-.wty-why ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
-.wty-why li {
-  background: var(--sheet); border-left: 4px solid var(--gold); padding: 14px 16px;
+.wty-faq { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 6px; }
+.wty-faq button {
+  width: 100%;
+  background: none;
+  border: 0;
+  padding: 11px 0;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
 }
-.wty-why strong { display: block; margin-bottom: 4px; }
-.wty-pay ol {
-  list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; counter-reset: step;
+.wty-faq button:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+.wty-faq p {
+  margin: 0 0 10px;
+  color: var(--sub);
+  font-size: 13.5px;
+  line-height: 1.45;
 }
-.wty-pay li {
-  counter-increment: step;
-  display: grid; grid-template-columns: 36px 1fr; gap: 12px; align-items: start;
-  padding: 12px 0; border-bottom: 1px solid var(--line);
+footer {
+  margin-top: 22px;
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #8696a0;
 }
-.wty-pay li::before {
-  content: counter(step);
-  width: 36px; height: 36px; border-radius: 50%;
-  border: 2px solid var(--leaf); color: var(--leaf);
-  display: grid; place-items: center; font-weight: 800;
-}
-.wty-pay b { display: block; }
-.wty-pay span { color: var(--muted); font-size: 14px; }
-.wty-faq-list { display: grid; gap: 8px; }
-.wty-faq-list > div { background: var(--sheet); border: 1px solid var(--line); }
-.wty-faq-list button {
-  width: 100%; text-align: left; background: none; border: 0; cursor: pointer;
-  padding: 14px 16px; font: inherit; font-weight: 700;
-  display: flex; justify-content: space-between; gap: 12px; color: var(--ink);
-}
-.wty-faq-list button:focus-visible { outline: 2px solid var(--leaf); outline-offset: -2px; }
-.wty-faq-list p { margin: 0; padding: 0 16px 14px; color: var(--muted); line-height: 1.5; }
-.wty-sticky {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 12px 18px;
-  background: #0d241c; color: #eef6f0;
-  box-shadow: 0 -8px 24px rgba(0,0,0,.18);
-}
-.wty-sticky p { margin: 0; font-size: 13px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.wty-sticky b { color: #f3e3a6; font-size: 18px; }
-.wty-sticky a {
-  text-decoration: none; background: #c9a227; color: #1a1404;
-  font-weight: 800; padding: 12px 18px; min-width: 108px; text-align: center;
-}
-.wty-sticky a:hover { filter: brightness(1.08); }
-.wty-foot {
-  max-width: 1120px; margin: 0 auto; padding: 28px 20px 20px;
-  display: flex; flex-wrap: wrap; gap: 14px 22px;
-  font-size: 13px; color: var(--muted);
-}
-.wty-foot a:hover { color: var(--ink); }
-@media (max-width: 860px) {
-  .wty-hero { grid-template-columns: 1fr; padding-top: 20px; padding-bottom: 24px; }
-  .wty-copy h1 { max-width: none; }
-  .wty-stage { min-height: 260px; }
-  .wty-sheet { width: 88%; }
-  .wty-sheet-pro { width: 82%; top: 40px; }
-}
-@media (max-width: 560px) {
-  .wty-cta { width: 100%; }
-  .wty-cta-label, .wty-cta-price { flex: 1; text-align: center; }
-  .wty-sticky p { font-size: 12px; }
-  .wty-sheet-free { transform: none; }
-  .wty-sheet-pro { transform: none; position: relative; top: 12px; right: auto; width: 100%; }
-  .wty-stage { min-height: 0; }
+footer a { text-decoration: none; }
+footer a:hover { color: var(--teal); }
+@media (max-width: 480px) {
+  .wty { padding: 12px 10px 28px; }
+  .wty-card { border-radius: 10px; }
+  .wty h1 { font-size: 24px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .wty-cta, .wty-sticky a { transition: none; }
+  .wty-cta { transition: none; }
 }
 `;
