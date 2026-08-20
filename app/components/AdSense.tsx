@@ -4,7 +4,11 @@ import Script from "next/script";
 import { usePathname } from "next/navigation";
 
 // Pages where AdSense must never load (paid acquisition funnels, etc.)
-const NO_ADS_PATHS = ["/whatsapp-lp"];
+const NO_ADS_PATHS = [
+  "/whatsapp-lp",
+  "/extensions/whatsapp-chat-export/welcome",
+  "/extensions/whatsapp-chat-export/thank-you",
+];
 
 export default function AdSense() {
   const pathname = usePathname();
