@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-const URL = "https://www.calc-tech.com/extensions/keepwa/privacy";
+const URL = "https://calc-tech.com/extensions/keepwa/privacy";
 
 export const metadata: Metadata = {
   title: "Privacy Policy – KeepWA Chrome Extension",
