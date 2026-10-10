@@ -38,7 +38,7 @@ export default function KeepWAPrivacyPage() {
             Privacy Policy
           </h1>
           <p style={{ color: "#888", fontSize: 14 }}>
-            KeepWA — Chrome extension · Last updated: September 8, 2026
+            KeepWA — Chrome extension · Last updated: October 10, 2026
           </p>
         </div>
 
@@ -52,9 +52,9 @@ export default function KeepWAPrivacyPage() {
           <p style={{ color: "#333", fontSize: 15, lineHeight: 1.65 }}>
             KeepWA exports WhatsApp Web chats, contacts, and group numbers{" "}
             <strong>inside your browser</strong>. Chat content is never uploaded.
-            The only things that can leave your device are: (1) a license key you
-            paste, (2) a Contact Us message you type, and (3) nothing else — we
-            do not run analytics on your chats.
+            The only things that can leave your device are: a license key you
+            paste, messages and Help questions you type, and anonymous counts
+            of rating screens. We do not run analytics on your chats.
           </p>
         </div>
 
@@ -71,9 +71,9 @@ export default function KeepWAPrivacyPage() {
             </p>
           </Section>
 
-          <Section title="2. What the extension reads">
+          <Section title="2. Collection">
             <p>
-              Only on{" "}
+              KeepWA reads data only on{" "}
               <code
                 style={{
                   background: "#f4f4f4",
@@ -84,57 +84,106 @@ export default function KeepWAPrivacyPage() {
               >
                 https://web.whatsapp.com
               </code>
-              , and only for
-              the chat or list you asked to export:
+              , and only for the chat or list you asked to export: messages,
+              timestamps, sender names, contact names, and group participant
+              names and phone numbers when WhatsApp shows them. This is read in
+              your browser to build your file. We do not collect it.
             </p>
+            <p style={{ marginTop: 12 }}>What we do collect:</p>
             <ul style={{ marginTop: 8, paddingLeft: 22 }}>
-              <li>Messages, timestamps, and sender names</li>
-              <li>Contact names</li>
-              <li>Group participant names and phone numbers when WhatsApp shows them</li>
+              <li>
+                <strong>Messages you send us.</strong> Contact Us text, the
+                optional feedback you type after a rating, and an email address
+                if you enter one.
+              </li>
+              <li style={{ marginTop: 8 }}>
+                <strong>Help assistant questions.</strong> The question you
+                type, a random install id, your language, and basic extension
+                state (version, PRO on or off, the format and message count of
+                your last export). No chat content.
+              </li>
+              <li style={{ marginTop: 8 }}>
+                <strong>License key.</strong> Only if you paste one.
+              </li>
+              <li style={{ marginTop: 8 }}>
+                <strong>Anonymous counts.</strong> When a rating screen is
+                shown, which rating was picked, and whether the store review
+                page was opened. These are plain daily totals with no install
+                id, no name, and no text.
+              </li>
             </ul>
-            <p style={{ marginTop: 12 }}>
-              That data is turned into a PDF, CSV, TXT, or HTML file on your
-              computer. It is not stored on our servers.
-            </p>
           </Section>
 
-          <Section title="3. What stays on your computer">
-            <p>Chrome local storage may keep:</p>
+          <Section title="3. Handling">
+            <ul style={{ paddingLeft: 22 }}>
+              <li>
+                Your export file (PDF, Excel, CSV, TXT, or HTML) is built
+                inside your browser and saved to your computer.
+              </li>
+              <li style={{ marginTop: 8 }}>
+                Messages you send us are used to answer you and fix problems.
+              </li>
+              <li style={{ marginTop: 8 }}>
+                Help assistant questions are answered by an AI model and are
+                not kept after the answer is returned. Only a daily usage count
+                per install is kept, to limit abuse.
+              </li>
+              <li style={{ marginTop: 8 }}>
+                Anonymous counts tell us whether people find the rating screens
+                useful. They cannot be linked to a person or a browser.
+              </li>
+              <li style={{ marginTop: 8 }}>
+                We do not use your data for advertising, and we do not run
+                analytics on your chats.
+              </li>
+            </ul>
+          </Section>
+
+          <Section title="4. Storage">
+            <p>On your computer, Chrome local storage may keep:</p>
             <ul style={{ marginTop: 8, paddingLeft: 22 }}>
               <li>Language and export options (format, dates)</li>
               <li>License key and whether PRO is on</li>
-              <li>A random install id used only on this browser</li>
+              <li>A random install id</li>
+              <li>How many exports you made today, and whether you were asked to rate</li>
               <li>Whether you hid the in-page Export button</li>
             </ul>
             <p style={{ marginTop: 12 }}>
-              Chat history is not saved in extension storage. Uninstalling
-              KeepWA deletes this local data.
+              Chat history is never saved in extension storage or on our
+              servers. Uninstalling KeepWA deletes the local data. On our side
+              we keep the messages you sent us, in our support mailbox, and the
+              anonymous daily counts.
             </p>
           </Section>
 
-          <Section title="4. What can leave your device">
-            <p>Chat messages do not leave your device. These requests can:</p>
+          <Section title="5. Sharing">
+            <p>
+              We do not sell your data and we do not share chats, contacts, or
+              group lists with anyone, because they never leave your device.
+              The items in “Collection” pass through these services only:
+            </p>
             <ul style={{ marginTop: 8, paddingLeft: 22 }}>
               <li>
-                <strong>Contact Us.</strong> If you send a message from the
-                panel, we receive what you typed (and an email if you entered
-                one), plus extension version and whether PRO is on. No chat
-                export is attached. That form goes to our feedback worker.
+                <strong>Cloudflare</strong> runs the small server that receives
+                Contact Us messages, Help assistant questions, and the
+                anonymous counts.
               </li>
               <li style={{ marginTop: 8 }}>
-                <strong>License key.</strong> If you paste a PRO key, the key
-                string may be checked with the license provider (Gumroad). No
-                chat content is sent with it. Checkout is not live yet; this
-                only applies when you enter a key.
+                <strong>Resend</strong> delivers Contact Us and feedback
+                messages to our mailbox.
+              </li>
+              <li style={{ marginTop: 8 }}>
+                <strong>Groq</strong> (backup: NVIDIA) runs the AI model that
+                answers Help assistant questions.
+              </li>
+              <li style={{ marginTop: 8 }}>
+                <strong>Lemon Squeezy</strong> handles checkout and checks a
+                license key you paste. Payment details go to them, not to us.
               </li>
             </ul>
-            <p style={{ marginTop: 12 }}>
-              We do not send chats, contacts, or group lists to a server. We do
-              not sell your data.
-            </p>
           </Section>
 
-          <Section title="5. Permissions">
+          <Section title="6. Permissions">
             <ul style={{ paddingLeft: 22 }}>
               <li>
                 <strong>storage</strong> — settings and license on this device.
@@ -158,21 +207,21 @@ export default function KeepWAPrivacyPage() {
             </ul>
           </Section>
 
-          <Section title="6. Children">
+          <Section title="7. Children">
             <p>
               KeepWA is not for children under 13. We do not knowingly collect
               information from children.
             </p>
           </Section>
 
-          <Section title="7. Changes">
+          <Section title="8. Changes">
             <p>
               We may update this page. The “Last updated” date will change.
               Using KeepWA after a change means you accept the new text.
             </p>
           </Section>
 
-          <Section title="8. Contact">
+          <Section title="9. Contact">
             <p>
               Email{" "}
               <a href="mailto:support@calc-tech.com" style={{ color: ACCENT }}>
